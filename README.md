@@ -2,7 +2,7 @@
 
 由 **滔哥 × Claude Code** 共同构建的全球金融科技行业知识图谱。
 
-🌐 **在线访问**：[fintech.feima.ai](https://fintech.feima.ai/)
+🌐 **在线访问**：https://ghoulvspol.github.io/fintech-knowledge-graph/
 
 ## 内容覆盖
 
@@ -23,7 +23,7 @@
 
 - 内容：Markdown + Obsidian wikilinks
 - 构建：Python 静态站点生成器
-- 部署：GitHub Pages + 自定义域名（CNAME）
+- 部署：GitHub Pages
 
 ## License
 
