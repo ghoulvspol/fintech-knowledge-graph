@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Basel III & IV（巴塞尔协议 III 与 IV） - 金融科技知识图谱</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon-180.png">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#FAF7F2;
+  --bg2:#F3EDE4;
+  --text:#1B1B18;
+  --text2:#6B6560;
+  --gold:#B8860B;
+  --gold-light:#D4A843;
+  --gold-glow:rgba(184,134,11,.12);
+  --navy:#1A2332;
+  --navy-light:#2C3E50;
+  --cream:#FFF8EE;
+  --border:#E0D6C8;
+  --card:#FFFFFF;
+  --link:#8B5E0B;
+  --serif:'Noto Serif SC','Crimson Pro',Georgia,'Times New Roman',serif;
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --sidebar-w:260px;
+}
+
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--navy);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:.5px;
+  font-family:var(--serif);
+  display:block;
+}
+.logo:hover{color:var(--gold-light)}
+
+.sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+
+.nav-link{
+  display:block;
+  padding:6px 16px;
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-left:3px solid transparent;
+  transition:all .15s;
+}
+.nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-link.active{
+  color:#fff;
+  background:rgba(184,134,11,.15);
+  border-left-color:var(--gold);
+  font-weight:600;
+}
+.nav-home{font-size:14px;padding:10px 16px;font-weight:500;margin-bottom:4px}
+.nav-changelog{
+  margin-top:auto;
+  padding:14px 16px;
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.nav-changelog:hover{color:rgba(255,255,255,.7)}
+.nav-changelog.active{color:var(--gold-light)}
+.sidebar-nav{display:flex;flex-direction:column;height:100%}
+
+.nav-group{margin-bottom:2px}
+.nav-group-title{
+  padding:8px 16px;
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  user-select:none;
+  transition:color .15s;
+}
+.nav-group-title:hover{color:#fff}
+.caret{
+  display:inline-block;
+  width:0;height:0;
+  border-left:5px solid #cbd5e1;
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  transition:transform .2s;
+}
+.nav-group.open .nav-group-title .caret{transform:rotate(90deg);border-left-color:#fff}
+.nav-group-title .badge{
+  margin-left:auto;
+  background:rgba(255,255,255,.1);
+  color:#cbd5e1;
+  font-size:11px;
+  padding:1px 6px;
+  border-radius:8px;
+  font-weight:400;
+}
+.nav-group-items{display:none;padding-left:8px}
+.nav-group.open .nav-group-items{display:block}
+
+.hamburger{
+  display:none;
+  position:fixed;
+  top:12px;left:12px;
+  z-index:200;
+  background:var(--navy);
+  color:#fff;
+  border:none;
+  font-size:20px;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:max(var(--sidebar-w), calc((100vw - 1160px) / 2));
+  flex:1;
+  position:relative;
+  max-width:1160px;
+  padding:0;
+}
+
+/* grain overlay */
+.main::after{
+  content:'';
+  position:fixed;
+  top:0;left:var(--sidebar-w);right:0;bottom:0;
+  pointer-events:none;
+  opacity:.03;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== FAV / BOOKMARK BUTTON ===== */
+.fav-wrap{
+  position:absolute;
+  top:24px;right:48px;
+  z-index:50;
+}
+.fav-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  color:var(--gold);
+  font-size:16px;
+  cursor:pointer;
+  transition:all .25s;
+  font-family:var(--sans);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.fav-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-1px);
+}
+.fav-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+}
+.fav-btn:hover .fav-label{color:var(--gold)}
+.fav-pop{
+  display:none;
+  position:absolute;
+  right:0;top:48px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  font-size:13px;
+  min-width:240px;
+  z-index:51;
+  color:var(--text);
+  line-height:1.6;
+}
+.fav-pop.show{display:block}
+.fav-pop kbd{
+  background:var(--bg2);
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:12px;
+  border:1px solid var(--border);
+  font-family:var(--sans);
+  color:var(--navy);
+  font-weight:600;
+}
+.fav-pop-copy{
+  display:block;
+  width:100%;
+  margin-top:10px;
+  padding:8px 0;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:12px;
+  cursor:pointer;
+  text-align:center;
+  transition:all .15s;
+  font-family:var(--sans);
+}
+.fav-pop-copy:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.fav-pop-copy.copied{
+  background:#ecfdf5;
+  border-color:#6ee7b7;
+  color:#059669;
+}
+
+@media(max-width:768px){
+  .fav-wrap{right:16px;top:12px}
+  .fav-btn{padding:6px 14px}
+  .fav-label{font-size:12px}
+}
+
+/* ===== CHANGELOG ===== */
+.article.changelog h2{
+  border-bottom-color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.version{
+  display:inline-flex;
+  align-items:center;
+  background:var(--gold);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:3px 11px;
+  border-radius:6px;
+  font-family:var(--sans);
+  letter-spacing:.3px;
+}
+.changelog-date{
+  font-size:14px;
+  color:var(--text2);
+  font-weight:500;
+  font-family:var(--sans);
+}
+.change-list{list-style:none;padding:0;margin:16px 0}
+.change-list li{
+  padding:10px 0 10px 18px;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  line-height:1.75;
+}
+.change-list li:last-child{border-bottom:none}
+.change-list li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:20px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--gold);
+}
+.change-type{
+  display:inline-block;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+  margin-right:8px;
+  font-family:var(--sans);
+  vertical-align:1px;
+  letter-spacing:.2px;
+}
+.change-type.feat{background:#059669}
+.change-type.fix{background:#dc2626}
+.change-type.plan{background:#3b82f6}
+.change-list li strong{color:var(--navy);font-weight:700}
+
+/* ===== ARTICLE (content pages) ===== */
+.article{max-width:820px;padding:48px 48px 80px}
+.meta{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.type-badge{
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+}
+.type-概念{background:#7C5E2A}
+.type-方法{background:#5E4A8B}
+.type-产品{background:#1A6B7C}
+.type-人物{background:#8B2F2F}
+.type-总体规划{background:#2A6B4F}
+.type-访谈{background:#3A5E8B}
+.type-财报会议{background:#4A6E2A}
+.type-索引{background:#6B6560}
+
+.article h1{
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:1.3;
+  margin-bottom:24px;
+  font-weight:900;
+  color:var(--navy);
+  letter-spacing:-.5px;
+}
+.article h2{
+  font-family:var(--serif);
+  font-size:21px;
+  margin:36px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--border);
+  font-weight:700;
+  color:var(--navy);
+}
+.article h3{
+  font-family:var(--serif);
+  font-size:17px;
+  margin:24px 0 10px;
+  font-weight:600;
+  color:var(--navy-light);
+}
+.article p{margin:10px 0}
+.article ul,.article ol{padding-left:24px;margin:10px 0}
+.article li{margin:4px 0}
+
+.article a{
+  color:var(--link);
+  text-decoration:none;
+  background:linear-gradient(to bottom,transparent 60%,var(--gold-glow) 60%);
+  transition:background .2s;
+}
+.article a:hover{background:linear-gradient(to bottom,transparent 40%,rgba(184,134,11,.2) 40%)}
+
+.article blockquote{
+  background:var(--cream);
+  border-left:4px solid var(--gold);
+  padding:14px 20px;
+  margin:16px 0;
+  border-radius:0 8px 8px 0;
+  font-style:italic;
+  color:#5C4813;
+  font-family:var(--serif);
+}
+.article blockquote p{margin:0}
+.article blockquote a{background:none;color:var(--gold)}
+.article blockquote a:hover{text-decoration:underline}
+
+.article table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.article th,.article td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+.article th{background:var(--bg2);font-weight:600;color:var(--navy)}
+.article strong{font-weight:700}
+.article hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.article code{
+  background:var(--bg2);
+  padding:2px 6px;
+  border-radius:3px;
+  font-size:13px;
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+  color:#5C4813;
+}
+
+/* ===== BACKLINKS PANEL (right sidebar) ===== */
+.main.has-backlinks{
+  display:grid;
+  grid-template-columns:minmax(0,820px) 280px;
+  gap:0 24px;
+  max-width:1160px;
+}
+.main-content{min-width:0}
+
+.backlinks-panel{
+  grid-column:2;
+  grid-row:1/-1;
+  position:sticky;
+  top:24px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  padding:24px 0 24px 20px;
+  border-left:1px solid var(--border);
+  font-size:13px;
+  align-self:start;
+}
+.backlinks-panel::-webkit-scrollbar{width:3px}
+.backlinks-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.bl-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.bl-panel-title{
+  font-family:var(--serif);
+  font-size:14px;
+  font-weight:700;
+  color:var(--navy);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.bl-count{
+  font-size:11px;
+  background:var(--bg2);
+  padding:1px 7px;
+  border-radius:10px;
+  color:var(--text2);
+  font-weight:600;
+}
+.bl-panel-actions{display:flex;gap:4px}
+.bl-action{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:2px 8px;
+  font-size:11px;
+  color:var(--text2);
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:all .15s;
+}
+.bl-action:hover{border-color:var(--gold);color:var(--gold)}
+
+.bl-group{margin-bottom:4px}
+.bl-group-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:5px 0;
+  width:100%;
+  text-align:left;
+  font-size:13px;
+  font-family:var(--sans);
+}
+.bl-group-header:hover{background:rgba(0,0,0,.02);border-radius:4px}
+
+.bl-caret{
+  display:inline-block;
+  width:0;height:0;
+  border:4px solid transparent;
+  border-left:5px solid var(--text2);
+  transition:transform .15s;
+  flex-shrink:0;
+}
+.bl-group.open .bl-caret{transform:rotate(90deg)}
+
+.bl-source-name{
+  color:var(--navy);
+  font-weight:600;
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bl-mention-cat{
+  font-size:10px;
+  color:var(--text2);
+  background:var(--bg2);
+  padding:0 5px;
+  border-radius:8px;
+  flex-shrink:0;
+  margin-left:4px;
+}
+
+.bl-snippets{display:none;padding:4px 0 4px 14px}
+.bl-group.open .bl-snippets{display:block}
+
+.bl-snippet{
+  padding:6px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.6;
+  color:var(--text2);
+  font-size:12px;
+}
+.bl-snippet:last-child{border-bottom:none}
+.bl-go-link{
+  display:inline-block;
+  font-size:11px;
+  color:var(--link);
+  text-decoration:none;
+  padding:4px 0 2px;
+  font-weight:600;
+  transition:color .15s;
+}
+.bl-go-link:hover{color:var(--gold);text-decoration:underline}
+
+/* ===== HOMEPAGE ===== */
+.hero-section{
+  position:relative;
+  padding:72px 48px 56px;
+  max-width:900px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp .6s ease forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-1px;
+  color:var(--navy);
+  margin-bottom:6px;
+  opacity:0;
+  animation:fadeUp .6s ease .1s forwards;
+}
+.hero-title .gold{color:var(--gold)}
+.hero-sub{
+  font-size:17px;
+  color:var(--text2);
+  line-height:1.8;
+  margin-top:16px;
+  max-width:640px;
+  font-family:var(--serif);
+  font-weight:400;
+  opacity:0;
+  animation:fadeUp .6s ease .2s forwards;
+}
+.hero-sub b{color:var(--navy);font-weight:700}
+
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  max-width:900px;
+  margin:0 auto 48px;
+  padding:0 48px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  opacity:0;
+  animation:fadeUp .6s ease .3s forwards;
+}
+.stat-item{
+  text-align:center;
+  padding:28px 12px;
+  position:relative;
+  transition:background .3s;
+  text-decoration:none;
+  color:inherit;
+}
+.stat-item:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  right:0;top:20%;
+  height:60%;
+  width:1px;
+  background:var(--border);
+}
+.stat-item:hover{background:var(--gold-glow)}
+.stat-num{
+  font-family:var(--serif);
+  font-size:42px;
+  font-weight:900;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-2px;
+}
+.stat-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+  letter-spacing:.5px;
+}
+
+.main-inner{max-width:900px;padding:0 48px 80px;margin:0 auto}
+
+.nav-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:56px;
+  opacity:0;
+  animation:fadeUp .6s ease .4s forwards;
+}
+.nav-card{
+  position:relative;
+  padding:28px 20px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  display:block;
+  color:inherit;
+}
+.nav-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  opacity:0;
+  transition:opacity .3s;
+}
+.nav-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+  border-color:var(--gold-light);
+}
+.nav-card:hover::before{opacity:1}
+.nav-card-icon{font-size:32px;margin-bottom:14px;display:block;line-height:1}
+.nav-card-title{
+  font-family:var(--serif);
+  font-size:16px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.nav-card-sub{font-size:13px;color:var(--text2)}
+.nav-card-arrow{
+  position:absolute;
+  bottom:20px;right:20px;
+  font-size:18px;
+  color:var(--border);
+  transition:all .3s;
+}
+.nav-card:hover .nav-card-arrow{color:var(--gold);transform:translateX(4px)}
+
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-line{flex:1;height:1px;background:var(--border)}
+.section-title{
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:700;
+  color:var(--navy);
+  white-space:nowrap;
+}
+.section-count{
+  font-size:12px;
+  color:var(--gold);
+  font-weight:600;
+  background:var(--gold-glow);
+  padding:3px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:10px}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  font-size:14px;
+  color:var(--text);
+  text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  font-weight:500;
+}
+.tag:hover{
+  border-color:var(--gold);
+  color:var(--navy);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-2px);
+}
+.tag-n{
+  font-size:11px;
+  font-weight:700;
+  color:#fff;
+  background:var(--gold);
+  padding:2px 8px;
+  border-radius:10px;
+  min-width:20px;
+  text-align:center;
+}
+.tag.tier-1{
+  font-size:16px;
+  padding:10px 22px;
+  font-weight:700;
+  border-color:var(--gold-light);
+  background:linear-gradient(135deg,#FFFDF5,#FFF8E7);
+}
+.tag.tier-1 .tag-n{font-size:12px;padding:3px 10px;background:var(--gold)}
+.tag.tier-2{font-size:15px;padding:9px 20px;font-weight:600}
+
+.people-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+}
+.person-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:24px 16px 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s;
+  text-align:center;
+  color:inherit;
+}
+.person-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  border-color:var(--gold-light);
+}
+.person-avatar{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+  color:var(--gold-light);
+  font-family:var(--serif);
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(26,35,50,.15);
+}
+.person-name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.person-refs{font-size:12px;color:var(--text2)}
+
+.gold-divider{display:flex;align-items:center;gap:16px;margin:56px 0}
+.gold-divider::before,.gold-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.gold-divider-diamond{
+  width:8px;height:8px;
+  background:var(--gold);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+.footer-promo{
+  position:relative;
+  overflow:hidden;
+  padding:40px;
+  background:var(--navy);
+  border-radius:20px;
+  color:#fff;
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+.footer-promo::before{
+  content:'';
+  position:absolute;
+  top:-50%;right:-20%;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(184,134,11,.15),transparent 70%);
+}
+.promo-story{flex:1;position:relative;z-index:1;min-width:0}
+.promo-story h3{
+  font-family:var(--serif);
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--gold-light);
+}
+.promo-story p{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8;margin:8px 0}
+.promo-credit{
+  margin-top:16px !important;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  font-size:13px !important;
+}
+.promo-credit strong{color:var(--gold-light);font-weight:700}
+
+.promo-qr{
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  text-align:center;
+}
+.qr-img{
+  display:block;
+  width:140px;
+  height:140px;
+  border-radius:12px;
+  border:3px solid rgba(255,255,255,.15);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  background:#fff;
+  padding:6px;
+}
+.qr-text{
+  font-size:12px;
+  color:rgba(255,255,255,.6);
+  margin-top:10px;
+  letter-spacing:.5px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.section{opacity:0;animation:fadeUp .5s ease forwards}
+.section:nth-child(1){animation-delay:.45s}
+.section:nth-child(2){animation-delay:.55s}
+.section:nth-child(3){animation-delay:.65s}
+.section:nth-child(4){animation-delay:.75s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .main.has-backlinks{display:block}
+  .backlinks-panel{
+    position:static;
+    max-height:none;
+    overflow-y:visible;
+    border-left:none;
+    border-top:1px solid var(--border);
+    padding:24px 16px;
+    margin-top:24px;
+    max-width:820px;
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .main{margin-left:0;max-width:100%}
+  .main::after{left:0}
+  .main.has-backlinks{display:block}
+  .article{padding:48px 16px 60px}
+  .backlinks-panel{padding:16px 12px;margin-top:16px}
+  .hero-section{padding:44px 20px 20px}
+  .hero-eyebrow{font-size:10px;margin-bottom:12px}
+  .hero-title{font-size:26px}
+  .hero-sub{font-size:14px;line-height:1.6;margin-top:10px}
+  .stats-row{padding:0 16px;margin:0 0 20px}
+  .stat-item{padding:16px 4px}
+  .stat-num{font-size:28px;letter-spacing:-1px}
+  .stat-label{font-size:11px}
+  .main-inner{padding:0 20px 60px}
+  .nav-cards{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+  .nav-card{padding:20px 14px 18px}
+  .nav-card-icon{font-size:24px;margin-bottom:8px}
+  .nav-card-title{font-size:14px}
+  .nav-card-sub{font-size:12px}
+  .footer-promo{flex-direction:column;text-align:center;padding:28px 20px;gap:24px}
+  .people-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="菜单" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<aside class="sidebar">
+  <div class="sidebar-header"><a href="/index.html" class="logo">金融科技知识图谱</a></div>
+  <div class="sidebar-nav">
+    <a href="/index.html" class="nav-link nav-home">🏛 首页</a>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>索引<span class="badge">8</span></div>
+  <div class="nav-group-items">
+    <a href="/index-pages/业务模式索引.html" class="nav-link" title="业务模式索引">业务模式索引</a>
+    <a href="/index-pages/中国公司索引.html" class="nav-link" title="中国公司索引">中国公司索引</a>
+    <a href="/index-pages/关键事件索引.html" class="nav-link" title="关键事件索引">关键事件索引</a>
+    <a href="/index-pages/关键人物索引.html" class="nav-link" title="关键人物索引">关键人物索引</a>
+    <a href="/index-pages/技术栈索引.html" class="nav-link" title="技术栈索引">技术栈索引</a>
+    <a href="/index-pages/核心概念索引.html" class="nav-link" title="核心概念索引">核心概念索引</a>
+    <a href="/index-pages/海外公司索引.html" class="nav-link" title="海外公司索引">海外公司索引</a>
+    <a href="/index-pages/监管政策索引.html" class="nav-link" title="监管政策索引">监管政策索引</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>中国公司<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-cn/京东科技.html" class="nav-link" title="京东科技">京东科技</a>
+    <a href="/companies-cn/字节跳动金融.html" class="nav-link" title="字节跳动金融">字节跳动金融</a>
+    <a href="/companies-cn/小米金融.html" class="nav-link" title="小米金融">小米金融</a>
+    <a href="/companies-cn/平安壹钱包.html" class="nav-link" title="平安壹钱包">平安壹钱包</a>
+    <a href="/companies-cn/度小满.html" class="nav-link" title="度小满">度小满</a>
+    <a href="/companies-cn/微众银行.html" class="nav-link" title="微众银行">微众银行</a>
+    <a href="/companies-cn/滴滴金融.html" class="nav-link" title="滴滴金融">滴滴金融</a>
+    <a href="/companies-cn/网商银行.html" class="nav-link" title="网商银行">网商银行</a>
+    <a href="/companies-cn/腾讯金融科技.html" class="nav-link" title="腾讯金融科技">腾讯金融科技</a>
+    <a href="/companies-cn/苏宁金融.html" class="nav-link" title="苏宁金融">苏宁金融</a>
+    <a href="/companies-cn/蚂蚁集团.html" class="nav-link" title="蚂蚁集团">蚂蚁集团</a>
+    <a href="/companies-cn/陆金所.html" class="nav-link" title="陆金所">陆金所</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>海外公司<span class="badge">20</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-global/Adyen.html" class="nav-link" title="Adyen">Adyen</a>
+    <a href="/companies-global/Affirm.html" class="nav-link" title="Affirm">Affirm</a>
+    <a href="/companies-global/Block.html" class="nav-link" title="Block">Block</a>
+    <a href="/companies-global/Chime.html" class="nav-link" title="Chime">Chime</a>
+    <a href="/companies-global/Coinbase.html" class="nav-link" title="Coinbase">Coinbase</a>
+    <a href="/companies-global/GoToFinancial.html" class="nav-link" title="GoToFinancial">GoToFinancial</a>
+    <a href="/companies-global/Grab.html" class="nav-link" title="Grab">Grab</a>
+    <a href="/companies-global/KakaoPay.html" class="nav-link" title="KakaoPay">KakaoPay</a>
+    <a href="/companies-global/Klarna.html" class="nav-link" title="Klarna">Klarna</a>
+    <a href="/companies-global/MercadoPago.html" class="nav-link" title="MercadoPago">MercadoPago</a>
+    <a href="/companies-global/Nubank.html" class="nav-link" title="Nubank">Nubank</a>
+    <a href="/companies-global/PayPal.html" class="nav-link" title="PayPal">PayPal</a>
+    <a href="/companies-global/Paytm.html" class="nav-link" title="Paytm">Paytm</a>
+    <a href="/companies-global/PhonePe.html" class="nav-link" title="PhonePe">PhonePe</a>
+    <a href="/companies-global/Plaid.html" class="nav-link" title="Plaid">Plaid</a>
+    <a href="/companies-global/Revolut.html" class="nav-link" title="Revolut">Revolut</a>
+    <a href="/companies-global/Robinhood.html" class="nav-link" title="Robinhood">Robinhood</a>
+    <a href="/companies-global/SoFi.html" class="nav-link" title="SoFi">SoFi</a>
+    <a href="/companies-global/Stripe.html" class="nav-link" title="Stripe">Stripe</a>
+    <a href="/companies-global/Wise.html" class="nav-link" title="Wise">Wise</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>业务模式<span class="badge">10</span></div>
+  <div class="nav-group-items">
+    <a href="/business-models/B端开放平台.html" class="nav-link" title="B端开放平台">B端开放平台</a>
+    <a href="/business-models/SaaS加金融.html" class="nav-link" title="SaaS加金融">SaaS加金融</a>
+    <a href="/business-models/保险科技业务模式.html" class="nav-link" title="保险科技业务模式">保险科技业务模式</a>
+    <a href="/business-models/加密资产交易与托管.html" class="nav-link" title="加密资产交易与托管">加密资产交易与托管</a>
+    <a href="/business-models/小微普惠信贷.html" class="nav-link" title="小微普惠信贷">小微普惠信贷</a>
+    <a href="/business-models/数字银行.html" class="nav-link" title="数字银行">数字银行</a>
+    <a href="/business-models/消费信贷.html" class="nav-link" title="消费信贷">消费信贷</a>
+    <a href="/business-models/第三方支付.html" class="nav-link" title="第三方支付">第三方支付</a>
+    <a href="/business-models/财富管理.html" class="nav-link" title="财富管理">财富管理</a>
+    <a href="/business-models/跨境支付.html" class="nav-link" title="跨境支付">跨境支付</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>核心概念<span class="badge">22</span></div>
+  <div class="nav-group-items">
+    <a href="/concepts/ABS.html" class="nav-link" title="ABS">ABS</a>
+    <a href="/concepts/BNPL.html" class="nav-link" title="BNPL">BNPL</a>
+    <a href="/concepts/CBDC.html" class="nav-link" title="CBDC">CBDC</a>
+    <a href="/concepts/DeFi.html" class="nav-link" title="DeFi">DeFi</a>
+    <a href="/concepts/InsurTech.html" class="nav-link" title="InsurTech">InsurTech</a>
+    <a href="/concepts/Interchange.html" class="nav-link" title="Interchange">Interchange</a>
+    <a href="/concepts/KYC AML.html" class="nav-link" title="KYC AML">KYC AML</a>
+    <a href="/concepts/Open Banking.html" class="nav-link" title="Open Banking">Open Banking</a>
+    <a href="/concepts/RegTech.html" class="nav-link" title="RegTech">RegTech</a>
+    <a href="/concepts/Stablecoin.html" class="nav-link" title="Stablecoin">Stablecoin</a>
+    <a href="/concepts/TPV GPV.html" class="nav-link" title="TPV GPV">TPV GPV</a>
+    <a href="/concepts/Take Rate.html" class="nav-link" title="Take Rate">Take Rate</a>
+    <a href="/concepts/信用卡分期 vs BNPL.html" class="nav-link" title="信用卡分期 vs BNPL">信用卡分期 vs BNPL</a>
+    <a href="/concepts/信用工厂.html" class="nav-link" title="信用工厂">信用工厂</a>
+    <a href="/concepts/助贷模式.html" class="nav-link" title="助贷模式">助贷模式</a>
+    <a href="/concepts/嵌入式金融.html" class="nav-link" title="嵌入式金融">嵌入式金融</a>
+    <a href="/concepts/影子银行.html" class="nav-link" title="影子银行">影子银行</a>
+    <a href="/concepts/普惠金融.html" class="nav-link" title="普惠金融">普惠金融</a>
+    <a href="/concepts/联合贷款.html" class="nav-link" title="联合贷款">联合贷款</a>
+    <a href="/concepts/超级App.html" class="nav-link" title="超级App">超级App</a>
+    <a href="/concepts/金融脱媒.html" class="nav-link" title="金融脱媒">金融脱媒</a>
+    <a href="/concepts/长尾金融.html" class="nav-link" title="长尾金融">长尾金融</a>
+  </div>
+</div>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>监管政策<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/regulations/Basel III & IV.html" class="nav-link active" title="Basel III & IV">Basel III & IV</a>
+    <a href="/regulations/Dodd-Frank Act.html" class="nav-link" title="Dodd-Frank Act">Dodd-Frank Act</a>
+    <a href="/regulations/FCA Sandbox & Singapore MAS Sandbox.html" class="nav-link" title="FCA Sandbox & Singapore MAS Sandbox">FCA Sandbox & Singapore MAS Sandbox</a>
+    <a href="/regulations/MiCA.html" class="nav-link" title="MiCA">MiCA</a>
+    <a href="/regulations/PSD2.html" class="nav-link" title="PSD2">PSD2</a>
+    <a href="/regulations/个人征信新规.html" class="nav-link" title="个人征信新规">个人征信新规</a>
+    <a href="/regulations/中国稳定币与加密资产监管.html" class="nav-link" title="中国稳定币与加密资产监管">中国稳定币与加密资产监管</a>
+    <a href="/regulations/互金整治.html" class="nav-link" title="互金整治">互金整治</a>
+    <a href="/regulations/数据出境监管.html" class="nav-link" title="数据出境监管">数据出境监管</a>
+    <a href="/regulations/网络小贷新规.html" class="nav-link" title="网络小贷新规">网络小贷新规</a>
+    <a href="/regulations/蚂蚁集团重组.html" class="nav-link" title="蚂蚁集团重组">蚂蚁集团重组</a>
+    <a href="/regulations/金融控股公司管理办法.html" class="nav-link" title="金融控股公司管理办法">金融控股公司管理办法</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键事件<span class="badge">14</span></div>
+  <div class="nav-group-items">
+    <a href="/events/Diem 流产.html" class="nav-link" title="Diem 流产">Diem 流产</a>
+    <a href="/events/FTX 崩盘.html" class="nav-link" title="FTX 崩盘">FTX 崩盘</a>
+    <a href="/events/Klarna 估值跳水.html" class="nav-link" title="Klarna 估值跳水">Klarna 估值跳水</a>
+    <a href="/events/P2P 全部清退.html" class="nav-link" title="P2P 全部清退">P2P 全部清退</a>
+    <a href="/events/Paytm Payments Bank 被叫停.html" class="nav-link" title="Paytm Payments Bank 被叫停">Paytm Payments Bank 被叫停</a>
+    <a href="/events/Robinhood GameStop 事件.html" class="nav-link" title="Robinhood GameStop 事件">Robinhood GameStop 事件</a>
+    <a href="/events/SVB 倒闭.html" class="nav-link" title="SVB 倒闭">SVB 倒闭</a>
+    <a href="/events/Square 改名 Block.html" class="nav-link" title="Square 改名 Block">Square 改名 Block</a>
+    <a href="/events/Visa 收购 Plaid 受阻.html" class="nav-link" title="Visa 收购 Plaid 受阻">Visa 收购 Plaid 受阻</a>
+    <a href="/events/Wirecard 丑闻.html" class="nav-link" title="Wirecard 丑闻">Wirecard 丑闻</a>
+    <a href="/events/京东金融重组.html" class="nav-link" title="京东金融重组">京东金融重组</a>
+    <a href="/events/平安科技板块独立.html" class="nav-link" title="平安科技板块独立">平安科技板块独立</a>
+    <a href="/events/滴滴金融崩盘.html" class="nav-link" title="滴滴金融崩盘">滴滴金融崩盘</a>
+    <a href="/events/蚂蚁 IPO 暂停.html" class="nav-link" title="蚂蚁 IPO 暂停">蚂蚁 IPO 暂停</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键人物<span class="badge">14</span></div>
+  <div class="nav-group-items">
+    <a href="/people/Brian Armstrong.html" class="nav-link" title="Brian Armstrong">Brian Armstrong</a>
+    <a href="/people/David Vélez.html" class="nav-link" title="David Vélez">David Vélez</a>
+    <a href="/people/Jack Dorsey.html" class="nav-link" title="Jack Dorsey">Jack Dorsey</a>
+    <a href="/people/John Collison.html" class="nav-link" title="John Collison">John Collison</a>
+    <a href="/people/Patrick Collison.html" class="nav-link" title="Patrick Collison">Patrick Collison</a>
+    <a href="/people/Sam Bankman-Fried.html" class="nav-link" title="Sam Bankman-Fried">Sam Bankman-Fried</a>
+    <a href="/people/Sebastian Siemiatkowski.html" class="nav-link" title="Sebastian Siemiatkowski">Sebastian Siemiatkowski</a>
+    <a href="/people/Vijay Shekhar Sharma.html" class="nav-link" title="Vijay Shekhar Sharma">Vijay Shekhar Sharma</a>
+    <a href="/people/Vlad Tenev.html" class="nav-link" title="Vlad Tenev">Vlad Tenev</a>
+    <a href="/people/井贤栋.html" class="nav-link" title="井贤栋">井贤栋</a>
+    <a href="/people/彭蕾.html" class="nav-link" title="彭蕾">彭蕾</a>
+    <a href="/people/陈生强.html" class="nav-link" title="陈生强">陈生强</a>
+    <a href="/people/顾国栋.html" class="nav-link" title="顾国栋">顾国栋</a>
+    <a href="/people/马化腾.html" class="nav-link" title="马化腾">马化腾</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>技术栈<span class="badge">7</span></div>
+  <div class="nav-group-items">
+    <a href="/tech/AI风控.html" class="nav-link" title="AI风控">AI风控</a>
+    <a href="/tech/区块链支付清算.html" class="nav-link" title="区块链支付清算">区块链支付清算</a>
+    <a href="/tech/大模型在金融场景的应用.html" class="nav-link" title="大模型在金融场景的应用">大模型在金融场景的应用</a>
+    <a href="/tech/生物核身.html" class="nav-link" title="生物核身">生物核身</a>
+    <a href="/tech/稳定币与清结算.html" class="nav-link" title="稳定币与清结算">稳定币与清结算</a>
+    <a href="/tech/联邦学习.html" class="nav-link" title="联邦学习">联邦学习</a>
+    <a href="/tech/隐私计算.html" class="nav-link" title="隐私计算">隐私计算</a>
+  </div>
+</div>
+
+  </div>
+</aside>
+<main class="main has-backlinks">
+<div class="main-content article"><div class="meta"><span class="type-badge type-监管政策">监管政策</span></div>
+<h1 id="basel-iii-iv-iii-iv">Basel III &amp; IV（巴塞尔协议 III 与 IV）</h1>
+<h2 id="_1">一句话定位</h2>
+<p>全球银行业资本与流动性监管的"国际宪法"——Basel III 由 BCBS 于 2010 年 12 月首次发布,为应对 2008 年金融危机引入了更高的资本充足率、流动性覆盖率(LCR)与净稳定资金比率(NSFR);Basel IV(实际上是 Basel III 最终修订版)于 2017 年 12 月达成,2025 年 1 月分阶段实施,通过限制内部评级模型、引入"产出下限"(Output Floor)等条款进一步收紧资本计量——两者共同重塑了全球银行业的资产负债结构、放贷能力与盈利模式,深刻影响了 <a href="/concepts/助贷模式.html">助贷模式</a>、<a href="/concepts/联合贷款.html">联合贷款</a>、挑战者银行、<a href="/concepts/BNPL.html">BNPL</a> 等金融科技商业模式的"资本边界"。</p>
+<h2 id="_2">背景与起因</h2>
+<p>要理解 Basel III &amp; IV,需要先回顾巴塞尔协议的演化历史:</p>
+<p><strong>Basel I (1988)</strong>:由 G10 央行行长在巴塞尔签署,首次确立国际银行资本充足率标准——核心要求是银行的"资本/风险加权资产"(Capital/RWA) 比率不低于 8%。这是国际银行资本监管的开端,但 Basel I 仅区分"零风险国债"与"100% 风险信贷",颗粒度粗糙。</p>
+<p><strong>Basel II (2004)</strong>:引入"三大支柱"框架——第一支柱(资本要求)、第二支柱(监管检查)、第三支柱(市场约束)。引入"内部评级法"(IRB Approach),允许大型银行使用自己的风险模型计算 RWA。</p>
+<p><strong>2008 危机暴露的 Basel II 缺陷</strong>:<br />
+1. <strong>资本质量不足</strong>:Tier 1 资本中包含大量"创新工具"(优先股、混合资本),实际危机吸损能力差。<br />
+2. <strong>杠杆率失控</strong>:雷曼兄弟杠杆率达 30 倍以上,Basel II 仅监管 RWA 杠杆,未管控总杠杆。<br />
+3. <strong>流动性风险未管</strong>:雷曼有充足资本但缺乏流动性 — Basel II 完全不涉及流动性监管。<br />
+4. <strong>顺周期性</strong>:经济上行期 RWA 模型低估风险,导致资本释放过多;下行期资本要求陡升,造成"信贷紧缩"。<br />
+5. <strong>内部模型套利</strong>:大型银行通过内部模型显著低估 RWA,与标准法计算结果差异巨大,形成"模型套利"。</p>
+<p><strong>Basel III 立法响应(2010-2017)</strong>:<br />
+- 2009 年 12 月 BCBS 发布 Basel III 咨询文件;<br />
+- 2010 年 12 月 16 日 BCBS 发布 Basel III 最终文本;<br />
+- 2010-2017 年陆续发布资本、流动性、杠杆率、TLAC、IFRS 9 减值等多份补充文件;<br />
+- 2017 年 12 月 BCBS 完成"Basel III: Finalising post-crisis reforms",即业界俗称的"Basel IV"——核心是约束内部模型、引入产出下限。<br />
+- 实施时间表:Basel III 主体 2013-2019 年分阶段,Basel IV 原计划 2022 年生效,因 COVID-19 推迟至 2023 年,后再推至 2025 年 1 月 1 日。</p>
+<h2 id="_3">核心条款</h2>
+<h3 id="basel-iii-2010-2017">Basel III 核心条款（2010-2017）</h3>
+<h4 id="1">1. 资本要求强化</h4>
+<ul>
+<li><strong>核心一级资本(CET1)</strong>:从 Basel II 的 2% 提升至 4.5%。</li>
+<li><strong>一级资本(Tier 1)</strong>:从 4% 提升至 6%。</li>
+<li><strong>总资本</strong>:仍为 8%(不变),但资本质量大幅提升。</li>
+<li><strong>资本留存缓冲</strong>(Capital Conservation Buffer):额外 2.5% CET1,合计 CET1 ≥ 7%。</li>
+<li><strong>逆周期缓冲</strong>(Countercyclical Buffer):0-2.5%,由各国监管在经济过热时提高。</li>
+<li><strong>G-SIBs 附加资本</strong>(Global Systemically Important Banks):按 G-SIB 评分,额外 1-3.5% CET1。</li>
+</ul>
+<h4 id="2">2. 流动性新规</h4>
+<ul>
+<li><strong>LCR (Liquidity Coverage Ratio, 流动性覆盖率)</strong>:银行必须持有足够"高质量流动性资产"(HQLA)以应对未来 30 天极端压力情景下的现金流出。LCR ≥ 100%。</li>
+<li><strong>NSFR (Net Stable Funding Ratio, 净稳定资金比率)</strong>:银行必须以稳定资金来源支持其长期资产。NSFR ≥ 100%。</li>
+</ul>
+<h4 id="3">3. 杠杆率监管</h4>
+<ul>
+<li><strong>Leverage Ratio</strong>:Tier 1 资本/(表内+表外资产) ≥ 3%。这是 Basel III 首次引入的"非风险加权"杠杆要求。</li>
+<li><strong>G-SIB 杠杆率附加要求</strong>:额外 0.5-1%,合计 ≥ 4%。</li>
+</ul>
+<h4 id="4-tlac-total-loss-absorbing-capacity">4. TLAC (Total Loss-Absorbing Capacity)</h4>
+<ul>
+<li>G-SIBs 必须持有"总损失吸收能力"——即资本+次级债+次级存款 ≥ 18% RWA(2022 年起)、6.75% leverage exposure。</li>
+<li>目的:确保大型银行倒闭时不需要纳税人救助,通过债权"减计"或"转股"承担损失。</li>
+</ul>
+<h3 id="basel-iv-2017-2025-2030">Basel IV 核心条款（2017 修订、2025-2030 分阶段实施）</h3>
+<h4 id="1_1">1. 标准法修订</h4>
+<ul>
+<li>信用风险标准法(SA-CR)、市场风险新标准法(FRTB)、操作风险标准法(SA-OR)等全面修订,提高风险敏感度。</li>
+</ul>
+<h4 id="2_1">2. 内部模型限制</h4>
+<ul>
+<li><strong>IRB (Internal Ratings-Based) Approach 限制</strong>:对大型企业(年营收超过 5 亿欧元)信贷,银行不得使用 Advanced IRB(高级内评法),只能使用 Foundation IRB 或标准法。</li>
+<li><strong>Equity exposures</strong>:银行的股票投资不得使用 IRB,统一用标准法。</li>
+<li><strong>Operational Risk</strong>:全部使用标准法 SA-OR,取消 AMA(Advanced Measurement Approach)。</li>
+</ul>
+<h4 id="3-output-floor">3. 产出下限（Output Floor）</h4>
+<ul>
+<li><strong>核心创新条款</strong>:银行使用内部模型计算的 RWA 不得低于"标准法 RWA × 72.5%"。</li>
+<li>目的:消除内部模型套利,确保模型 RWA 与标准法 RWA 之间的差距不会过大。</li>
+<li>实施安排:2025 年 50% → 2026 年 55% → 2027 年 60% → 2028 年 65% → 2029 年 70% → 2030 年 72.5%(分阶段提高)。</li>
+</ul>
+<h4 id="4-cvacredit-valuation-adjustment">4. CVA(Credit Valuation Adjustment)资本要求</h4>
+<ul>
+<li>衍生品 CVA 风险计量更严格,与 FRTB 对接。</li>
+</ul>
+<h2 id="_4">时间线</h2>
+<ul>
+<li><strong>1988-07</strong>:Basel I 通过,确立国际银行资本充足率 8% 标准。</li>
+<li><strong>2004-06</strong>:Basel II 通过。</li>
+<li><strong>2007-2009</strong>:全球金融危机暴露 Basel II 缺陷。</li>
+<li><strong>2009-12</strong>:BCBS 发布 Basel III 咨询文件。</li>
+<li><strong>2010-12-16</strong>:BCBS 发布 Basel III 最终文本。</li>
+<li><strong>2013-01-01</strong>:Basel III 资本要求开始实施(CET1 提至 3.5%)。</li>
+<li><strong>2014-2019</strong>:Basel III 资本与缓冲要求分阶段提升至最终标准。</li>
+<li><strong>2015-01-01</strong>:LCR 实施。</li>
+<li><strong>2018-01-01</strong>:NSFR 实施。</li>
+<li><strong>2017-12-07</strong>:BCBS 发布 "Basel III: Finalising post-crisis reforms",即 Basel IV。</li>
+<li><strong>2019-2020</strong>:各国对 Basel IV 实施时间表的争论(COVID-19 暂停一年)。</li>
+<li><strong>2022-04</strong>:欧盟、英国、美国宣布 Basel IV 推迟至 2023 年。</li>
+<li><strong>2023-03</strong>:Silicon Valley Bank、Credit Suisse 危机引发对 Basel III 流动性监管的反思。</li>
+<li><strong>2023-12</strong>:美国 Federal Reserve、OCC、FDIC 发布 Basel IV 立法提案("Basel III Endgame"),引发美国银行业激烈反对。</li>
+<li><strong>2024-09</strong>:欧盟 CRR3(资本要求条例第 3 版)与 CRD VI 实施 Basel IV。</li>
+<li><strong>2025-01-01</strong>:<strong>Basel IV 正式生效</strong>(欧盟、英国、加拿大、日本、新加坡、香港等);<strong>美国实施时间表延后,初步定于 2025-2028</strong>。</li>
+<li><strong>2025-2030</strong>:产出下限分阶段提升,最终 2030 年达 72.5%。</li>
+</ul>
+<h2 id="_5">对行业的影响</h2>
+<h3 id="_6">直接影响（可量化）</h3>
+<ul>
+<li><strong>全球银行资本水平</strong>:G-SIBs 平均 CET1 从 2008 年 7% 提升至 2024 年 14%,资本规模合计增长约 2 万亿美元。</li>
+<li><strong>欧洲银行业 RWA 影响</strong>:据 EBA 测算,Basel IV 实施后欧洲银行业 RWA 平均增加 8-10%,大型银行(尤其使用 IRB 模型的)增加 15-20%。</li>
+<li><strong>美国银行业影响</strong>:美国 Federal Reserve 测算,Basel IV(美国版"Basel III Endgame")将使美国大型银行 RWA 增加 19%,最低资本要求增加约 1900 亿美元。</li>
+<li><strong>流动性储备</strong>:全球银行业 HQLA 持有量从 2010 年约 8 万亿美元增至 2024 年约 18 万亿美元。</li>
+<li><strong>TLAC 发行规模</strong>:G-SIBs 累计发行 TLAC 工具超过 5 万亿美元。</li>
+<li><strong>盈利能力影响</strong>:全球银行业平均 ROE 从危机前 15-20% 降至 2024 年 10-12%。</li>
+</ul>
+<h3 id="_7">商业模式重塑</h3>
+<ol>
+<li><strong>从"扩表盈利"到"轻资本服务"</strong>:更高的资本要求迫使银行从"贷款规模驱动"转向"轻资本业务"(财富管理、咨询、支付等),传统对公贷款增长放缓。</li>
+<li><strong>从"自营+做市"到"客户驱动"</strong>:更高的市场风险资本(FRTB)使做市商业务回报率下降,银行收缩做市业务,加剧债券市场流动性下降。</li>
+<li><strong>影子银行扩张</strong>:银行受 Basel 约束,部分高风险信贷(如杠杆贷款、私募信贷、高收益债)迁移至非银金融机构,催生 Apollo、Blackstone、KKR、Ares 等私募信贷巨头。</li>
+<li><strong>金融科技替代银行业务的部分机会</strong>:在 Basel 约束下,银行对小微、消费、新经济信贷的服务能力下降,为 <a href="/companies-global/Klarna.html">Klarna</a> BNPL、OnDeck 小微、<a href="/companies-global/Affirm.html">Affirm</a> 消费信贷等 Fintech 提供市场空间。</li>
+<li><strong>联合贷款模式变化</strong>:Basel 资本约束使银行更倾向于"轻资本助贷"——银行出资 95-99%,Fintech 平台不出资但承担风控、获客;这一模式在中国 <a href="/regulations/网络小贷新规.html">网络小贷新规</a> 出台前曾极度盛行,Basel 是其全球范围内的根本动力。</li>
+<li><strong>CRT (Capital Relief Trades) 兴起</strong>:银行通过证券化、保险转移、合成 CDO 等方式转移信贷风险以释放资本——成为 2020 年代金融市场最重要的"资本优化"手段。</li>
+</ol>
+<h3 id="_8">各类玩家的不同处境</h3>
+<ul>
+<li><strong>大型 G-SIBs</strong>:JPMorgan、HSBC、Mitsubishi UFJ、BNP Paribas、Bank of China 等承担最重的资本与流动性负担,但同时享受"系统重要性"带来的隐性国家信用。Citigroup 因 Basel III 影响,业务持续收缩,从全球巨头转型为"全球商业银行"专业银行。</li>
+<li><strong>欧洲银行业</strong>:Basel III &amp; IV 影响最大——欧洲银行业 ROE 长期低于美国(2024 年欧洲约 10%、美国约 13%),股价市净率(P/B)长期低于 1。</li>
+<li><strong>美国银行业</strong>:在 2018 年 EGRRCPA 后部分回退 Basel III 严格度,2024 年"Basel III Endgame"再次推高资本要求,JPMorgan、BofA、Citi、Wells Fargo 等强烈反对。</li>
+<li><strong>挑战者银行 / 数字银行</strong>:Revolut、N26、Monzo、Starling、WeBank、KakaoBank 等需获得银行牌照才能扩张存贷业务,但也直面 Basel 约束。多数采取"轻资产+撮合"策略,延缓 IPO 与资本压力。</li>
+<li><strong>私募信贷</strong>:Apollo、Blackstone、KKR、Ares 等成为最大受益者——"银行不能放的贷款"由私募信贷接手。全球私募信贷市场规模从 2010 年约 3000 亿美元增至 2024 年约 1.7 万亿美元。</li>
+<li><strong>小微企业</strong>:整体受损——银行对小微贷款的资本占用相对高,但收益率不匹配,放贷意愿下降。</li>
+<li><strong>消费者</strong>:受影响有限——银行对消费信贷的资本占用相对低,加上 Fintech 替代,消费金融服务整体没有显著恶化。</li>
+</ul>
+<h2 id="_9">关键案例</h2>
+<ul>
+<li><strong>Lehman Brothers 破产</strong>(2008):立法的核心触发事件。</li>
+<li><strong>Silicon Valley Bank 倒闭</strong>(2023-03):SVB 资产 2090 亿美元,因长期债券投资在加息环境下出现巨额浮亏 + 存款集中流失,72 小时内崩溃。SVB 倒闭暴露了 Basel III 流动性监管的盲点——LCR 主要看现金流出,而 SVB 的崩溃源于"科技公司客户群体的高度集中性"。</li>
+<li><strong>Credit Suisse 危机</strong>(2023-03):瑞士信贷因长期治理问题与流动性危机被瑞银 32 亿瑞郎收购,瑞士金融市场监管局 FINMA 减计了 170 亿美元 AT1 债券——首次大规模触发 TLAC 减记机制,引发全球 AT1 市场动荡。</li>
+<li><strong>First Republic Bank 倒闭</strong>(2023-05):资产 2300 亿美元,被 JPMorgan 并购,与 SVB 同属"中大型区域银行"系统。</li>
+<li><strong><a href="/events/Wirecard 丑闻.html">Wirecard 丑闻</a></strong>(2020):德国支付公司 Wirecard 因 19 亿欧元造假倒闭,虽不是商业银行,但暴露了 BaFin 监管失败与"持牌支付机构"系统性风险。</li>
+<li><strong>Archegos Capital 爆仓</strong>(2021):比尔·黄旗下家族办公室通过 TRS(总收益互换)放杠杆,爆仓后给瑞士信贷、野村等造成 100 亿美元以上损失,促进了 Basel IV CVA 资本要求的强化。</li>
+</ul>
+<h2 id="_10">国际比较</h2>
+<ul>
+<li><strong>欧盟</strong>:通过 CRD IV/CRR(2013)实施 Basel III,通过 CRR3/CRD VI(2024)实施 Basel IV;欧盟整体执行最严。</li>
+<li><strong>美国</strong>:Dodd-Frank Act 与 Basel 协同实施,但美国对 Basel IV("Basel III Endgame")态度较为保守,2024 年 Federal Reserve 提案后美国银行业激烈反对,实施时间表多次推迟。</li>
+<li><strong>英国</strong>:Bank of England 与 PRA 通过 PRA Rulebook 实施 Basel III;脱欧后保持与欧盟基本一致;Basel IV 于 2025 年 1 月生效。</li>
+<li><strong>中国</strong>:银保监会发布《商业银行资本管理办法》(2012)实施 Basel III;2024 年 1 月发布修订版,与 Basel IV 接轨。中国大型银行(工农中建交)平均 CET1 约 11-12%,符合 Basel 要求。</li>
+<li><strong>日本</strong>:FSA 通过《银行法》及监管命令实施 Basel III &amp; IV;三菱 UFJ、三井住友、瑞穗等 G-SIBs 长期处于较低 ROE 水平。</li>
+<li><strong>新加坡 / 香港</strong>:MAS、HKMA 完整实施 Basel III &amp; IV,作为国际金融中心保持高标准。</li>
+<li><strong>核心差异</strong>:Basel 是"国际软法"——BCBS 不具有强制性,各国通过本国法律实施。这导致各国实施进度、严格度不一致,部分国家(如美国 2024 年争论)成为"最后一公里"问题。</li>
+</ul>
+<h2 id="_11">学术与业界争议</h2>
+<ul>
+<li><strong>支持派</strong>:BIS、IMF、FSB、Mark Carney、Mario Draghi、Janet Yellen 等认为,Basel III &amp; IV 是危机后最重要的国际金融监管改革,显著降低了全球银行业系统性风险。</li>
+<li><strong>批评派</strong>:</li>
+<li><strong>"过度监管"压制信贷</strong>:Anat Admati(Stanford)等学者认为 Basel 资本要求"还不够高",但 Jamie Dimon、Brian Moynihan 等银行家认为已经"过度",压制了银行放贷能力。</li>
+<li><strong>"复杂性陷阱"</strong>:Andrew Haldane(前英国央行首席经济学家)在著名演讲"The Dog and the Frisbee"(2012)中指出,Basel 协议从 Basel I 的几十页增长至 Basel III &amp; IV 的数千页,过于复杂反而不利于监管效果。</li>
+<li><strong>"产出下限不公平"</strong>:Basel IV 的产出下限被欧洲银行视为"对欧洲不公"——美国银行业以非 IRB 模型为主,影响较小;欧洲银行业大量使用 IRB,影响巨大。</li>
+<li><strong>"私募信贷的监管套利"</strong>:Basel 推动信贷向影子银行迁移,但影子银行受 Basel 约束远小,存在新的系统性风险积累。</li>
+<li><strong>"流动性监管失败"</strong>:SVB 事件证明 LCR 不能预防"超快速"的存款流失("Twitter Bank Run"),Basel 流动性监管框架需要重新审视。</li>
+<li><strong>Mervyn King</strong>(前英国央行行长)在《End of Alchemy》(2016)中提出"PFAS"(Pawnbroker For All Seasons,全季节当铺)模型,主张"远比 Basel 更激进"的资本与流动性要求,代表对 Basel 整体框架的根本批评。</li>
+</ul>
+<h2 id="_12">后续演变</h2>
+<ul>
+<li><strong>Basel V?</strong>:2023 年 SVB、Credit Suisse 危机后,业界讨论是否需要 Basel V 来应对"数字时代的快速银行挤兑";但 BCBS 表示"先评估 Basel III &amp; IV 完整实施"。</li>
+<li><strong>气候风险纳入</strong>:BCBS 2022 年发布《气候相关金融风险管理原则》,各国央行陆续将气候风险纳入第二支柱(监管检查),欧洲央行 2024 年起要求银行年度气候压力测试。</li>
+<li><strong>加密资产资本要求</strong>:BCBS 2022 年 12 月发布《银行加密资产风险管理》指引,2025 年 1 月生效。要求银行对加密资产持有按 1250% 风险权重(等于 100% 资本),实质禁止银行直接持有比特币、以太坊等。</li>
+<li><strong>TLAC 全球扩容</strong>:从 G-SIBs 扩展至 D-SIBs(Domestic Systemically Important Banks),增强各国银行业的"自我救助"(bail-in)能力。</li>
+</ul>
+<h2 id="_13">相关监管</h2>
+<ul>
+<li><a href="/regulations/Dodd-Frank Act.html">Dodd-Frank Act</a>——美国 Basel 实施的法律框架</li>
+<li><a href="/regulations/蚂蚁集团重组.html">蚂蚁集团重组</a>——中国对网络小贷的"30% 出资"参考 Basel 资本要求</li>
+<li><a href="/regulations/网络小贷新规.html">网络小贷新规</a>——网络小贷杠杆约束(5 倍)远严于 Basel 银行(12.5 倍),反映监管对"金融科技"的特殊审慎</li>
+<li><a href="/regulations/MiCA.html">MiCA</a>——加密资产 CASP 资本要求参考 Basel 银行资本框架</li>
+<li><a href="/regulations/FCA Sandbox & Singapore MAS Sandbox.html">FCA Sandbox &amp; Singapore MAS Sandbox</a>——监管沙盒在 Basel 框架内的试点空间</li>
+</ul>
+<h2 id="_14">相关概念</h2>
+<ul>
+<li>资本充足率</li>
+<li>CET1</li>
+<li>Tier 1</li>
+<li>LCR</li>
+<li>NSFR</li>
+<li>杠杆率</li>
+<li>G-SIBs</li>
+<li>D-SIBs</li>
+<li>TLAC</li>
+<li>IRB</li>
+<li>FRTB</li>
+<li>CVA</li>
+<li>CRT</li>
+<li>私募信贷</li>
+<li><a href="/concepts/影子银行.html">影子银行</a></li>
+<li><a href="/concepts/助贷模式.html">助贷模式</a></li>
+<li><a href="/concepts/联合贷款.html">联合贷款</a></li>
+</ul></div><aside class="backlinks-panel">
+  <div class="bl-panel-header">
+    <h3 class="bl-panel-title">链接到本页 <span class="bl-count">2</span></h3>
+    <div class="bl-panel-actions">
+      <button class="bl-action bl-expand-all">展开</button>
+      <button class="bl-action bl-collapse-all">折叠</button>
+    </div>
+  </div>
+  <div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Dodd-Frank Act（多德-弗兰克法案，美国 2010 金融监管改革）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…ection 1033 实施时间表存在不确定性,Volcker Rule 部分条款进入再评估。  ## 相关监管  - Basel III &amp; IV——与 Dodd-Frank 协同的国际资本充足率框架 - PSD2——欧盟 Open Banking 立法,与…</div>
+    <a href="/regulations/Dodd-Frank Act.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">MiCA（Markets in Crypto-Assets Regulation，欧盟加密资产市场监管）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…金融监管,与 MiCA 形成对比 - 中国稳定币与加密资产监管——中国全面禁止,与 MiCA 形成根本对立 - Basel III &amp; IV——CASP 资本金要求参考的国际银行资本框架  ## 相关概念  - Stablecoin - [[CBDC]…</div>
+    <a href="/regulations/MiCA.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+
+</aside>
+
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle sidebar nav groups
+  document.querySelectorAll('.nav-group-title').forEach(function(el) {
+    el.addEventListener('click', function() {
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // Backlinks: toggle individual groups
+  document.querySelectorAll('.bl-group-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      this.closest('.bl-group').classList.toggle('open');
+    });
+  });
+
+  // Favorite / bookmark popup
+  var favBtn = document.getElementById('fav-btn');
+  var favPop = document.getElementById('fav-pop');
+  if (favBtn && favPop) {
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+    var key = isMac ? '⌘ + D' : 'Ctrl + D';
+    favPop.innerHTML =
+      '按 <kbd>' + key + '</kbd> 收藏本页到浏览器书签' +
+      '<button class="fav-pop-copy" id="fav-pop-copy">复制本页链接</button>';
+
+    favBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      favPop.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+      if (!favPop.contains(e.target) && e.target !== favBtn) {
+        favPop.classList.remove('show');
+      }
+    });
+
+    var copyBtn = document.getElementById('fav-pop-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          copyBtn.textContent = '✓ 已复制';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = '复制本页链接';
+            copyBtn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+  }
+
+  // Backlinks: expand/collapse all
+  document.querySelectorAll('.bl-expand-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.add('open');
+      });
+    });
+  });
+  document.querySelectorAll('.bl-collapse-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.remove('open');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>
