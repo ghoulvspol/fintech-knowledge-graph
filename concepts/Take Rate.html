@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Take Rate（费率/抽成率） - 金融科技知识图谱</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon-180.png">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#FAF7F2;
+  --bg2:#F3EDE4;
+  --text:#1B1B18;
+  --text2:#6B6560;
+  --gold:#B8860B;
+  --gold-light:#D4A843;
+  --gold-glow:rgba(184,134,11,.12);
+  --navy:#1A2332;
+  --navy-light:#2C3E50;
+  --cream:#FFF8EE;
+  --border:#E0D6C8;
+  --card:#FFFFFF;
+  --link:#8B5E0B;
+  --serif:'Noto Serif SC','Crimson Pro',Georgia,'Times New Roman',serif;
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --sidebar-w:260px;
+}
+
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--navy);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:.5px;
+  font-family:var(--serif);
+  display:block;
+}
+.logo:hover{color:var(--gold-light)}
+
+.sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+
+.nav-link{
+  display:block;
+  padding:6px 16px;
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-left:3px solid transparent;
+  transition:all .15s;
+}
+.nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-link.active{
+  color:#fff;
+  background:rgba(184,134,11,.15);
+  border-left-color:var(--gold);
+  font-weight:600;
+}
+.nav-home{font-size:14px;padding:10px 16px;font-weight:500;margin-bottom:4px}
+.nav-changelog{
+  margin-top:auto;
+  padding:14px 16px;
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.nav-changelog:hover{color:rgba(255,255,255,.7)}
+.nav-changelog.active{color:var(--gold-light)}
+.sidebar-nav{display:flex;flex-direction:column;height:100%}
+
+.nav-group{margin-bottom:2px}
+.nav-group-title{
+  padding:8px 16px;
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  user-select:none;
+  transition:color .15s;
+}
+.nav-group-title:hover{color:#fff}
+.caret{
+  display:inline-block;
+  width:0;height:0;
+  border-left:5px solid #cbd5e1;
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  transition:transform .2s;
+}
+.nav-group.open .nav-group-title .caret{transform:rotate(90deg);border-left-color:#fff}
+.nav-group-title .badge{
+  margin-left:auto;
+  background:rgba(255,255,255,.1);
+  color:#cbd5e1;
+  font-size:11px;
+  padding:1px 6px;
+  border-radius:8px;
+  font-weight:400;
+}
+.nav-group-items{display:none;padding-left:8px}
+.nav-group.open .nav-group-items{display:block}
+
+.hamburger{
+  display:none;
+  position:fixed;
+  top:12px;left:12px;
+  z-index:200;
+  background:var(--navy);
+  color:#fff;
+  border:none;
+  font-size:20px;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:max(var(--sidebar-w), calc((100vw - 1160px) / 2));
+  flex:1;
+  position:relative;
+  max-width:1160px;
+  padding:0;
+}
+
+/* grain overlay */
+.main::after{
+  content:'';
+  position:fixed;
+  top:0;left:var(--sidebar-w);right:0;bottom:0;
+  pointer-events:none;
+  opacity:.03;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== FAV / BOOKMARK BUTTON ===== */
+.fav-wrap{
+  position:absolute;
+  top:24px;right:48px;
+  z-index:50;
+}
+.fav-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  color:var(--gold);
+  font-size:16px;
+  cursor:pointer;
+  transition:all .25s;
+  font-family:var(--sans);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.fav-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-1px);
+}
+.fav-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+}
+.fav-btn:hover .fav-label{color:var(--gold)}
+.fav-pop{
+  display:none;
+  position:absolute;
+  right:0;top:48px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  font-size:13px;
+  min-width:240px;
+  z-index:51;
+  color:var(--text);
+  line-height:1.6;
+}
+.fav-pop.show{display:block}
+.fav-pop kbd{
+  background:var(--bg2);
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:12px;
+  border:1px solid var(--border);
+  font-family:var(--sans);
+  color:var(--navy);
+  font-weight:600;
+}
+.fav-pop-copy{
+  display:block;
+  width:100%;
+  margin-top:10px;
+  padding:8px 0;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:12px;
+  cursor:pointer;
+  text-align:center;
+  transition:all .15s;
+  font-family:var(--sans);
+}
+.fav-pop-copy:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.fav-pop-copy.copied{
+  background:#ecfdf5;
+  border-color:#6ee7b7;
+  color:#059669;
+}
+
+@media(max-width:768px){
+  .fav-wrap{right:16px;top:12px}
+  .fav-btn{padding:6px 14px}
+  .fav-label{font-size:12px}
+}
+
+/* ===== CHANGELOG ===== */
+.article.changelog h2{
+  border-bottom-color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.version{
+  display:inline-flex;
+  align-items:center;
+  background:var(--gold);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:3px 11px;
+  border-radius:6px;
+  font-family:var(--sans);
+  letter-spacing:.3px;
+}
+.changelog-date{
+  font-size:14px;
+  color:var(--text2);
+  font-weight:500;
+  font-family:var(--sans);
+}
+.change-list{list-style:none;padding:0;margin:16px 0}
+.change-list li{
+  padding:10px 0 10px 18px;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  line-height:1.75;
+}
+.change-list li:last-child{border-bottom:none}
+.change-list li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:20px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--gold);
+}
+.change-type{
+  display:inline-block;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+  margin-right:8px;
+  font-family:var(--sans);
+  vertical-align:1px;
+  letter-spacing:.2px;
+}
+.change-type.feat{background:#059669}
+.change-type.fix{background:#dc2626}
+.change-type.plan{background:#3b82f6}
+.change-list li strong{color:var(--navy);font-weight:700}
+
+/* ===== ARTICLE (content pages) ===== */
+.article{max-width:820px;padding:48px 48px 80px}
+.meta{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.type-badge{
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+}
+.type-概念{background:#7C5E2A}
+.type-方法{background:#5E4A8B}
+.type-产品{background:#1A6B7C}
+.type-人物{background:#8B2F2F}
+.type-总体规划{background:#2A6B4F}
+.type-访谈{background:#3A5E8B}
+.type-财报会议{background:#4A6E2A}
+.type-索引{background:#6B6560}
+
+.article h1{
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:1.3;
+  margin-bottom:24px;
+  font-weight:900;
+  color:var(--navy);
+  letter-spacing:-.5px;
+}
+.article h2{
+  font-family:var(--serif);
+  font-size:21px;
+  margin:36px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--border);
+  font-weight:700;
+  color:var(--navy);
+}
+.article h3{
+  font-family:var(--serif);
+  font-size:17px;
+  margin:24px 0 10px;
+  font-weight:600;
+  color:var(--navy-light);
+}
+.article p{margin:10px 0}
+.article ul,.article ol{padding-left:24px;margin:10px 0}
+.article li{margin:4px 0}
+
+.article a{
+  color:var(--link);
+  text-decoration:none;
+  background:linear-gradient(to bottom,transparent 60%,var(--gold-glow) 60%);
+  transition:background .2s;
+}
+.article a:hover{background:linear-gradient(to bottom,transparent 40%,rgba(184,134,11,.2) 40%)}
+
+.article blockquote{
+  background:var(--cream);
+  border-left:4px solid var(--gold);
+  padding:14px 20px;
+  margin:16px 0;
+  border-radius:0 8px 8px 0;
+  font-style:italic;
+  color:#5C4813;
+  font-family:var(--serif);
+}
+.article blockquote p{margin:0}
+.article blockquote a{background:none;color:var(--gold)}
+.article blockquote a:hover{text-decoration:underline}
+
+.article table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.article th,.article td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+.article th{background:var(--bg2);font-weight:600;color:var(--navy)}
+.article strong{font-weight:700}
+.article hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.article code{
+  background:var(--bg2);
+  padding:2px 6px;
+  border-radius:3px;
+  font-size:13px;
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+  color:#5C4813;
+}
+
+/* ===== BACKLINKS PANEL (right sidebar) ===== */
+.main.has-backlinks{
+  display:grid;
+  grid-template-columns:minmax(0,820px) 280px;
+  gap:0 24px;
+  max-width:1160px;
+}
+.main-content{min-width:0}
+
+.backlinks-panel{
+  grid-column:2;
+  grid-row:1/-1;
+  position:sticky;
+  top:24px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  padding:24px 0 24px 20px;
+  border-left:1px solid var(--border);
+  font-size:13px;
+  align-self:start;
+}
+.backlinks-panel::-webkit-scrollbar{width:3px}
+.backlinks-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.bl-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.bl-panel-title{
+  font-family:var(--serif);
+  font-size:14px;
+  font-weight:700;
+  color:var(--navy);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.bl-count{
+  font-size:11px;
+  background:var(--bg2);
+  padding:1px 7px;
+  border-radius:10px;
+  color:var(--text2);
+  font-weight:600;
+}
+.bl-panel-actions{display:flex;gap:4px}
+.bl-action{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:2px 8px;
+  font-size:11px;
+  color:var(--text2);
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:all .15s;
+}
+.bl-action:hover{border-color:var(--gold);color:var(--gold)}
+
+.bl-group{margin-bottom:4px}
+.bl-group-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:5px 0;
+  width:100%;
+  text-align:left;
+  font-size:13px;
+  font-family:var(--sans);
+}
+.bl-group-header:hover{background:rgba(0,0,0,.02);border-radius:4px}
+
+.bl-caret{
+  display:inline-block;
+  width:0;height:0;
+  border:4px solid transparent;
+  border-left:5px solid var(--text2);
+  transition:transform .15s;
+  flex-shrink:0;
+}
+.bl-group.open .bl-caret{transform:rotate(90deg)}
+
+.bl-source-name{
+  color:var(--navy);
+  font-weight:600;
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bl-mention-cat{
+  font-size:10px;
+  color:var(--text2);
+  background:var(--bg2);
+  padding:0 5px;
+  border-radius:8px;
+  flex-shrink:0;
+  margin-left:4px;
+}
+
+.bl-snippets{display:none;padding:4px 0 4px 14px}
+.bl-group.open .bl-snippets{display:block}
+
+.bl-snippet{
+  padding:6px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.6;
+  color:var(--text2);
+  font-size:12px;
+}
+.bl-snippet:last-child{border-bottom:none}
+.bl-go-link{
+  display:inline-block;
+  font-size:11px;
+  color:var(--link);
+  text-decoration:none;
+  padding:4px 0 2px;
+  font-weight:600;
+  transition:color .15s;
+}
+.bl-go-link:hover{color:var(--gold);text-decoration:underline}
+
+/* ===== HOMEPAGE ===== */
+.hero-section{
+  position:relative;
+  padding:72px 48px 56px;
+  max-width:900px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp .6s ease forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-1px;
+  color:var(--navy);
+  margin-bottom:6px;
+  opacity:0;
+  animation:fadeUp .6s ease .1s forwards;
+}
+.hero-title .gold{color:var(--gold)}
+.hero-sub{
+  font-size:17px;
+  color:var(--text2);
+  line-height:1.8;
+  margin-top:16px;
+  max-width:640px;
+  font-family:var(--serif);
+  font-weight:400;
+  opacity:0;
+  animation:fadeUp .6s ease .2s forwards;
+}
+.hero-sub b{color:var(--navy);font-weight:700}
+
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  max-width:900px;
+  margin:0 auto 48px;
+  padding:0 48px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  opacity:0;
+  animation:fadeUp .6s ease .3s forwards;
+}
+.stat-item{
+  text-align:center;
+  padding:28px 12px;
+  position:relative;
+  transition:background .3s;
+  text-decoration:none;
+  color:inherit;
+}
+.stat-item:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  right:0;top:20%;
+  height:60%;
+  width:1px;
+  background:var(--border);
+}
+.stat-item:hover{background:var(--gold-glow)}
+.stat-num{
+  font-family:var(--serif);
+  font-size:42px;
+  font-weight:900;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-2px;
+}
+.stat-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+  letter-spacing:.5px;
+}
+
+.main-inner{max-width:900px;padding:0 48px 80px;margin:0 auto}
+
+.nav-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:56px;
+  opacity:0;
+  animation:fadeUp .6s ease .4s forwards;
+}
+.nav-card{
+  position:relative;
+  padding:28px 20px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  display:block;
+  color:inherit;
+}
+.nav-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  opacity:0;
+  transition:opacity .3s;
+}
+.nav-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+  border-color:var(--gold-light);
+}
+.nav-card:hover::before{opacity:1}
+.nav-card-icon{font-size:32px;margin-bottom:14px;display:block;line-height:1}
+.nav-card-title{
+  font-family:var(--serif);
+  font-size:16px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.nav-card-sub{font-size:13px;color:var(--text2)}
+.nav-card-arrow{
+  position:absolute;
+  bottom:20px;right:20px;
+  font-size:18px;
+  color:var(--border);
+  transition:all .3s;
+}
+.nav-card:hover .nav-card-arrow{color:var(--gold);transform:translateX(4px)}
+
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-line{flex:1;height:1px;background:var(--border)}
+.section-title{
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:700;
+  color:var(--navy);
+  white-space:nowrap;
+}
+.section-count{
+  font-size:12px;
+  color:var(--gold);
+  font-weight:600;
+  background:var(--gold-glow);
+  padding:3px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:10px}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  font-size:14px;
+  color:var(--text);
+  text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  font-weight:500;
+}
+.tag:hover{
+  border-color:var(--gold);
+  color:var(--navy);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-2px);
+}
+.tag-n{
+  font-size:11px;
+  font-weight:700;
+  color:#fff;
+  background:var(--gold);
+  padding:2px 8px;
+  border-radius:10px;
+  min-width:20px;
+  text-align:center;
+}
+.tag.tier-1{
+  font-size:16px;
+  padding:10px 22px;
+  font-weight:700;
+  border-color:var(--gold-light);
+  background:linear-gradient(135deg,#FFFDF5,#FFF8E7);
+}
+.tag.tier-1 .tag-n{font-size:12px;padding:3px 10px;background:var(--gold)}
+.tag.tier-2{font-size:15px;padding:9px 20px;font-weight:600}
+
+.people-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+}
+.person-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:24px 16px 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s;
+  text-align:center;
+  color:inherit;
+}
+.person-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  border-color:var(--gold-light);
+}
+.person-avatar{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+  color:var(--gold-light);
+  font-family:var(--serif);
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(26,35,50,.15);
+}
+.person-name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.person-refs{font-size:12px;color:var(--text2)}
+
+.gold-divider{display:flex;align-items:center;gap:16px;margin:56px 0}
+.gold-divider::before,.gold-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.gold-divider-diamond{
+  width:8px;height:8px;
+  background:var(--gold);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+.footer-promo{
+  position:relative;
+  overflow:hidden;
+  padding:40px;
+  background:var(--navy);
+  border-radius:20px;
+  color:#fff;
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+.footer-promo::before{
+  content:'';
+  position:absolute;
+  top:-50%;right:-20%;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(184,134,11,.15),transparent 70%);
+}
+.promo-story{flex:1;position:relative;z-index:1;min-width:0}
+.promo-story h3{
+  font-family:var(--serif);
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--gold-light);
+}
+.promo-story p{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8;margin:8px 0}
+.promo-credit{
+  margin-top:16px !important;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  font-size:13px !important;
+}
+.promo-credit strong{color:var(--gold-light);font-weight:700}
+
+.promo-qr{
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  text-align:center;
+}
+.qr-img{
+  display:block;
+  width:140px;
+  height:140px;
+  border-radius:12px;
+  border:3px solid rgba(255,255,255,.15);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  background:#fff;
+  padding:6px;
+}
+.qr-text{
+  font-size:12px;
+  color:rgba(255,255,255,.6);
+  margin-top:10px;
+  letter-spacing:.5px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.section{opacity:0;animation:fadeUp .5s ease forwards}
+.section:nth-child(1){animation-delay:.45s}
+.section:nth-child(2){animation-delay:.55s}
+.section:nth-child(3){animation-delay:.65s}
+.section:nth-child(4){animation-delay:.75s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .main.has-backlinks{display:block}
+  .backlinks-panel{
+    position:static;
+    max-height:none;
+    overflow-y:visible;
+    border-left:none;
+    border-top:1px solid var(--border);
+    padding:24px 16px;
+    margin-top:24px;
+    max-width:820px;
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .main{margin-left:0;max-width:100%}
+  .main::after{left:0}
+  .main.has-backlinks{display:block}
+  .article{padding:48px 16px 60px}
+  .backlinks-panel{padding:16px 12px;margin-top:16px}
+  .hero-section{padding:44px 20px 20px}
+  .hero-eyebrow{font-size:10px;margin-bottom:12px}
+  .hero-title{font-size:26px}
+  .hero-sub{font-size:14px;line-height:1.6;margin-top:10px}
+  .stats-row{padding:0 16px;margin:0 0 20px}
+  .stat-item{padding:16px 4px}
+  .stat-num{font-size:28px;letter-spacing:-1px}
+  .stat-label{font-size:11px}
+  .main-inner{padding:0 20px 60px}
+  .nav-cards{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+  .nav-card{padding:20px 14px 18px}
+  .nav-card-icon{font-size:24px;margin-bottom:8px}
+  .nav-card-title{font-size:14px}
+  .nav-card-sub{font-size:12px}
+  .footer-promo{flex-direction:column;text-align:center;padding:28px 20px;gap:24px}
+  .people-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="菜单" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<aside class="sidebar">
+  <div class="sidebar-header"><a href="/index.html" class="logo">金融科技知识图谱</a></div>
+  <div class="sidebar-nav">
+    <a href="/index.html" class="nav-link nav-home">🏛 首页</a>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>索引<span class="badge">8</span></div>
+  <div class="nav-group-items">
+    <a href="/index-pages/业务模式索引.html" class="nav-link" title="业务模式索引">业务模式索引</a>
+    <a href="/index-pages/中国公司索引.html" class="nav-link" title="中国公司索引">中国公司索引</a>
+    <a href="/index-pages/关键事件索引.html" class="nav-link" title="关键事件索引">关键事件索引</a>
+    <a href="/index-pages/关键人物索引.html" class="nav-link" title="关键人物索引">关键人物索引</a>
+    <a href="/index-pages/技术栈索引.html" class="nav-link" title="技术栈索引">技术栈索引</a>
+    <a href="/index-pages/核心概念索引.html" class="nav-link" title="核心概念索引">核心概念索引</a>
+    <a href="/index-pages/海外公司索引.html" class="nav-link" title="海外公司索引">海外公司索引</a>
+    <a href="/index-pages/监管政策索引.html" class="nav-link" title="监管政策索引">监管政策索引</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>中国公司<span class="badge">11</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-cn/京东科技.html" class="nav-link" title="京东科技">京东科技</a>
+    <a href="/companies-cn/字节跳动金融.html" class="nav-link" title="字节跳动金融">字节跳动金融</a>
+    <a href="/companies-cn/小米金融.html" class="nav-link" title="小米金融">小米金融</a>
+    <a href="/companies-cn/平安壹钱包.html" class="nav-link" title="平安壹钱包">平安壹钱包</a>
+    <a href="/companies-cn/度小满.html" class="nav-link" title="度小满">度小满</a>
+    <a href="/companies-cn/微众银行.html" class="nav-link" title="微众银行">微众银行</a>
+    <a href="/companies-cn/网商银行.html" class="nav-link" title="网商银行">网商银行</a>
+    <a href="/companies-cn/腾讯金融科技.html" class="nav-link" title="腾讯金融科技">腾讯金融科技</a>
+    <a href="/companies-cn/苏宁金融.html" class="nav-link" title="苏宁金融">苏宁金融</a>
+    <a href="/companies-cn/蚂蚁集团.html" class="nav-link" title="蚂蚁集团">蚂蚁集团</a>
+    <a href="/companies-cn/陆金所.html" class="nav-link" title="陆金所">陆金所</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>海外公司<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-global/Adyen.html" class="nav-link" title="Adyen">Adyen</a>
+    <a href="/companies-global/Block.html" class="nav-link" title="Block">Block</a>
+    <a href="/companies-global/Chime.html" class="nav-link" title="Chime">Chime</a>
+    <a href="/companies-global/Coinbase.html" class="nav-link" title="Coinbase">Coinbase</a>
+    <a href="/companies-global/Klarna.html" class="nav-link" title="Klarna">Klarna</a>
+    <a href="/companies-global/PayPal.html" class="nav-link" title="PayPal">PayPal</a>
+    <a href="/companies-global/Plaid.html" class="nav-link" title="Plaid">Plaid</a>
+    <a href="/companies-global/Revolut.html" class="nav-link" title="Revolut">Revolut</a>
+    <a href="/companies-global/Robinhood.html" class="nav-link" title="Robinhood">Robinhood</a>
+    <a href="/companies-global/SoFi.html" class="nav-link" title="SoFi">SoFi</a>
+    <a href="/companies-global/Stripe.html" class="nav-link" title="Stripe">Stripe</a>
+    <a href="/companies-global/Wise.html" class="nav-link" title="Wise">Wise</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>业务模式<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>核心概念<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/concepts/BNPL.html" class="nav-link" title="BNPL">BNPL</a>
+    <a href="/concepts/CBDC.html" class="nav-link" title="CBDC">CBDC</a>
+    <a href="/concepts/DeFi.html" class="nav-link" title="DeFi">DeFi</a>
+    <a href="/concepts/Interchange.html" class="nav-link" title="Interchange">Interchange</a>
+    <a href="/concepts/KYC AML.html" class="nav-link" title="KYC AML">KYC AML</a>
+    <a href="/concepts/Open Banking.html" class="nav-link" title="Open Banking">Open Banking</a>
+    <a href="/concepts/Stablecoin.html" class="nav-link" title="Stablecoin">Stablecoin</a>
+    <a href="/concepts/TPV GPV.html" class="nav-link" title="TPV GPV">TPV GPV</a>
+    <a href="/concepts/Take Rate.html" class="nav-link active" title="Take Rate">Take Rate</a>
+    <a href="/concepts/嵌入式金融.html" class="nav-link" title="嵌入式金融">嵌入式金融</a>
+    <a href="/concepts/联合贷款.html" class="nav-link" title="联合贷款">联合贷款</a>
+    <a href="/concepts/超级App.html" class="nav-link" title="超级App">超级App</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>监管政策<span class="badge">6</span></div>
+  <div class="nav-group-items">
+    <a href="/regulations/个人征信新规.html" class="nav-link" title="个人征信新规">个人征信新规</a>
+    <a href="/regulations/互金整治.html" class="nav-link" title="互金整治">互金整治</a>
+    <a href="/regulations/数据出境监管.html" class="nav-link" title="数据出境监管">数据出境监管</a>
+    <a href="/regulations/网络小贷新规.html" class="nav-link" title="网络小贷新规">网络小贷新规</a>
+    <a href="/regulations/蚂蚁集团重组.html" class="nav-link" title="蚂蚁集团重组">蚂蚁集团重组</a>
+    <a href="/regulations/金融控股公司管理办法.html" class="nav-link" title="金融控股公司管理办法">金融控股公司管理办法</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键事件<span class="badge">5</span></div>
+  <div class="nav-group-items">
+    <a href="/events/P2P 全部清退.html" class="nav-link" title="P2P 全部清退">P2P 全部清退</a>
+    <a href="/events/京东金融重组.html" class="nav-link" title="京东金融重组">京东金融重组</a>
+    <a href="/events/平安科技板块独立.html" class="nav-link" title="平安科技板块独立">平安科技板块独立</a>
+    <a href="/events/滴滴金融崩盘.html" class="nav-link" title="滴滴金融崩盘">滴滴金融崩盘</a>
+    <a href="/events/蚂蚁 IPO 暂停.html" class="nav-link" title="蚂蚁 IPO 暂停">蚂蚁 IPO 暂停</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键人物<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/people/Brian Armstrong.html" class="nav-link" title="Brian Armstrong">Brian Armstrong</a>
+    <a href="/people/David Vélez.html" class="nav-link" title="David Vélez">David Vélez</a>
+    <a href="/people/Jack Dorsey.html" class="nav-link" title="Jack Dorsey">Jack Dorsey</a>
+    <a href="/people/John Collison.html" class="nav-link" title="John Collison">John Collison</a>
+    <a href="/people/Patrick Collison.html" class="nav-link" title="Patrick Collison">Patrick Collison</a>
+    <a href="/people/Sebastian Siemiatkowski.html" class="nav-link" title="Sebastian Siemiatkowski">Sebastian Siemiatkowski</a>
+    <a href="/people/Vlad Tenev.html" class="nav-link" title="Vlad Tenev">Vlad Tenev</a>
+    <a href="/people/井贤栋.html" class="nav-link" title="井贤栋">井贤栋</a>
+    <a href="/people/彭蕾.html" class="nav-link" title="彭蕾">彭蕾</a>
+    <a href="/people/陈生强.html" class="nav-link" title="陈生强">陈生强</a>
+    <a href="/people/顾国栋.html" class="nav-link" title="顾国栋">顾国栋</a>
+    <a href="/people/马化腾.html" class="nav-link" title="马化腾">马化腾</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>技术栈<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+
+  </div>
+</aside>
+<main class="main has-backlinks">
+<div class="main-content article"><div class="meta"><span class="type-badge type-核心概念">核心概念</span></div>
+<h1 id="take-ratetake-rate">Take Rate（Take Rate / 费率）</h1>
+<h2 id="_1">一句话定义</h2>
+<p>Take Rate 是指交易平台或金融服务商从每一笔流转的交易额中抽取的佣金/费用占比，等于"平台收入 / 平台撮合的交易总额（GMV/TPV）"——是衡量平台货币化能力的核心 KPI。</p>
+<h2 id="_2">起源与背景</h2>
+<p>Take Rate 作为术语起源于美国电商和支付行业，eBay 早期招股书（1998）就使用 take rate 描述其相对于 GMV 的收入提取能力。这一指标随支付公司（PayPal、Visa）和电商公司（Amazon、Alibaba）的成长成为投行估值标尺。</p>
+<p>为什么要单独看 Take Rate 而不是收入？因为对于平台型业务，收入受 GMV 规模驱动，但 GMV 本身可能虚高（刷单、补贴），而 Take Rate 反映的是平台真正的"定价权"。投行估值时常用 GMV × Take Rate 来推演成熟期收入，进而估算 EV/Sales。</p>
+<p>进入金融科技领域后，Take Rate 的内涵被扩展：支付公司的 MDR、<a href="/concepts/BNPL.html">BNPL</a> 的商户折扣率、保险代销的佣金率、券商的交易费率、加密交易所的交易费率，本质都是 Take Rate 的不同形态。</p>
+<h2 id="_3">核心要义</h2>
+<p><strong>第一，Take Rate 不是越高越好——它反映的是平台"创造价值"与"分配价值"之间的平衡。</strong> 过低（如 支付宝 大额支付费率&lt;0.1%）意味着平台主要做基础设施、靠规模赚钱；过高（如 <a href="/companies-global/Klarna.html">Klarna</a> 在小商户的 6%）意味着平台为商户提供了高溢价的服务。但当 Take Rate 持续上升超过商户毛利可承受范围，会触发"去中介化"——商户绕过平台直接对接客户，正是淘宝商家近年来开始转向私域流量的逻辑。</p>
+<p><strong>第二，Take Rate 的可比性需要严格定义口径。</strong> 同样是支付公司，<a href="/companies-global/Stripe.html">Stripe</a> 的 Take Rate 约 1.8%（含跨境）、<a href="/companies-global/Block.html">Block</a> 的 2.6%（含 SaaS）、<a href="/companies-global/Adyen.html">Adyen</a> 的 0.16%（仅交换费净额）。差异不是定价能力，而是收入口径不同——<a href="/companies-global/Adyen.html">Adyen</a> 用的是"net revenue"扣除 interchange，<a href="/companies-global/Stripe.html">Stripe</a>/<a href="/companies-global/Block.html">Block</a> 用的是"gross revenue"包含 interchange 通过。投行估值时往往要把所有公司"换算到同一口径"才有可比性。</p>
+<p><strong>第三，Take Rate 在不同阶段有不同意义。</strong> 早期平台（GMV 增速 &gt;100%）Take Rate 通常很低甚至为负（补贴），目的是占领市场；成熟期（GMV 增速 20%-50%）Take Rate 上升体现定价权；衰退期 Take Rate 难以再提升、只能靠交叉销售（金融、广告）扩大"扩展 Take Rate"。这就是为什么 <a href="/companies-cn/蚂蚁集团.html">蚂蚁集团</a> 把"小微贷款促成费"包装成 Take Rate 来讲增长故事。</p>
+<h2 id="_4">在中国</h2>
+<ul>
+<li>主要玩家：支付宝（综合 Take Rate 约 0.4%-0.6%）、微信支付（约 0.4%-0.6%）、阿里电商（综合 Take Rate 约 4%-5%）、美团（外卖 Take Rate 约 13%-15%）、京东（综合 Take Rate 约 3%-4%）</li>
+<li>典型口径：聚合支付通常 0.2%-0.6%；电商平台佣金 1%-5%；外卖平台 10%-25%；信贷促成费 1.5%-3%（Take Rate 形态的服务费）</li>
+<li>监管态度：央行《条码支付业务规范》对二维码支付费率有窗口指导（≤0.38% 或 0.55%）；外卖费率因 2021 年商家抗议被反垄断局介入降费</li>
+<li>与国外的差异：中国 C2C 转账免费、B2C 支付费率极低；商品类电商 Take Rate 显著低于亚马逊；外卖等本地生活 Take Rate 高于全球均值</li>
+</ul>
+<h2 id="_5">在海外</h2>
+<ul>
+<li>主要玩家：<a href="/companies-global/Stripe.html">Stripe</a>（约 1.8%）、<a href="/companies-global/Block.html">Block</a> Square（2.6%）、<a href="/companies-global/Adyen.html">Adyen</a>（0.16% 净额）、PayPal（约 1.9%）、<a href="/companies-global/Klarna.html">Klarna</a>（<a href="/concepts/BNPL.html">BNPL</a> 约 4-6%）、Affirm（<a href="/concepts/BNPL.html">BNPL</a> 约 5-6%）、Visa/Mastercard 卡组织本身（0.1%-0.15% 净额）、Amazon Marketplace（约 15%）、Uber（外卖 Uber Eats 约 30%、网约车约 25%）</li>
+<li>典型口径：北美卡支付 1.5%-3%（含 interchange、卡组织、收单费多重叠加）；P2P 支付（Venmo、Zelle）通常免费；加密交易所 Take Rate 0.1%-1.5%</li>
+<li>主要监管框架：欧盟 IFR（Interchange Fee Regulation）将借记卡 interchange 上限定为 0.2%、信用卡 0.3%；澳大利亚 RBA 直接监管 interchange；美国 Durbin Amendment 限制大行 interchange</li>
+<li>商业模式特点：Take Rate 高度叠加（merchant pays MDR → 收单方 → 卡组织 → 发卡行）</li>
+</ul>
+<h2 id="_6">关键数据</h2>
+<table>
+<thead>
+<tr>
+<th>业务类型</th>
+<th>行业典型 Take Rate</th>
+<th>代表公司</th>
+<th>时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>卡支付（含 interchange）</td>
+<td>1.5%-3%</td>
+<td>Visa/<a href="/companies-global/Stripe.html">Stripe</a>/<a href="/companies-global/Block.html">Block</a></td>
+<td>2024</td>
+</tr>
+<tr>
+<td>卡支付（净额，扣 interchange）</td>
+<td>0.1%-0.3%</td>
+<td><a href="/companies-global/Adyen.html">Adyen</a>/Visa</td>
+<td>2024</td>
+</tr>
+<tr>
+<td>二维码支付（中国）</td>
+<td>0.2%-0.55%</td>
+<td>支付宝/微信支付</td>
+<td>2024</td>
+</tr>
+<tr>
+<td><a href="/concepts/BNPL.html">BNPL</a></td>
+<td>3%-6%</td>
+<td><a href="/companies-global/Klarna.html">Klarna</a>/Affirm</td>
+<td>2024</td>
+</tr>
+<tr>
+<td>加密交易所现货</td>
+<td>0.1%-0.5%</td>
+<td><a href="/companies-global/Coinbase.html">Coinbase</a>/Binance</td>
+<td>2024</td>
+</tr>
+<tr>
+<td>经纪商现货（零佣）</td>
+<td>约 0%（订单流付款变现）</td>
+<td><a href="/companies-global/Robinhood.html">Robinhood</a></td>
+<td>2024</td>
+</tr>
+<tr>
+<td>财富管理（智能投顾）AUM 费</td>
+<td>0.25%-0.5%/年</td>
+<td>Betterment/Wealthfront</td>
+<td>2024</td>
+</tr>
+<tr>
+<td>网约车/外卖</td>
+<td>15%-30%</td>
+<td>Uber/美团/Grab Financial</td>
+<td>2024</td>
+</tr>
+</tbody>
+</table>
+<p>数据来源：各公司 10-K/招股书、McKinsey <em>Global Payments Report 2023</em>。</p>
+<h2 id="_7">商业模式</h2>
+<p>Take Rate 是商业模式的"压缩定义"：<br />
+- <strong>基础设施型</strong>（卡组织、交易所）：Take Rate 极低（0.1%-0.3%），靠规模与网络效应<br />
+- <strong>平台型</strong>（电商、外卖）：Take Rate 中等（3%-15%），靠流量分配权与服务深度<br />
+- <strong>嵌入式金融型</strong>（<a href="/concepts/BNPL.html">BNPL</a>、保险代销）：Take Rate 较高（4%-8%），靠风控与转化提升</p>
+<h2 id="_8">风险与争议</h2>
+<ul>
+<li><strong>垄断指控</strong>：高 Take Rate 常被视为垄断证据，Apple App Store 30% 抽成、外卖平台 25% 佣金都引发反垄断诉讼</li>
+<li><strong>替代品压力</strong>：高 Take Rate 引发"绕过"——商户自建支付（Shopify Payments）、品牌直营 DTC、PISP 替代卡支付</li>
+<li><strong>指标失真</strong>：通过 GMV 虚增、补贴等手段可短期压低 Take Rate 数字，<a href="/companies-global/Block.html">Block</a>、<a href="/companies-global/Klarna.html">Klarna</a> 都被审计师质询过相关口径</li>
+<li><strong>监管价格管制</strong>：欧盟 IFR、澳大利亚 RBA 直接限制 interchange，挤压 Take Rate 上限</li>
+</ul>
+<h2 id="_9">相关概念</h2>
+<ul>
+<li><a href="/concepts/Interchange.html">Interchange</a>——卡支付 Take Rate 的核心组成</li>
+<li>TPV / GPV——Take Rate 的分母</li>
+<li><a href="/concepts/嵌入式金融.html">嵌入式金融</a>——Take Rate 重新分配的舞台</li>
+<li><a href="/concepts/BNPL.html">BNPL</a>——高 Take Rate 业务代表</li>
+<li>第三方支付——Take Rate 是其核心 KPI</li>
+</ul>
+<h2 id="_10">典型案例</h2>
+<ul>
+<li><strong><a href="/companies-global/Adyen.html">Adyen</a> vs <a href="/companies-global/Stripe.html">Stripe</a></strong>：Adyen 单笔 Take Rate（净额）远低于 Stripe，但因服务大客户净利润率却更高，是"低 Take Rate × 高 ARPU"的代表</li>
+<li><strong><a href="/companies-cn/蚂蚁集团.html">蚂蚁集团</a> 招股书"Take Rate"</strong>：在 IPO 招股书中，蚂蚁定义了"科技服务费率"作为对各业务的统一货币化指标，引发投行估值方法讨论</li>
+<li><strong>Apple 30% 与 DMA</strong>：欧盟 2024 年 DMA 强制要求 Apple 允许第三方应用商店，本质上是对 Take Rate 30% 的反垄断打击</li>
+</ul></div><aside class="backlinks-panel">
+  <div class="bl-panel-header">
+    <h3 class="bl-panel-title">链接到本页 <span class="bl-count">21</span></h3>
+    <div class="bl-panel-actions">
+      <button class="bl-action bl-expand-all">展开</button>
+      <button class="bl-action bl-collapse-all">折叠</button>
+    </div>
+  </div>
+  <div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">京东科技（JD Technology，原京东数科 / 京东金融）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…信贷]] - 白条 - 联合贷款 - 供应链金融 - 助贷 - 第三方支付 - Take Rate - 嵌入式金融 - 产业互联网  ## 关键事件  - 京东金融重组 - [[京东数科 IPO…</div>
+    <a href="/companies-cn/京东科技.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">度小满（Du Xiaoman Financial，原百度金融）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…]] - 助贷 - 联合贷款 - 直销银行 - 百信银行 - 搜索流量变现 - Take Rate - 征信业务管理办法 - 互联网贷款  ## 关键事件  - 百度金融分拆 - [[互金整治]…</div>
+    <a href="/companies-cn/度小满.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">网商银行（MYbank）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…凡星计划 - 第三方支付 - 民营银行 - 征信业务管理办法 - 钱塘征信 - Take Rate  ## 关键事件  - 互金整治 - 网络小贷新规 - 蚂蚁重组 - 征信业务管理办法…</div>
+    <a href="/companies-cn/网商银行.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">腾讯金融科技（Tencent Financial Technology / FiT）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…务费 / 销售返佣、信贷利息分润（来自微众及自营）、保险佣金、信用卡还款手续费等 - 核心盈利来源：商业支付费（Take Rate 约 0.6%–0.8%，To-B 商户费率为主）；理财通基金代销渠道费；微众银行投资收益（按权益法计入腾讯净利润） -…</div>
+    <a href="/companies-cn/腾讯金融科技.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">蚂蚁集团（Ant Group）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…5.9%、创新业务及其他 0.8% - 核心盈利来源：消费信贷的 联合贷款 与助贷分润、技术服务费 / Take Rate、支付通道费、理财保险代销佣金 - 典型 Take Rate / 利率水平：花呗借呗对终端借款人年化利率约 14…</div>
+    <a href="/companies-cn/蚂蚁集团.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">陆金所（Lufax Holding）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…资产" facilitation 占比下降，担保收入与利息收入占比上升 - 核心盈利来源：贷款促成的服务费 / Take Rate、利差（消金子公司表内）、担保费；从平台撮合模式转向"全包风险"模式后，盈利对资产质量极其敏感 - **典型 Take…</div>
+    <a href="/companies-cn/陆金所.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Adyen</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…CCO，长期负责商务拓展。  ## 相关概念  - Acquirer Issuer Processor Take Rate Interchange Scheme Fees PSD2 Open Banking […</div>
+    <a href="/companies-global/Adyen.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Block（原 Square）</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…App 内部领导职务。  ## 相关概念  - BNPL Bitcoin Stablecoin Take Rate Interchange Neobank POS Embedded Finance [[…</div>
+    <a href="/companies-global/Block.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Chime</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…ange]] Durbin Amendment CFPB Earned Wage Access Take Rate Embedded Finance Credit Builder  ## 关键事件  - [[Chime…</div>
+    <a href="/companies-global/Chime.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Klarna</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…导 IPO 流程。  ## 相关概念  - BNPL Open Banking Neobank Take Rate Interchange CFPB FCA Down Round [[Embedded…</div>
+    <a href="/companies-global/Klarna.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">PayPal（贝宝）</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…PSP），承接 Uber、Airbnb、TikTok 等大型平台流量，是 PayPal 内部 TPV 增长的主引擎，但 Take Rate 显著低于品牌钱包。 - Venmo：2013 年随 Braintree 一并收入囊中，是美国最具社交属性的 P…</div>
+    <a href="/companies-global/PayPal.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Plaid</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…] Embedded Finance BaaS Screen Scraping FDX Take Rate Anti-Trust  ## 关键事件  - Visa 收购 Plaid 受阻 - [[CFPB 10…</div>
+    <a href="/companies-global/Plaid.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Revolut</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…—Revolut UK CEO，前 Molo Finance CEO。  ## 相关概念  - Neobank Take Rate Interchange Multi-currency Account Open Banking…</div>
+    <a href="/companies-global/Revolut.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Robinhood</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…low]] Robinhood Gold Self-Custody Wallet Crypto Take Rate Margin Loan Neobroker Meme Stock BitLicense…</div>
+    <a href="/companies-global/Robinhood.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">SoFi</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…司 Figure。  ## 相关概念  - Neobank BaaS Core Banking Take Rate Interchange Banking License OCC CFPB [[Embe…</div>
+    <a href="/companies-global/SoFi.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Stripe</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…onnect、Issuing、Treasury、Atlas 等大多按 BPS 抽成或按月费/接口费收取，整体公司净收入 Take Rate 约 1%~1.5%。 - 关键财务指标（公司披露与外部估算）：   - 2023 年 TPV 突破 1 万亿美…</div>
+    <a href="/companies-global/Stripe.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Wise（原 TransferWise）</span>
+    <span class="bl-mention-cat">海外公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…—CTO。  ## 相关概念  - Open Banking Cross-border Payment Take Rate Interchange CHAPS SEPA Direct Listing [[Mul…</div>
+    <a href="/companies-global/Wise.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">BNPL（Buy Now Pay Later，先买后付）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…相关概念  - 消费信贷——BNPL 是其新形态 - 嵌入式金融——BNPL 是嵌入式信贷的代表 - Take Rate——BNPL 的核心 KPI - ABS——BNPL 平台的主要融资工具 - 信用卡分期 vs BNPL…</div>
+    <a href="/concepts/BNPL.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Interchange（卡组织交换费）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…*（2023 提案）拟强制大行支持非 Visa/Mastercard 路由，可能动摇双寡头格局  ## 相关概念  - Take Rate——Interchange 是支付 Take Rate 的核心 - 第三方支付——支付公司围绕 Intercha…</div>
+    <a href="/concepts/Interchange.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">TPV / GPV（总支付/交易额）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…**：Klarna 2022 年 TPV 增长但仍亏损 10 亿美元，TPV 神话破裂  ## 相关概念  - Take Rate——TPV 是其分母 - Interchange——TPV 经过卡组织时被收取 - 第三方支付——TPV…</div>
+    <a href="/concepts/TPV GPV.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">核心概念索引</span>
+    <span class="bl-mention-cat">索引</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…份识别 / 反洗钱核心环节 - 信用工厂——蚂蚁、京东、平安式的批量化信用决策  ## 商业模式核心指标  - Take Rate——平台费率，fintech 估值的核心度量 - Interchange——卡组织交换费，Visa/MC 的命脉…</div>
+    <a href="/index-pages/核心概念索引.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+
+</aside>
+
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle sidebar nav groups
+  document.querySelectorAll('.nav-group-title').forEach(function(el) {
+    el.addEventListener('click', function() {
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // Backlinks: toggle individual groups
+  document.querySelectorAll('.bl-group-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      this.closest('.bl-group').classList.toggle('open');
+    });
+  });
+
+  // Favorite / bookmark popup
+  var favBtn = document.getElementById('fav-btn');
+  var favPop = document.getElementById('fav-pop');
+  if (favBtn && favPop) {
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+    var key = isMac ? '⌘ + D' : 'Ctrl + D';
+    favPop.innerHTML =
+      '按 <kbd>' + key + '</kbd> 收藏本页到浏览器书签' +
+      '<button class="fav-pop-copy" id="fav-pop-copy">复制本页链接</button>';
+
+    favBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      favPop.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+      if (!favPop.contains(e.target) && e.target !== favBtn) {
+        favPop.classList.remove('show');
+      }
+    });
+
+    var copyBtn = document.getElementById('fav-pop-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          copyBtn.textContent = '✓ 已复制';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = '复制本页链接';
+            copyBtn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+  }
+
+  // Backlinks: expand/collapse all
+  document.querySelectorAll('.bl-expand-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.add('open');
+      });
+    });
+  });
+  document.querySelectorAll('.bl-collapse-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.remove('open');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>

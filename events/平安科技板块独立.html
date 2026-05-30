@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>平安科技板块独立（Ping An Tech Spin-Offs） - 金融科技知识图谱</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon-180.png">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#FAF7F2;
+  --bg2:#F3EDE4;
+  --text:#1B1B18;
+  --text2:#6B6560;
+  --gold:#B8860B;
+  --gold-light:#D4A843;
+  --gold-glow:rgba(184,134,11,.12);
+  --navy:#1A2332;
+  --navy-light:#2C3E50;
+  --cream:#FFF8EE;
+  --border:#E0D6C8;
+  --card:#FFFFFF;
+  --link:#8B5E0B;
+  --serif:'Noto Serif SC','Crimson Pro',Georgia,'Times New Roman',serif;
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --sidebar-w:260px;
+}
+
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--navy);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:.5px;
+  font-family:var(--serif);
+  display:block;
+}
+.logo:hover{color:var(--gold-light)}
+
+.sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+
+.nav-link{
+  display:block;
+  padding:6px 16px;
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-left:3px solid transparent;
+  transition:all .15s;
+}
+.nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-link.active{
+  color:#fff;
+  background:rgba(184,134,11,.15);
+  border-left-color:var(--gold);
+  font-weight:600;
+}
+.nav-home{font-size:14px;padding:10px 16px;font-weight:500;margin-bottom:4px}
+.nav-changelog{
+  margin-top:auto;
+  padding:14px 16px;
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.nav-changelog:hover{color:rgba(255,255,255,.7)}
+.nav-changelog.active{color:var(--gold-light)}
+.sidebar-nav{display:flex;flex-direction:column;height:100%}
+
+.nav-group{margin-bottom:2px}
+.nav-group-title{
+  padding:8px 16px;
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  user-select:none;
+  transition:color .15s;
+}
+.nav-group-title:hover{color:#fff}
+.caret{
+  display:inline-block;
+  width:0;height:0;
+  border-left:5px solid #cbd5e1;
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  transition:transform .2s;
+}
+.nav-group.open .nav-group-title .caret{transform:rotate(90deg);border-left-color:#fff}
+.nav-group-title .badge{
+  margin-left:auto;
+  background:rgba(255,255,255,.1);
+  color:#cbd5e1;
+  font-size:11px;
+  padding:1px 6px;
+  border-radius:8px;
+  font-weight:400;
+}
+.nav-group-items{display:none;padding-left:8px}
+.nav-group.open .nav-group-items{display:block}
+
+.hamburger{
+  display:none;
+  position:fixed;
+  top:12px;left:12px;
+  z-index:200;
+  background:var(--navy);
+  color:#fff;
+  border:none;
+  font-size:20px;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:max(var(--sidebar-w), calc((100vw - 1160px) / 2));
+  flex:1;
+  position:relative;
+  max-width:1160px;
+  padding:0;
+}
+
+/* grain overlay */
+.main::after{
+  content:'';
+  position:fixed;
+  top:0;left:var(--sidebar-w);right:0;bottom:0;
+  pointer-events:none;
+  opacity:.03;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== FAV / BOOKMARK BUTTON ===== */
+.fav-wrap{
+  position:absolute;
+  top:24px;right:48px;
+  z-index:50;
+}
+.fav-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  color:var(--gold);
+  font-size:16px;
+  cursor:pointer;
+  transition:all .25s;
+  font-family:var(--sans);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.fav-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-1px);
+}
+.fav-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+}
+.fav-btn:hover .fav-label{color:var(--gold)}
+.fav-pop{
+  display:none;
+  position:absolute;
+  right:0;top:48px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  font-size:13px;
+  min-width:240px;
+  z-index:51;
+  color:var(--text);
+  line-height:1.6;
+}
+.fav-pop.show{display:block}
+.fav-pop kbd{
+  background:var(--bg2);
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:12px;
+  border:1px solid var(--border);
+  font-family:var(--sans);
+  color:var(--navy);
+  font-weight:600;
+}
+.fav-pop-copy{
+  display:block;
+  width:100%;
+  margin-top:10px;
+  padding:8px 0;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:12px;
+  cursor:pointer;
+  text-align:center;
+  transition:all .15s;
+  font-family:var(--sans);
+}
+.fav-pop-copy:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.fav-pop-copy.copied{
+  background:#ecfdf5;
+  border-color:#6ee7b7;
+  color:#059669;
+}
+
+@media(max-width:768px){
+  .fav-wrap{right:16px;top:12px}
+  .fav-btn{padding:6px 14px}
+  .fav-label{font-size:12px}
+}
+
+/* ===== CHANGELOG ===== */
+.article.changelog h2{
+  border-bottom-color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.version{
+  display:inline-flex;
+  align-items:center;
+  background:var(--gold);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:3px 11px;
+  border-radius:6px;
+  font-family:var(--sans);
+  letter-spacing:.3px;
+}
+.changelog-date{
+  font-size:14px;
+  color:var(--text2);
+  font-weight:500;
+  font-family:var(--sans);
+}
+.change-list{list-style:none;padding:0;margin:16px 0}
+.change-list li{
+  padding:10px 0 10px 18px;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  line-height:1.75;
+}
+.change-list li:last-child{border-bottom:none}
+.change-list li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:20px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--gold);
+}
+.change-type{
+  display:inline-block;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+  margin-right:8px;
+  font-family:var(--sans);
+  vertical-align:1px;
+  letter-spacing:.2px;
+}
+.change-type.feat{background:#059669}
+.change-type.fix{background:#dc2626}
+.change-type.plan{background:#3b82f6}
+.change-list li strong{color:var(--navy);font-weight:700}
+
+/* ===== ARTICLE (content pages) ===== */
+.article{max-width:820px;padding:48px 48px 80px}
+.meta{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.type-badge{
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+}
+.type-概念{background:#7C5E2A}
+.type-方法{background:#5E4A8B}
+.type-产品{background:#1A6B7C}
+.type-人物{background:#8B2F2F}
+.type-总体规划{background:#2A6B4F}
+.type-访谈{background:#3A5E8B}
+.type-财报会议{background:#4A6E2A}
+.type-索引{background:#6B6560}
+
+.article h1{
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:1.3;
+  margin-bottom:24px;
+  font-weight:900;
+  color:var(--navy);
+  letter-spacing:-.5px;
+}
+.article h2{
+  font-family:var(--serif);
+  font-size:21px;
+  margin:36px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--border);
+  font-weight:700;
+  color:var(--navy);
+}
+.article h3{
+  font-family:var(--serif);
+  font-size:17px;
+  margin:24px 0 10px;
+  font-weight:600;
+  color:var(--navy-light);
+}
+.article p{margin:10px 0}
+.article ul,.article ol{padding-left:24px;margin:10px 0}
+.article li{margin:4px 0}
+
+.article a{
+  color:var(--link);
+  text-decoration:none;
+  background:linear-gradient(to bottom,transparent 60%,var(--gold-glow) 60%);
+  transition:background .2s;
+}
+.article a:hover{background:linear-gradient(to bottom,transparent 40%,rgba(184,134,11,.2) 40%)}
+
+.article blockquote{
+  background:var(--cream);
+  border-left:4px solid var(--gold);
+  padding:14px 20px;
+  margin:16px 0;
+  border-radius:0 8px 8px 0;
+  font-style:italic;
+  color:#5C4813;
+  font-family:var(--serif);
+}
+.article blockquote p{margin:0}
+.article blockquote a{background:none;color:var(--gold)}
+.article blockquote a:hover{text-decoration:underline}
+
+.article table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.article th,.article td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+.article th{background:var(--bg2);font-weight:600;color:var(--navy)}
+.article strong{font-weight:700}
+.article hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.article code{
+  background:var(--bg2);
+  padding:2px 6px;
+  border-radius:3px;
+  font-size:13px;
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+  color:#5C4813;
+}
+
+/* ===== BACKLINKS PANEL (right sidebar) ===== */
+.main.has-backlinks{
+  display:grid;
+  grid-template-columns:minmax(0,820px) 280px;
+  gap:0 24px;
+  max-width:1160px;
+}
+.main-content{min-width:0}
+
+.backlinks-panel{
+  grid-column:2;
+  grid-row:1/-1;
+  position:sticky;
+  top:24px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  padding:24px 0 24px 20px;
+  border-left:1px solid var(--border);
+  font-size:13px;
+  align-self:start;
+}
+.backlinks-panel::-webkit-scrollbar{width:3px}
+.backlinks-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.bl-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.bl-panel-title{
+  font-family:var(--serif);
+  font-size:14px;
+  font-weight:700;
+  color:var(--navy);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.bl-count{
+  font-size:11px;
+  background:var(--bg2);
+  padding:1px 7px;
+  border-radius:10px;
+  color:var(--text2);
+  font-weight:600;
+}
+.bl-panel-actions{display:flex;gap:4px}
+.bl-action{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:2px 8px;
+  font-size:11px;
+  color:var(--text2);
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:all .15s;
+}
+.bl-action:hover{border-color:var(--gold);color:var(--gold)}
+
+.bl-group{margin-bottom:4px}
+.bl-group-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:5px 0;
+  width:100%;
+  text-align:left;
+  font-size:13px;
+  font-family:var(--sans);
+}
+.bl-group-header:hover{background:rgba(0,0,0,.02);border-radius:4px}
+
+.bl-caret{
+  display:inline-block;
+  width:0;height:0;
+  border:4px solid transparent;
+  border-left:5px solid var(--text2);
+  transition:transform .15s;
+  flex-shrink:0;
+}
+.bl-group.open .bl-caret{transform:rotate(90deg)}
+
+.bl-source-name{
+  color:var(--navy);
+  font-weight:600;
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bl-mention-cat{
+  font-size:10px;
+  color:var(--text2);
+  background:var(--bg2);
+  padding:0 5px;
+  border-radius:8px;
+  flex-shrink:0;
+  margin-left:4px;
+}
+
+.bl-snippets{display:none;padding:4px 0 4px 14px}
+.bl-group.open .bl-snippets{display:block}
+
+.bl-snippet{
+  padding:6px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.6;
+  color:var(--text2);
+  font-size:12px;
+}
+.bl-snippet:last-child{border-bottom:none}
+.bl-go-link{
+  display:inline-block;
+  font-size:11px;
+  color:var(--link);
+  text-decoration:none;
+  padding:4px 0 2px;
+  font-weight:600;
+  transition:color .15s;
+}
+.bl-go-link:hover{color:var(--gold);text-decoration:underline}
+
+/* ===== HOMEPAGE ===== */
+.hero-section{
+  position:relative;
+  padding:72px 48px 56px;
+  max-width:900px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp .6s ease forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-1px;
+  color:var(--navy);
+  margin-bottom:6px;
+  opacity:0;
+  animation:fadeUp .6s ease .1s forwards;
+}
+.hero-title .gold{color:var(--gold)}
+.hero-sub{
+  font-size:17px;
+  color:var(--text2);
+  line-height:1.8;
+  margin-top:16px;
+  max-width:640px;
+  font-family:var(--serif);
+  font-weight:400;
+  opacity:0;
+  animation:fadeUp .6s ease .2s forwards;
+}
+.hero-sub b{color:var(--navy);font-weight:700}
+
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  max-width:900px;
+  margin:0 auto 48px;
+  padding:0 48px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  opacity:0;
+  animation:fadeUp .6s ease .3s forwards;
+}
+.stat-item{
+  text-align:center;
+  padding:28px 12px;
+  position:relative;
+  transition:background .3s;
+  text-decoration:none;
+  color:inherit;
+}
+.stat-item:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  right:0;top:20%;
+  height:60%;
+  width:1px;
+  background:var(--border);
+}
+.stat-item:hover{background:var(--gold-glow)}
+.stat-num{
+  font-family:var(--serif);
+  font-size:42px;
+  font-weight:900;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-2px;
+}
+.stat-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+  letter-spacing:.5px;
+}
+
+.main-inner{max-width:900px;padding:0 48px 80px;margin:0 auto}
+
+.nav-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:56px;
+  opacity:0;
+  animation:fadeUp .6s ease .4s forwards;
+}
+.nav-card{
+  position:relative;
+  padding:28px 20px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  display:block;
+  color:inherit;
+}
+.nav-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  opacity:0;
+  transition:opacity .3s;
+}
+.nav-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+  border-color:var(--gold-light);
+}
+.nav-card:hover::before{opacity:1}
+.nav-card-icon{font-size:32px;margin-bottom:14px;display:block;line-height:1}
+.nav-card-title{
+  font-family:var(--serif);
+  font-size:16px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.nav-card-sub{font-size:13px;color:var(--text2)}
+.nav-card-arrow{
+  position:absolute;
+  bottom:20px;right:20px;
+  font-size:18px;
+  color:var(--border);
+  transition:all .3s;
+}
+.nav-card:hover .nav-card-arrow{color:var(--gold);transform:translateX(4px)}
+
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-line{flex:1;height:1px;background:var(--border)}
+.section-title{
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:700;
+  color:var(--navy);
+  white-space:nowrap;
+}
+.section-count{
+  font-size:12px;
+  color:var(--gold);
+  font-weight:600;
+  background:var(--gold-glow);
+  padding:3px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:10px}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  font-size:14px;
+  color:var(--text);
+  text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  font-weight:500;
+}
+.tag:hover{
+  border-color:var(--gold);
+  color:var(--navy);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-2px);
+}
+.tag-n{
+  font-size:11px;
+  font-weight:700;
+  color:#fff;
+  background:var(--gold);
+  padding:2px 8px;
+  border-radius:10px;
+  min-width:20px;
+  text-align:center;
+}
+.tag.tier-1{
+  font-size:16px;
+  padding:10px 22px;
+  font-weight:700;
+  border-color:var(--gold-light);
+  background:linear-gradient(135deg,#FFFDF5,#FFF8E7);
+}
+.tag.tier-1 .tag-n{font-size:12px;padding:3px 10px;background:var(--gold)}
+.tag.tier-2{font-size:15px;padding:9px 20px;font-weight:600}
+
+.people-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+}
+.person-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:24px 16px 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s;
+  text-align:center;
+  color:inherit;
+}
+.person-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  border-color:var(--gold-light);
+}
+.person-avatar{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+  color:var(--gold-light);
+  font-family:var(--serif);
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(26,35,50,.15);
+}
+.person-name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.person-refs{font-size:12px;color:var(--text2)}
+
+.gold-divider{display:flex;align-items:center;gap:16px;margin:56px 0}
+.gold-divider::before,.gold-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.gold-divider-diamond{
+  width:8px;height:8px;
+  background:var(--gold);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+.footer-promo{
+  position:relative;
+  overflow:hidden;
+  padding:40px;
+  background:var(--navy);
+  border-radius:20px;
+  color:#fff;
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+.footer-promo::before{
+  content:'';
+  position:absolute;
+  top:-50%;right:-20%;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(184,134,11,.15),transparent 70%);
+}
+.promo-story{flex:1;position:relative;z-index:1;min-width:0}
+.promo-story h3{
+  font-family:var(--serif);
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--gold-light);
+}
+.promo-story p{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8;margin:8px 0}
+.promo-credit{
+  margin-top:16px !important;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  font-size:13px !important;
+}
+.promo-credit strong{color:var(--gold-light);font-weight:700}
+
+.promo-qr{
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  text-align:center;
+}
+.qr-img{
+  display:block;
+  width:140px;
+  height:140px;
+  border-radius:12px;
+  border:3px solid rgba(255,255,255,.15);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  background:#fff;
+  padding:6px;
+}
+.qr-text{
+  font-size:12px;
+  color:rgba(255,255,255,.6);
+  margin-top:10px;
+  letter-spacing:.5px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.section{opacity:0;animation:fadeUp .5s ease forwards}
+.section:nth-child(1){animation-delay:.45s}
+.section:nth-child(2){animation-delay:.55s}
+.section:nth-child(3){animation-delay:.65s}
+.section:nth-child(4){animation-delay:.75s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .main.has-backlinks{display:block}
+  .backlinks-panel{
+    position:static;
+    max-height:none;
+    overflow-y:visible;
+    border-left:none;
+    border-top:1px solid var(--border);
+    padding:24px 16px;
+    margin-top:24px;
+    max-width:820px;
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .main{margin-left:0;max-width:100%}
+  .main::after{left:0}
+  .main.has-backlinks{display:block}
+  .article{padding:48px 16px 60px}
+  .backlinks-panel{padding:16px 12px;margin-top:16px}
+  .hero-section{padding:44px 20px 20px}
+  .hero-eyebrow{font-size:10px;margin-bottom:12px}
+  .hero-title{font-size:26px}
+  .hero-sub{font-size:14px;line-height:1.6;margin-top:10px}
+  .stats-row{padding:0 16px;margin:0 0 20px}
+  .stat-item{padding:16px 4px}
+  .stat-num{font-size:28px;letter-spacing:-1px}
+  .stat-label{font-size:11px}
+  .main-inner{padding:0 20px 60px}
+  .nav-cards{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+  .nav-card{padding:20px 14px 18px}
+  .nav-card-icon{font-size:24px;margin-bottom:8px}
+  .nav-card-title{font-size:14px}
+  .nav-card-sub{font-size:12px}
+  .footer-promo{flex-direction:column;text-align:center;padding:28px 20px;gap:24px}
+  .people-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="菜单" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<aside class="sidebar">
+  <div class="sidebar-header"><a href="/index.html" class="logo">金融科技知识图谱</a></div>
+  <div class="sidebar-nav">
+    <a href="/index.html" class="nav-link nav-home">🏛 首页</a>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>索引<span class="badge">8</span></div>
+  <div class="nav-group-items">
+    <a href="/index-pages/业务模式索引.html" class="nav-link" title="业务模式索引">业务模式索引</a>
+    <a href="/index-pages/中国公司索引.html" class="nav-link" title="中国公司索引">中国公司索引</a>
+    <a href="/index-pages/关键事件索引.html" class="nav-link" title="关键事件索引">关键事件索引</a>
+    <a href="/index-pages/关键人物索引.html" class="nav-link" title="关键人物索引">关键人物索引</a>
+    <a href="/index-pages/技术栈索引.html" class="nav-link" title="技术栈索引">技术栈索引</a>
+    <a href="/index-pages/核心概念索引.html" class="nav-link" title="核心概念索引">核心概念索引</a>
+    <a href="/index-pages/海外公司索引.html" class="nav-link" title="海外公司索引">海外公司索引</a>
+    <a href="/index-pages/监管政策索引.html" class="nav-link" title="监管政策索引">监管政策索引</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>中国公司<span class="badge">11</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-cn/京东科技.html" class="nav-link" title="京东科技">京东科技</a>
+    <a href="/companies-cn/字节跳动金融.html" class="nav-link" title="字节跳动金融">字节跳动金融</a>
+    <a href="/companies-cn/小米金融.html" class="nav-link" title="小米金融">小米金融</a>
+    <a href="/companies-cn/平安壹钱包.html" class="nav-link" title="平安壹钱包">平安壹钱包</a>
+    <a href="/companies-cn/度小满.html" class="nav-link" title="度小满">度小满</a>
+    <a href="/companies-cn/微众银行.html" class="nav-link" title="微众银行">微众银行</a>
+    <a href="/companies-cn/网商银行.html" class="nav-link" title="网商银行">网商银行</a>
+    <a href="/companies-cn/腾讯金融科技.html" class="nav-link" title="腾讯金融科技">腾讯金融科技</a>
+    <a href="/companies-cn/苏宁金融.html" class="nav-link" title="苏宁金融">苏宁金融</a>
+    <a href="/companies-cn/蚂蚁集团.html" class="nav-link" title="蚂蚁集团">蚂蚁集团</a>
+    <a href="/companies-cn/陆金所.html" class="nav-link" title="陆金所">陆金所</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>海外公司<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-global/Adyen.html" class="nav-link" title="Adyen">Adyen</a>
+    <a href="/companies-global/Block.html" class="nav-link" title="Block">Block</a>
+    <a href="/companies-global/Chime.html" class="nav-link" title="Chime">Chime</a>
+    <a href="/companies-global/Coinbase.html" class="nav-link" title="Coinbase">Coinbase</a>
+    <a href="/companies-global/Klarna.html" class="nav-link" title="Klarna">Klarna</a>
+    <a href="/companies-global/PayPal.html" class="nav-link" title="PayPal">PayPal</a>
+    <a href="/companies-global/Plaid.html" class="nav-link" title="Plaid">Plaid</a>
+    <a href="/companies-global/Revolut.html" class="nav-link" title="Revolut">Revolut</a>
+    <a href="/companies-global/Robinhood.html" class="nav-link" title="Robinhood">Robinhood</a>
+    <a href="/companies-global/SoFi.html" class="nav-link" title="SoFi">SoFi</a>
+    <a href="/companies-global/Stripe.html" class="nav-link" title="Stripe">Stripe</a>
+    <a href="/companies-global/Wise.html" class="nav-link" title="Wise">Wise</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>业务模式<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>核心概念<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/concepts/BNPL.html" class="nav-link" title="BNPL">BNPL</a>
+    <a href="/concepts/CBDC.html" class="nav-link" title="CBDC">CBDC</a>
+    <a href="/concepts/DeFi.html" class="nav-link" title="DeFi">DeFi</a>
+    <a href="/concepts/Interchange.html" class="nav-link" title="Interchange">Interchange</a>
+    <a href="/concepts/KYC AML.html" class="nav-link" title="KYC AML">KYC AML</a>
+    <a href="/concepts/Open Banking.html" class="nav-link" title="Open Banking">Open Banking</a>
+    <a href="/concepts/Stablecoin.html" class="nav-link" title="Stablecoin">Stablecoin</a>
+    <a href="/concepts/TPV GPV.html" class="nav-link" title="TPV GPV">TPV GPV</a>
+    <a href="/concepts/Take Rate.html" class="nav-link" title="Take Rate">Take Rate</a>
+    <a href="/concepts/嵌入式金融.html" class="nav-link" title="嵌入式金融">嵌入式金融</a>
+    <a href="/concepts/联合贷款.html" class="nav-link" title="联合贷款">联合贷款</a>
+    <a href="/concepts/超级App.html" class="nav-link" title="超级App">超级App</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>监管政策<span class="badge">6</span></div>
+  <div class="nav-group-items">
+    <a href="/regulations/个人征信新规.html" class="nav-link" title="个人征信新规">个人征信新规</a>
+    <a href="/regulations/互金整治.html" class="nav-link" title="互金整治">互金整治</a>
+    <a href="/regulations/数据出境监管.html" class="nav-link" title="数据出境监管">数据出境监管</a>
+    <a href="/regulations/网络小贷新规.html" class="nav-link" title="网络小贷新规">网络小贷新规</a>
+    <a href="/regulations/蚂蚁集团重组.html" class="nav-link" title="蚂蚁集团重组">蚂蚁集团重组</a>
+    <a href="/regulations/金融控股公司管理办法.html" class="nav-link" title="金融控股公司管理办法">金融控股公司管理办法</a>
+  </div>
+</div>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>关键事件<span class="badge">5</span></div>
+  <div class="nav-group-items">
+    <a href="/events/P2P 全部清退.html" class="nav-link" title="P2P 全部清退">P2P 全部清退</a>
+    <a href="/events/京东金融重组.html" class="nav-link" title="京东金融重组">京东金融重组</a>
+    <a href="/events/平安科技板块独立.html" class="nav-link active" title="平安科技板块独立">平安科技板块独立</a>
+    <a href="/events/滴滴金融崩盘.html" class="nav-link" title="滴滴金融崩盘">滴滴金融崩盘</a>
+    <a href="/events/蚂蚁 IPO 暂停.html" class="nav-link" title="蚂蚁 IPO 暂停">蚂蚁 IPO 暂停</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键人物<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/people/Brian Armstrong.html" class="nav-link" title="Brian Armstrong">Brian Armstrong</a>
+    <a href="/people/David Vélez.html" class="nav-link" title="David Vélez">David Vélez</a>
+    <a href="/people/Jack Dorsey.html" class="nav-link" title="Jack Dorsey">Jack Dorsey</a>
+    <a href="/people/John Collison.html" class="nav-link" title="John Collison">John Collison</a>
+    <a href="/people/Patrick Collison.html" class="nav-link" title="Patrick Collison">Patrick Collison</a>
+    <a href="/people/Sebastian Siemiatkowski.html" class="nav-link" title="Sebastian Siemiatkowski">Sebastian Siemiatkowski</a>
+    <a href="/people/Vlad Tenev.html" class="nav-link" title="Vlad Tenev">Vlad Tenev</a>
+    <a href="/people/井贤栋.html" class="nav-link" title="井贤栋">井贤栋</a>
+    <a href="/people/彭蕾.html" class="nav-link" title="彭蕾">彭蕾</a>
+    <a href="/people/陈生强.html" class="nav-link" title="陈生强">陈生强</a>
+    <a href="/people/顾国栋.html" class="nav-link" title="顾国栋">顾国栋</a>
+    <a href="/people/马化腾.html" class="nav-link" title="马化腾">马化腾</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>技术栈<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+
+  </div>
+</aside>
+<main class="main has-backlinks">
+<div class="main-content article"><div class="meta"><span class="type-badge type-关键事件">关键事件</span></div>
+<h1 id="ping-an-tech-spin-offs">平安科技板块独立（Ping An Tech Spin-Offs）</h1>
+<h2 id="_1">一句话概括</h2>
+<p>中国平安通过将<a href="/companies-cn/陆金所.html">陆金所</a>、<a href="/companies-cn/平安壹钱包.html">平安壹钱包</a>、金融壹账通、平安健康、平安好车、平安科技等科技板块逐步独立融资乃至上市,创造了中国传统金融机构"科技独角兽孵化"的最完整路径,但 2018-2023 年间这些独立板块全面遭遇估值缩水或战略调整,标志传统金融机构主导的"科技+金融"模式同样面临系统性挑战。</p>
+<h2 id="_2">时间线</h2>
+<ul>
+<li><strong>2011-09</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>在上海正式成立,作为中国平安旗下网络投融资平台,初期定位为 P2P 撮合+财富管理。计葵生(Greg Gibb)出任董事长。</li>
+<li><strong>2012-08</strong>:平安健康互联网成立,后发展为"平安好医生",定位互联网医疗。</li>
+<li><strong>2014-08</strong>:<a href="/companies-cn/平安壹钱包.html">平安壹钱包</a>(原"平安付")获得央行第三方支付牌照,成为平安金融科技对接 C 端的支付载体。</li>
+<li><strong>2014-12</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>推出"稳赢-安e贷"等信贷产品,P2P 业务规模快速放大。</li>
+<li><strong>2015-03</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>完成 A 轮融资 4.85 亿美元,投后估值约 100 亿美元,成为中国 fintech 估值最高独角兽之一。</li>
+<li><strong>2015-12-04</strong>:平安好医生正式成立(从平安健康分拆),CEO王涛掌舵。</li>
+<li><strong>2016-01</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>完成 B 轮融资 12.16 亿美元,估值升至 185 亿美元。</li>
+<li><strong>2016-12</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>整合普惠金融业务,业务结构调整为"陆金服(P2P)+陆基金+陆财富+陆国际+陆控全资普惠子公司"等多线。</li>
+<li><strong>2017-06</strong>:金融壹账通(OneConnect)从平安独立运营,定位"金融机构服务平台",对外输出平安的核心系统、风控、AI 能力。</li>
+<li><strong>2018-03-22</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>母公司"陆金所控股"启动 C 轮融资 13.3 亿美元,估值达到 394 亿美元(约 2480 亿元人民币),为陆金所估值峰值。</li>
+<li><strong>2018-05-04</strong>:平安好医生在港交所上市,首日开盘价 57.3 港元,市值约 540 亿港元。</li>
+<li><strong>2019-08</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>宣布退出 P2P 业务,加快向消费金融、财富管理转型,该决定让陆金所在 P2P 全面清退潮中得以保全。</li>
+<li><strong>2019-12-13</strong>:金融壹账通在纽交所上市,发行价 10 美元,首日开盘价 10.1 美元,市值约 36 亿美元。</li>
+<li><strong>2020-10-30</strong>:陆金所控股在纽交所上市,股票代码 LU,发行价 13.5 美元,首日收盘价 13.06 美元,市值约 318 亿美元。</li>
+<li><strong>2021-至今</strong>:中国金融科技监管整体收紧,平安系科技板块全面承压。</li>
+<li><strong>2021-2022</strong>:平安好医生股价从 2020 年峰值 148 港元跌至 2022 年低点 13 港元,市值缩水约 90%。CEO 王涛2020 年 5 月被换下,方蔚豪接任。</li>
+<li><strong>2022-04-28</strong>:金融壹账通从纽交所启动私有化退市评估,但最终未完成,转向降级。2022 年 7 月主动降级为低位市值,股价从 2020 年高点约 30 美元跌至 2024 年约 1 美元区间(经历 1:30 反向拆股后)。</li>
+<li><strong>2023-04-14</strong>:陆金所控股在港交所完成"介绍上市"(无新股发行),实现纽约+香港双重主要上市,但港股股价在 2023-2024 年整体走弱。</li>
+<li><strong>2023-下半年</strong>:<a href="/companies-cn/陆金所.html">陆金所</a>核心业务消费金融受监管整改,直接信贷余额从 2020 年峰值 5800 亿元持续压降至 2024 年的约 2000 亿元。</li>
+<li><strong>2024-02-29</strong>:陆金所控股财报披露 2023 年净亏损 12.36 亿元,为上市以来首次年度亏损。市值从 IPO 时 318 亿美元缩水至约 25 亿美元(2024 年 5 月)。</li>
+<li><strong>2024-2025</strong>:<a href="/companies-cn/平安壹钱包.html">平安壹钱包</a>业务持续整合至平安集团内部,独立故事弱化;金融壹账通股价持续低位,业务收缩;<a href="/companies-cn/陆金所.html">陆金所</a>主动转型为"持牌消费金融+财富管理"双轨,但估值故事难以重建。</li>
+</ul>
+<h2 id="_3">关键当事方</h2>
+<ul>
+<li><strong>中国平安</strong>:科技板块孵化母体,以股东身份持续推进</li>
+<li><strong>马明哲</strong>:中国平安创始人、董事长,科技战略主导者</li>
+<li><strong><a href="/companies-cn/陆金所.html">陆金所</a>/陆金所控股</strong>:科技板块旗舰</li>
+<li><strong>计葵生</strong>(Greg Gibb):前陆金所董事长,海归金融科技代表人物</li>
+<li><strong>平安好医生</strong>(后改名平安健康):互联网医疗代表</li>
+<li><strong>金融壹账通</strong>(OneConnect):ToB 科技输出代表</li>
+<li><strong><a href="/companies-cn/平安壹钱包.html">平安壹钱包</a></strong>:支付板块</li>
+<li><strong>平安科技</strong>:集团内 IT 与 AI 中心</li>
+<li><strong>纽约证券交易所 港交所</strong>:多板块上市地</li>
+<li><strong>银保监会 证监会</strong>:监管方</li>
+</ul>
+<h2 id="_4">起因深度分析</h2>
+<p>平安科技板块独立战略的根本逻辑可以追溯到 2008 年马明哲提出的"金融+科技"战略,以及 2013 年内部确立的"科技驱动金融、金融服务实体"双轮战略。这一战略的根本动因有三层。</p>
+<p><strong>第一层是估值再发现的财务诉求</strong>。中国平安作为一家大型综合金融集团,在 A 股的市盈率长期在 7-12 倍区间徘徊,而美国硅谷的金融科技公司估值普遍达到 30-50 倍。平安认识到,如果将科技板块独立融资,可以以"独角兽估值"享受溢价。陆金所 C 轮估值 394 亿美元即是这一逻辑的极致体现——按平安持股约 40% 计算,陆金所给平安贡献了 158 亿美元的"账面估值",显著超过其在合并报表中的会计价值。这一逻辑也被同业借鉴(如招商银行招联消金、工商银行工银科技)。</p>
+<p><strong>第二层是业务赛道竞争的战略诉求</strong>。在互联网金融蓬勃发展的 2014-2018 年,以蚂蚁金服为代表的科技公司向传统金融机构的核心业务发起挑战。平安的应对策略是"以科技对抗科技"——将自己的科技能力独立成军,与互联网公司同台竞技。陆金所、金融壹账通、平安壹钱包等独立板块,本质是平安对蚂蚁、京东金融等的"对位部署"。在某种意义上,平安是中国传统金融机构中"互联网化转型"最坚决的代表。</p>
+<p><strong>第三层是组织活力的内部诉求</strong>。传统金融机构存在严重的"科层制+合规优先"组织文化,难以吸引顶尖科技人才。通过独立运营、独立估值、独立股权激励,平安试图为科技人才创造"硅谷式"工作环境。陆金所核心团队薪酬+股权激励远高于平安集团总部水平,平安好医生上市前更是创造了多名"高管财富自由"的案例。</p>
+<p>但这一战略在 2020 年后遭遇系统性挑战。<a href="/events/蚂蚁 IPO 暂停.html">蚂蚁 IPO 暂停</a>、<a href="/events/P2P 全部清退.html">P2P 全部清退</a>后,中国对"金融科技"的监管定调发生根本变化:科技不能改变金融业务的本质,所有金融业务必须持牌、穿透、资本约束。陆金所失去了"高估值科技"的叙事基础,被重新定价为"持牌金融机构"。平安好医生的"互联网医疗"故事在用户付费意愿不足、医保对接缓慢的现实下也难以兑现。金融壹账通对外输出技术的"中台模式"则在客户银行自主研发能力提升、对外采购意愿降低的背景下持续承压。</p>
+<h2 id="_5">经过的关键转折</h2>
+<p><strong>第一个关键转折是 2018-2019 年的密集上市</strong>。平安好医生 2018 年 5 月港股上市、金融壹账通 2019 年 12 月纽交所上市,前后相隔 18 个月,表明平安科技板块独立战略进入收获期。这两次上市当时被视为"传统金融科技转型的成功范本"。</p>
+<p><strong>第二个关键转折是 2020 年 10 月的陆金所 IPO</strong>。陆金所选择在蚂蚁 IPO 前上市(蚂蚁原计划 2020-11 上市,陆金所 10 月 30 日上市),是一个时机选择上的高明决策。陆金所避开了后来的蚂蚁监管风暴。但陆金所上市当日定价已显著低于 2018 年 C 轮的 394 亿美元估值,显示市场对中国 P2P/消费金融板块整体性的估值警惕。</p>
+<p><strong>第三个关键转折是 2021 年起的全面估值重估</strong>。蚂蚁事件后,所有"互联网金融"板块的估值锚发生根本性变化。陆金所从 IPO 时 318 亿美元市值跌至 2024 年 25 亿美元,缩水 92%。平安好医生从 2020 年 1100 亿港元市值跌至 2022 年低点约 90 亿港元,缩水 92%。金融壹账通从 2020 年高点约 100 亿美元市值跌至 2024 年约 5 亿美元,缩水 95%。三家公司同步缩水超过 90% 的事实,标志平安"科技独角兽孵化"战略遭遇全面挫折。</p>
+<p><strong>第四个关键转折是 2023-2024 年的业务收缩</strong>。陆金所主动压降信贷规模,2023 年首次年度亏损;平安好医生剥离低毛利消费医疗业务,聚焦企业医疗服务;金融壹账通客户结构从"对外输出"逐渐回归"对内服务"。三家公司的业务策略均从"扩张"转向"聚焦",反映科技独角兽叙事的根本性破灭。</p>
+<h2 id="_6">直接影响(量化)</h2>
+<table>
+<thead>
+<tr>
+<th>板块</th>
+<th>估值峰值(年份)</th>
+<th>2024 年估值</th>
+<th>缩水幅度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>陆金所控股</td>
+<td>394 亿美元(2018)</td>
+<td>约 25 亿美元</td>
+<td>-94%</td>
+</tr>
+<tr>
+<td>平安好医生</td>
+<td>约 1100 亿港元(2020)</td>
+<td>约 100 亿港元</td>
+<td>-91%</td>
+</tr>
+<tr>
+<td>金融壹账通</td>
+<td>约 100 亿美元(2020)</td>
+<td>约 5 亿美元</td>
+<td>-95%</td>
+</tr>
+<tr>
+<td><a href="/companies-cn/平安壹钱包.html">平安壹钱包</a></td>
+<td>估算 200 亿元(独立期)</td>
+<td>整合至集团内</td>
+<td>不再独立</td>
+</tr>
+<tr>
+<td>平安系科技板块合计估值峰值</td>
+<td>约 1500 亿美元(2020 峰值)</td>
+<td>约 200 亿美元</td>
+<td>-87%</td>
+</tr>
+<tr>
+<td>陆金所员工数</td>
+<td>约 10000(2020)</td>
+<td>约 4500(2024)</td>
+<td>-55%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_7">行业冲击</h2>
+<h3 id="_8">短期冲击(半年内)</h3>
+<p>平安科技板块的估值缩水让传统金融机构的"科技子公司独立路径"声誉受损。同期招商银行、工商银行、建设银行等机构的金融科技子公司估值预期均被大幅下调。"金融机构科技独角兽"的对外叙事难以维系。</p>
+<h3 id="1-3">中期重塑(1-3 年)</h3>
+<p>传统金融机构的科技战略从"独立估值"转向"内部能力建设"。招商银行 2022 年战略调整,不再追求金融科技子公司独立融资,而是把科技能力深度内嵌于核心业务。建设银行旗下"建信金科"、工商银行"工银科技"等也降低了独立化预期。中国"传统金融机构主导的金融科技赛道",转向"持牌+科技赋能本业"的内向化模式。</p>
+<h3 id="3">长期影响(3 年以上)</h3>
+<p>中国金融业的"科技+金融"路径出现两次系统性挫折:第一次是 2020-2021 年互联网公司主导的"超级 App + 金融"路径(蚂蚁、京东、滴滴),第二次是 2021-2024 年传统金融机构主导的"科技子公司孵化"路径(平安系)。两次挫折共同导致"金融科技"作为独立估值赛道在中国资本市场基本消失。从 2024 年起,投资人对中国金融科技的估值基础回归"持牌金融机构估值+合理科技溢价"。</p>
+<h2 id="_9">监管反应</h2>
+<p>监管层并未单独针对平安科技板块发声,但平安系板块的整改路径反映了监管整体思路。陆金所在 2019 年主动退出 P2P,体现"监管早预判+主动合规"策略,这一选择是平安能够避免 2020-2021 年监管风暴的关键。陆金所的消费金融业务在 2020 年后接受持续整改,跟随网络小贷新规、商业银行互联网贷款新规等调整业务结构。金融壹账通的"金融云+ToB 输出"业务受到《商业银行互联网贷款管理暂行办法》(2020-07)的影响,银行客户对第三方科技输出的依赖被监管约束。平安壹钱包则在《非银行支付机构条例》(2023-12)框架下接受牌照穿透监管。</p>
+<h2 id="_10">行业争议与不同声音</h2>
+<p><strong>支持平安路径派</strong>(以传统金融业内部为主):认为平安通过孵化科技子公司,既保持了集团整体合规优势,又获得了科技板块的估值溢价,即使在 2021 年后估值缩水,平安仍是传统金融机构中科技转型最成功的代表。</p>
+<p><strong>质疑路径派</strong>(以学界、独立投行为主):指出平安系科技板块的"独立估值"很大程度上依赖于"集团内部资源输送+流量+牌照",独立性是表面的,所谓的"独角兽估值"具有水分。陆金所早期相当部分资金来源于平安银行内部,平安好医生早期用户中相当部分来自平安寿险代理人推广。这种"内生独角兽"难以经受独立市场的真实检验。</p>
+<p><strong>业内反思派</strong>(以原平安系科技高管为主):部分前平安高管在事后接受采访时承认,2017-2020 年的科技板块独立战略过度依赖资本市场叙事,真正的产品-市场匹配(PMF)未充分验证就推动上市,导致了上市后业绩与估值的持续偏离。</p>
+<h2 id="_11">后续进展</h2>
+<p>截至 2025 年,平安系科技板块进入"务实整合"阶段:<a href="/companies-cn/陆金所.html">陆金所</a>剥离 P2P 后聚焦持牌消费金融+财富管理,但业务规模持续收缩,2024 年净亏损扩大,管理层多次调整;平安好医生(已改名"平安健康")聚焦平安集团内部医疗服务,放弃了对外大众市场,业绩有所企稳;金融壹账通客户结构调整,从"对外输出"转回"对内服务",定位为平安集团内部技术中台;<a href="/companies-cn/平安壹钱包.html">平安壹钱包</a>事实上整合至集团 C 端入口"平安金管家"App。整体上,平安"科技独角兽孵化"战略已基本结束,转向"科技服务集团本业"的回归路径。马明哲在 2023 年股东大会上对此表述为"金融为本,科技为用"。</p>
+<h2 id="_12">关联事件</h2>
+<ul>
+<li><a href="/events/蚂蚁 IPO 暂停.html">蚂蚁 IPO 暂停</a>——同期同质的"科技公司"估值重估</li>
+<li><a href="/events/京东金融重组.html">京东金融重组</a>——同样路径的另一案例</li>
+<li><a href="/events/P2P 全部清退.html">P2P 全部清退</a>——直接导致陆金所战略调整</li>
+<li><a href="/events/滴滴金融崩盘.html">滴滴金融崩盘</a>——平台金融退潮的另一案例</li>
+</ul>
+<h2 id="_13">关联监管</h2>
+<ul>
+<li>网络借贷信息中介机构业务活动管理暂行办法——陆金所退出 P2P 的依据</li>
+<li>商业银行互联网贷款管理暂行办法——影响金融壹账通业务</li>
+<li>非银行支付机构条例——影响壹钱包业务</li>
+<li>金融控股公司监督管理试行办法——平安作为金控集团的总体框架</li>
+</ul>
+<h2 id="_14">教训与启示</h2>
+<p>第一,<strong>"传统金融机构孵化科技独角兽"路径与"互联网公司向金融延伸"路径,在监管层眼中并无本质差别</strong>——只要业务实质是金融,就必须按金融监管规则执行。平安通过"集团孵化+独立上市+独立估值"的精心架构,并不能让陆金所、金融壹账通在监管视角下获得"科技公司"待遇。第二,<strong>金融业务的"独立估值"必须经得起独立市场的检验</strong>,如果科技子公司的核心客户、流量、数据来源严重依赖母集团,所谓的独立性是表面的,长期估值难以维系。第三,<strong>资本市场叙事不能替代产品-市场匹配验证</strong>——平安好医生的 1100 亿港元市值建立在"互联网医疗"的故事之上,但用户实际付费意愿、医保对接、商业模式持续性等基础问题未被充分回答。第四,<strong>金融业的"科技驱动"是手段而非目的</strong>,平安系板块在 2020 年后的全面回归说明,金融业的根本竞争力仍然是风险定价、客户关系、合规能力,科技是放大器而非替代品。第五,从中国金融业整体演化看,"超级 App + 金融"和"传统金融 + 科技子公司"两条独立化路径的双双受挫,标志着中国金融科技进入"嵌入式合规"新阶段——科技必须嵌入持牌金融机构内部,作为合规基础上的能力增强,而不是作为独立的估值故事。</p></div><aside class="backlinks-panel">
+  <div class="bl-panel-header">
+    <h3 class="bl-panel-title">链接到本页 <span class="bl-count">3</span></h3>
+    <div class="bl-panel-actions">
+      <button class="bl-action bl-expand-all">展开</button>
+      <button class="bl-action bl-collapse-all">折叠</button>
+    </div>
+  </div>
+  <div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">P2P 全部清退（China P2P Industry Total Liquidation）</span>
+    <span class="bl-mention-cat">事件</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…]——监管理念在 P2P 教训上的进一步深化 - 滴滴金融崩盘——同样反映了"未持牌不得经营金融"的硬约束 - 平安科技板块独立——陆金所从 P2P 巅峰转型的具体案例  ## 关联监管  - 网络借贷信息中介机构业务活动管理暂行办法——P…</div>
+    <a href="/events/P2P 全部清退.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">京东金融重组（JD Finance Restructuring）</span>
+    <span class="bl-mention-cat">事件</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…蚂蚁 IPO 暂停——直接触发京东数科撤回的连锁事件 - 滴滴金融崩盘——同期同类问题但路径不同 - 平安科技板块独立——传统金融机构的对照路径  ## 关联监管  - 网络小额贷款业务管理暂行办法——核心约束 - [[金融控股公…</div>
+    <a href="/events/京东金融重组.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">关键事件索引</span>
+    <span class="bl-mention-cat">索引</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…融崩盘]]——网安调查后金融板块边缘化 - P2P 全部清退——从 6000+ 平台到 0 的 4 年长跑 - 平安科技板块独立——陆金所/壹钱包/壹账通/平安健康的不同路径  ## 海外 · 标志性时刻  ### 加密寒冬 - [[FTX 崩盘]…</div>
+    <a href="/index-pages/关键事件索引.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+
+</aside>
+
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle sidebar nav groups
+  document.querySelectorAll('.nav-group-title').forEach(function(el) {
+    el.addEventListener('click', function() {
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // Backlinks: toggle individual groups
+  document.querySelectorAll('.bl-group-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      this.closest('.bl-group').classList.toggle('open');
+    });
+  });
+
+  // Favorite / bookmark popup
+  var favBtn = document.getElementById('fav-btn');
+  var favPop = document.getElementById('fav-pop');
+  if (favBtn && favPop) {
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+    var key = isMac ? '⌘ + D' : 'Ctrl + D';
+    favPop.innerHTML =
+      '按 <kbd>' + key + '</kbd> 收藏本页到浏览器书签' +
+      '<button class="fav-pop-copy" id="fav-pop-copy">复制本页链接</button>';
+
+    favBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      favPop.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+      if (!favPop.contains(e.target) && e.target !== favBtn) {
+        favPop.classList.remove('show');
+      }
+    });
+
+    var copyBtn = document.getElementById('fav-pop-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          copyBtn.textContent = '✓ 已复制';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = '复制本页链接';
+            copyBtn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+  }
+
+  // Backlinks: expand/collapse all
+  document.querySelectorAll('.bl-expand-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.add('open');
+      });
+    });
+  });
+  document.querySelectorAll('.bl-collapse-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.remove('open');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>

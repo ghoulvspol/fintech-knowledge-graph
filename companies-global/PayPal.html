@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PayPal（贝宝） - 金融科技知识图谱</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon-180.png">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#FAF7F2;
+  --bg2:#F3EDE4;
+  --text:#1B1B18;
+  --text2:#6B6560;
+  --gold:#B8860B;
+  --gold-light:#D4A843;
+  --gold-glow:rgba(184,134,11,.12);
+  --navy:#1A2332;
+  --navy-light:#2C3E50;
+  --cream:#FFF8EE;
+  --border:#E0D6C8;
+  --card:#FFFFFF;
+  --link:#8B5E0B;
+  --serif:'Noto Serif SC','Crimson Pro',Georgia,'Times New Roman',serif;
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --sidebar-w:260px;
+}
+
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--navy);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:.5px;
+  font-family:var(--serif);
+  display:block;
+}
+.logo:hover{color:var(--gold-light)}
+
+.sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+
+.nav-link{
+  display:block;
+  padding:6px 16px;
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-left:3px solid transparent;
+  transition:all .15s;
+}
+.nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-link.active{
+  color:#fff;
+  background:rgba(184,134,11,.15);
+  border-left-color:var(--gold);
+  font-weight:600;
+}
+.nav-home{font-size:14px;padding:10px 16px;font-weight:500;margin-bottom:4px}
+.nav-changelog{
+  margin-top:auto;
+  padding:14px 16px;
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.nav-changelog:hover{color:rgba(255,255,255,.7)}
+.nav-changelog.active{color:var(--gold-light)}
+.sidebar-nav{display:flex;flex-direction:column;height:100%}
+
+.nav-group{margin-bottom:2px}
+.nav-group-title{
+  padding:8px 16px;
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  user-select:none;
+  transition:color .15s;
+}
+.nav-group-title:hover{color:#fff}
+.caret{
+  display:inline-block;
+  width:0;height:0;
+  border-left:5px solid #cbd5e1;
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  transition:transform .2s;
+}
+.nav-group.open .nav-group-title .caret{transform:rotate(90deg);border-left-color:#fff}
+.nav-group-title .badge{
+  margin-left:auto;
+  background:rgba(255,255,255,.1);
+  color:#cbd5e1;
+  font-size:11px;
+  padding:1px 6px;
+  border-radius:8px;
+  font-weight:400;
+}
+.nav-group-items{display:none;padding-left:8px}
+.nav-group.open .nav-group-items{display:block}
+
+.hamburger{
+  display:none;
+  position:fixed;
+  top:12px;left:12px;
+  z-index:200;
+  background:var(--navy);
+  color:#fff;
+  border:none;
+  font-size:20px;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:max(var(--sidebar-w), calc((100vw - 1160px) / 2));
+  flex:1;
+  position:relative;
+  max-width:1160px;
+  padding:0;
+}
+
+/* grain overlay */
+.main::after{
+  content:'';
+  position:fixed;
+  top:0;left:var(--sidebar-w);right:0;bottom:0;
+  pointer-events:none;
+  opacity:.03;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== FAV / BOOKMARK BUTTON ===== */
+.fav-wrap{
+  position:absolute;
+  top:24px;right:48px;
+  z-index:50;
+}
+.fav-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  color:var(--gold);
+  font-size:16px;
+  cursor:pointer;
+  transition:all .25s;
+  font-family:var(--sans);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.fav-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-1px);
+}
+.fav-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+}
+.fav-btn:hover .fav-label{color:var(--gold)}
+.fav-pop{
+  display:none;
+  position:absolute;
+  right:0;top:48px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  font-size:13px;
+  min-width:240px;
+  z-index:51;
+  color:var(--text);
+  line-height:1.6;
+}
+.fav-pop.show{display:block}
+.fav-pop kbd{
+  background:var(--bg2);
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:12px;
+  border:1px solid var(--border);
+  font-family:var(--sans);
+  color:var(--navy);
+  font-weight:600;
+}
+.fav-pop-copy{
+  display:block;
+  width:100%;
+  margin-top:10px;
+  padding:8px 0;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:12px;
+  cursor:pointer;
+  text-align:center;
+  transition:all .15s;
+  font-family:var(--sans);
+}
+.fav-pop-copy:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.fav-pop-copy.copied{
+  background:#ecfdf5;
+  border-color:#6ee7b7;
+  color:#059669;
+}
+
+@media(max-width:768px){
+  .fav-wrap{right:16px;top:12px}
+  .fav-btn{padding:6px 14px}
+  .fav-label{font-size:12px}
+}
+
+/* ===== CHANGELOG ===== */
+.article.changelog h2{
+  border-bottom-color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.version{
+  display:inline-flex;
+  align-items:center;
+  background:var(--gold);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:3px 11px;
+  border-radius:6px;
+  font-family:var(--sans);
+  letter-spacing:.3px;
+}
+.changelog-date{
+  font-size:14px;
+  color:var(--text2);
+  font-weight:500;
+  font-family:var(--sans);
+}
+.change-list{list-style:none;padding:0;margin:16px 0}
+.change-list li{
+  padding:10px 0 10px 18px;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  line-height:1.75;
+}
+.change-list li:last-child{border-bottom:none}
+.change-list li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:20px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--gold);
+}
+.change-type{
+  display:inline-block;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+  margin-right:8px;
+  font-family:var(--sans);
+  vertical-align:1px;
+  letter-spacing:.2px;
+}
+.change-type.feat{background:#059669}
+.change-type.fix{background:#dc2626}
+.change-type.plan{background:#3b82f6}
+.change-list li strong{color:var(--navy);font-weight:700}
+
+/* ===== ARTICLE (content pages) ===== */
+.article{max-width:820px;padding:48px 48px 80px}
+.meta{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.type-badge{
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+}
+.type-概念{background:#7C5E2A}
+.type-方法{background:#5E4A8B}
+.type-产品{background:#1A6B7C}
+.type-人物{background:#8B2F2F}
+.type-总体规划{background:#2A6B4F}
+.type-访谈{background:#3A5E8B}
+.type-财报会议{background:#4A6E2A}
+.type-索引{background:#6B6560}
+
+.article h1{
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:1.3;
+  margin-bottom:24px;
+  font-weight:900;
+  color:var(--navy);
+  letter-spacing:-.5px;
+}
+.article h2{
+  font-family:var(--serif);
+  font-size:21px;
+  margin:36px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--border);
+  font-weight:700;
+  color:var(--navy);
+}
+.article h3{
+  font-family:var(--serif);
+  font-size:17px;
+  margin:24px 0 10px;
+  font-weight:600;
+  color:var(--navy-light);
+}
+.article p{margin:10px 0}
+.article ul,.article ol{padding-left:24px;margin:10px 0}
+.article li{margin:4px 0}
+
+.article a{
+  color:var(--link);
+  text-decoration:none;
+  background:linear-gradient(to bottom,transparent 60%,var(--gold-glow) 60%);
+  transition:background .2s;
+}
+.article a:hover{background:linear-gradient(to bottom,transparent 40%,rgba(184,134,11,.2) 40%)}
+
+.article blockquote{
+  background:var(--cream);
+  border-left:4px solid var(--gold);
+  padding:14px 20px;
+  margin:16px 0;
+  border-radius:0 8px 8px 0;
+  font-style:italic;
+  color:#5C4813;
+  font-family:var(--serif);
+}
+.article blockquote p{margin:0}
+.article blockquote a{background:none;color:var(--gold)}
+.article blockquote a:hover{text-decoration:underline}
+
+.article table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.article th,.article td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+.article th{background:var(--bg2);font-weight:600;color:var(--navy)}
+.article strong{font-weight:700}
+.article hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.article code{
+  background:var(--bg2);
+  padding:2px 6px;
+  border-radius:3px;
+  font-size:13px;
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+  color:#5C4813;
+}
+
+/* ===== BACKLINKS PANEL (right sidebar) ===== */
+.main.has-backlinks{
+  display:grid;
+  grid-template-columns:minmax(0,820px) 280px;
+  gap:0 24px;
+  max-width:1160px;
+}
+.main-content{min-width:0}
+
+.backlinks-panel{
+  grid-column:2;
+  grid-row:1/-1;
+  position:sticky;
+  top:24px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  padding:24px 0 24px 20px;
+  border-left:1px solid var(--border);
+  font-size:13px;
+  align-self:start;
+}
+.backlinks-panel::-webkit-scrollbar{width:3px}
+.backlinks-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.bl-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.bl-panel-title{
+  font-family:var(--serif);
+  font-size:14px;
+  font-weight:700;
+  color:var(--navy);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.bl-count{
+  font-size:11px;
+  background:var(--bg2);
+  padding:1px 7px;
+  border-radius:10px;
+  color:var(--text2);
+  font-weight:600;
+}
+.bl-panel-actions{display:flex;gap:4px}
+.bl-action{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:2px 8px;
+  font-size:11px;
+  color:var(--text2);
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:all .15s;
+}
+.bl-action:hover{border-color:var(--gold);color:var(--gold)}
+
+.bl-group{margin-bottom:4px}
+.bl-group-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:5px 0;
+  width:100%;
+  text-align:left;
+  font-size:13px;
+  font-family:var(--sans);
+}
+.bl-group-header:hover{background:rgba(0,0,0,.02);border-radius:4px}
+
+.bl-caret{
+  display:inline-block;
+  width:0;height:0;
+  border:4px solid transparent;
+  border-left:5px solid var(--text2);
+  transition:transform .15s;
+  flex-shrink:0;
+}
+.bl-group.open .bl-caret{transform:rotate(90deg)}
+
+.bl-source-name{
+  color:var(--navy);
+  font-weight:600;
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bl-mention-cat{
+  font-size:10px;
+  color:var(--text2);
+  background:var(--bg2);
+  padding:0 5px;
+  border-radius:8px;
+  flex-shrink:0;
+  margin-left:4px;
+}
+
+.bl-snippets{display:none;padding:4px 0 4px 14px}
+.bl-group.open .bl-snippets{display:block}
+
+.bl-snippet{
+  padding:6px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.6;
+  color:var(--text2);
+  font-size:12px;
+}
+.bl-snippet:last-child{border-bottom:none}
+.bl-go-link{
+  display:inline-block;
+  font-size:11px;
+  color:var(--link);
+  text-decoration:none;
+  padding:4px 0 2px;
+  font-weight:600;
+  transition:color .15s;
+}
+.bl-go-link:hover{color:var(--gold);text-decoration:underline}
+
+/* ===== HOMEPAGE ===== */
+.hero-section{
+  position:relative;
+  padding:72px 48px 56px;
+  max-width:900px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp .6s ease forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-1px;
+  color:var(--navy);
+  margin-bottom:6px;
+  opacity:0;
+  animation:fadeUp .6s ease .1s forwards;
+}
+.hero-title .gold{color:var(--gold)}
+.hero-sub{
+  font-size:17px;
+  color:var(--text2);
+  line-height:1.8;
+  margin-top:16px;
+  max-width:640px;
+  font-family:var(--serif);
+  font-weight:400;
+  opacity:0;
+  animation:fadeUp .6s ease .2s forwards;
+}
+.hero-sub b{color:var(--navy);font-weight:700}
+
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  max-width:900px;
+  margin:0 auto 48px;
+  padding:0 48px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  opacity:0;
+  animation:fadeUp .6s ease .3s forwards;
+}
+.stat-item{
+  text-align:center;
+  padding:28px 12px;
+  position:relative;
+  transition:background .3s;
+  text-decoration:none;
+  color:inherit;
+}
+.stat-item:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  right:0;top:20%;
+  height:60%;
+  width:1px;
+  background:var(--border);
+}
+.stat-item:hover{background:var(--gold-glow)}
+.stat-num{
+  font-family:var(--serif);
+  font-size:42px;
+  font-weight:900;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-2px;
+}
+.stat-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+  letter-spacing:.5px;
+}
+
+.main-inner{max-width:900px;padding:0 48px 80px;margin:0 auto}
+
+.nav-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:56px;
+  opacity:0;
+  animation:fadeUp .6s ease .4s forwards;
+}
+.nav-card{
+  position:relative;
+  padding:28px 20px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  display:block;
+  color:inherit;
+}
+.nav-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  opacity:0;
+  transition:opacity .3s;
+}
+.nav-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+  border-color:var(--gold-light);
+}
+.nav-card:hover::before{opacity:1}
+.nav-card-icon{font-size:32px;margin-bottom:14px;display:block;line-height:1}
+.nav-card-title{
+  font-family:var(--serif);
+  font-size:16px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.nav-card-sub{font-size:13px;color:var(--text2)}
+.nav-card-arrow{
+  position:absolute;
+  bottom:20px;right:20px;
+  font-size:18px;
+  color:var(--border);
+  transition:all .3s;
+}
+.nav-card:hover .nav-card-arrow{color:var(--gold);transform:translateX(4px)}
+
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-line{flex:1;height:1px;background:var(--border)}
+.section-title{
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:700;
+  color:var(--navy);
+  white-space:nowrap;
+}
+.section-count{
+  font-size:12px;
+  color:var(--gold);
+  font-weight:600;
+  background:var(--gold-glow);
+  padding:3px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:10px}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  font-size:14px;
+  color:var(--text);
+  text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  font-weight:500;
+}
+.tag:hover{
+  border-color:var(--gold);
+  color:var(--navy);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-2px);
+}
+.tag-n{
+  font-size:11px;
+  font-weight:700;
+  color:#fff;
+  background:var(--gold);
+  padding:2px 8px;
+  border-radius:10px;
+  min-width:20px;
+  text-align:center;
+}
+.tag.tier-1{
+  font-size:16px;
+  padding:10px 22px;
+  font-weight:700;
+  border-color:var(--gold-light);
+  background:linear-gradient(135deg,#FFFDF5,#FFF8E7);
+}
+.tag.tier-1 .tag-n{font-size:12px;padding:3px 10px;background:var(--gold)}
+.tag.tier-2{font-size:15px;padding:9px 20px;font-weight:600}
+
+.people-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+}
+.person-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:24px 16px 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s;
+  text-align:center;
+  color:inherit;
+}
+.person-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  border-color:var(--gold-light);
+}
+.person-avatar{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+  color:var(--gold-light);
+  font-family:var(--serif);
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(26,35,50,.15);
+}
+.person-name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.person-refs{font-size:12px;color:var(--text2)}
+
+.gold-divider{display:flex;align-items:center;gap:16px;margin:56px 0}
+.gold-divider::before,.gold-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.gold-divider-diamond{
+  width:8px;height:8px;
+  background:var(--gold);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+.footer-promo{
+  position:relative;
+  overflow:hidden;
+  padding:40px;
+  background:var(--navy);
+  border-radius:20px;
+  color:#fff;
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+.footer-promo::before{
+  content:'';
+  position:absolute;
+  top:-50%;right:-20%;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(184,134,11,.15),transparent 70%);
+}
+.promo-story{flex:1;position:relative;z-index:1;min-width:0}
+.promo-story h3{
+  font-family:var(--serif);
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--gold-light);
+}
+.promo-story p{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8;margin:8px 0}
+.promo-credit{
+  margin-top:16px !important;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  font-size:13px !important;
+}
+.promo-credit strong{color:var(--gold-light);font-weight:700}
+
+.promo-qr{
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  text-align:center;
+}
+.qr-img{
+  display:block;
+  width:140px;
+  height:140px;
+  border-radius:12px;
+  border:3px solid rgba(255,255,255,.15);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  background:#fff;
+  padding:6px;
+}
+.qr-text{
+  font-size:12px;
+  color:rgba(255,255,255,.6);
+  margin-top:10px;
+  letter-spacing:.5px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.section{opacity:0;animation:fadeUp .5s ease forwards}
+.section:nth-child(1){animation-delay:.45s}
+.section:nth-child(2){animation-delay:.55s}
+.section:nth-child(3){animation-delay:.65s}
+.section:nth-child(4){animation-delay:.75s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .main.has-backlinks{display:block}
+  .backlinks-panel{
+    position:static;
+    max-height:none;
+    overflow-y:visible;
+    border-left:none;
+    border-top:1px solid var(--border);
+    padding:24px 16px;
+    margin-top:24px;
+    max-width:820px;
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .main{margin-left:0;max-width:100%}
+  .main::after{left:0}
+  .main.has-backlinks{display:block}
+  .article{padding:48px 16px 60px}
+  .backlinks-panel{padding:16px 12px;margin-top:16px}
+  .hero-section{padding:44px 20px 20px}
+  .hero-eyebrow{font-size:10px;margin-bottom:12px}
+  .hero-title{font-size:26px}
+  .hero-sub{font-size:14px;line-height:1.6;margin-top:10px}
+  .stats-row{padding:0 16px;margin:0 0 20px}
+  .stat-item{padding:16px 4px}
+  .stat-num{font-size:28px;letter-spacing:-1px}
+  .stat-label{font-size:11px}
+  .main-inner{padding:0 20px 60px}
+  .nav-cards{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+  .nav-card{padding:20px 14px 18px}
+  .nav-card-icon{font-size:24px;margin-bottom:8px}
+  .nav-card-title{font-size:14px}
+  .nav-card-sub{font-size:12px}
+  .footer-promo{flex-direction:column;text-align:center;padding:28px 20px;gap:24px}
+  .people-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="菜单" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<aside class="sidebar">
+  <div class="sidebar-header"><a href="/index.html" class="logo">金融科技知识图谱</a></div>
+  <div class="sidebar-nav">
+    <a href="/index.html" class="nav-link nav-home">🏛 首页</a>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>索引<span class="badge">8</span></div>
+  <div class="nav-group-items">
+    <a href="/index-pages/业务模式索引.html" class="nav-link" title="业务模式索引">业务模式索引</a>
+    <a href="/index-pages/中国公司索引.html" class="nav-link" title="中国公司索引">中国公司索引</a>
+    <a href="/index-pages/关键事件索引.html" class="nav-link" title="关键事件索引">关键事件索引</a>
+    <a href="/index-pages/关键人物索引.html" class="nav-link" title="关键人物索引">关键人物索引</a>
+    <a href="/index-pages/技术栈索引.html" class="nav-link" title="技术栈索引">技术栈索引</a>
+    <a href="/index-pages/核心概念索引.html" class="nav-link" title="核心概念索引">核心概念索引</a>
+    <a href="/index-pages/海外公司索引.html" class="nav-link" title="海外公司索引">海外公司索引</a>
+    <a href="/index-pages/监管政策索引.html" class="nav-link" title="监管政策索引">监管政策索引</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>中国公司<span class="badge">11</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-cn/京东科技.html" class="nav-link" title="京东科技">京东科技</a>
+    <a href="/companies-cn/字节跳动金融.html" class="nav-link" title="字节跳动金融">字节跳动金融</a>
+    <a href="/companies-cn/小米金融.html" class="nav-link" title="小米金融">小米金融</a>
+    <a href="/companies-cn/平安壹钱包.html" class="nav-link" title="平安壹钱包">平安壹钱包</a>
+    <a href="/companies-cn/度小满.html" class="nav-link" title="度小满">度小满</a>
+    <a href="/companies-cn/微众银行.html" class="nav-link" title="微众银行">微众银行</a>
+    <a href="/companies-cn/网商银行.html" class="nav-link" title="网商银行">网商银行</a>
+    <a href="/companies-cn/腾讯金融科技.html" class="nav-link" title="腾讯金融科技">腾讯金融科技</a>
+    <a href="/companies-cn/苏宁金融.html" class="nav-link" title="苏宁金融">苏宁金融</a>
+    <a href="/companies-cn/蚂蚁集团.html" class="nav-link" title="蚂蚁集团">蚂蚁集团</a>
+    <a href="/companies-cn/陆金所.html" class="nav-link" title="陆金所">陆金所</a>
+  </div>
+</div>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>海外公司<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-global/Adyen.html" class="nav-link" title="Adyen">Adyen</a>
+    <a href="/companies-global/Block.html" class="nav-link" title="Block">Block</a>
+    <a href="/companies-global/Chime.html" class="nav-link" title="Chime">Chime</a>
+    <a href="/companies-global/Coinbase.html" class="nav-link" title="Coinbase">Coinbase</a>
+    <a href="/companies-global/Klarna.html" class="nav-link" title="Klarna">Klarna</a>
+    <a href="/companies-global/PayPal.html" class="nav-link active" title="PayPal">PayPal</a>
+    <a href="/companies-global/Plaid.html" class="nav-link" title="Plaid">Plaid</a>
+    <a href="/companies-global/Revolut.html" class="nav-link" title="Revolut">Revolut</a>
+    <a href="/companies-global/Robinhood.html" class="nav-link" title="Robinhood">Robinhood</a>
+    <a href="/companies-global/SoFi.html" class="nav-link" title="SoFi">SoFi</a>
+    <a href="/companies-global/Stripe.html" class="nav-link" title="Stripe">Stripe</a>
+    <a href="/companies-global/Wise.html" class="nav-link" title="Wise">Wise</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>业务模式<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>核心概念<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/concepts/BNPL.html" class="nav-link" title="BNPL">BNPL</a>
+    <a href="/concepts/CBDC.html" class="nav-link" title="CBDC">CBDC</a>
+    <a href="/concepts/DeFi.html" class="nav-link" title="DeFi">DeFi</a>
+    <a href="/concepts/Interchange.html" class="nav-link" title="Interchange">Interchange</a>
+    <a href="/concepts/KYC AML.html" class="nav-link" title="KYC AML">KYC AML</a>
+    <a href="/concepts/Open Banking.html" class="nav-link" title="Open Banking">Open Banking</a>
+    <a href="/concepts/Stablecoin.html" class="nav-link" title="Stablecoin">Stablecoin</a>
+    <a href="/concepts/TPV GPV.html" class="nav-link" title="TPV GPV">TPV GPV</a>
+    <a href="/concepts/Take Rate.html" class="nav-link" title="Take Rate">Take Rate</a>
+    <a href="/concepts/嵌入式金融.html" class="nav-link" title="嵌入式金融">嵌入式金融</a>
+    <a href="/concepts/联合贷款.html" class="nav-link" title="联合贷款">联合贷款</a>
+    <a href="/concepts/超级App.html" class="nav-link" title="超级App">超级App</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>监管政策<span class="badge">6</span></div>
+  <div class="nav-group-items">
+    <a href="/regulations/个人征信新规.html" class="nav-link" title="个人征信新规">个人征信新规</a>
+    <a href="/regulations/互金整治.html" class="nav-link" title="互金整治">互金整治</a>
+    <a href="/regulations/数据出境监管.html" class="nav-link" title="数据出境监管">数据出境监管</a>
+    <a href="/regulations/网络小贷新规.html" class="nav-link" title="网络小贷新规">网络小贷新规</a>
+    <a href="/regulations/蚂蚁集团重组.html" class="nav-link" title="蚂蚁集团重组">蚂蚁集团重组</a>
+    <a href="/regulations/金融控股公司管理办法.html" class="nav-link" title="金融控股公司管理办法">金融控股公司管理办法</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键事件<span class="badge">5</span></div>
+  <div class="nav-group-items">
+    <a href="/events/P2P 全部清退.html" class="nav-link" title="P2P 全部清退">P2P 全部清退</a>
+    <a href="/events/京东金融重组.html" class="nav-link" title="京东金融重组">京东金融重组</a>
+    <a href="/events/平安科技板块独立.html" class="nav-link" title="平安科技板块独立">平安科技板块独立</a>
+    <a href="/events/滴滴金融崩盘.html" class="nav-link" title="滴滴金融崩盘">滴滴金融崩盘</a>
+    <a href="/events/蚂蚁 IPO 暂停.html" class="nav-link" title="蚂蚁 IPO 暂停">蚂蚁 IPO 暂停</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键人物<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/people/Brian Armstrong.html" class="nav-link" title="Brian Armstrong">Brian Armstrong</a>
+    <a href="/people/David Vélez.html" class="nav-link" title="David Vélez">David Vélez</a>
+    <a href="/people/Jack Dorsey.html" class="nav-link" title="Jack Dorsey">Jack Dorsey</a>
+    <a href="/people/John Collison.html" class="nav-link" title="John Collison">John Collison</a>
+    <a href="/people/Patrick Collison.html" class="nav-link" title="Patrick Collison">Patrick Collison</a>
+    <a href="/people/Sebastian Siemiatkowski.html" class="nav-link" title="Sebastian Siemiatkowski">Sebastian Siemiatkowski</a>
+    <a href="/people/Vlad Tenev.html" class="nav-link" title="Vlad Tenev">Vlad Tenev</a>
+    <a href="/people/井贤栋.html" class="nav-link" title="井贤栋">井贤栋</a>
+    <a href="/people/彭蕾.html" class="nav-link" title="彭蕾">彭蕾</a>
+    <a href="/people/陈生强.html" class="nav-link" title="陈生强">陈生强</a>
+    <a href="/people/顾国栋.html" class="nav-link" title="顾国栋">顾国栋</a>
+    <a href="/people/马化腾.html" class="nav-link" title="马化腾">马化腾</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>技术栈<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+
+  </div>
+</aside>
+<main class="main has-backlinks">
+<div class="main-content article"><div class="meta"><span class="type-badge type-海外公司">海外公司</span></div>
+<h1 id="paypal">PayPal（贝宝）</h1>
+<h2 id="_1">一句话定位</h2>
+<p>全球最早的互联网支付巨头之一，从 eBay 时代崛起、2015 年独立分拆后转型为综合数字钱包与商家服务平台，近年因增长失速、市值大幅缩水而陷入战略阵痛期。</p>
+<h2 id="_2">基本信息</h2>
+<ul>
+<li><strong>全称</strong>：PayPal Holdings, Inc.</li>
+<li><strong>创立时间</strong>：1998 年（前身 Confinity，2000 年与 X.com 合并）</li>
+<li><strong>创始人</strong>：Peter Thiel、Max Levchin、Elon Musk（X.com 一方）等，俗称 PayPal Mafia</li>
+<li><strong>总部</strong>：美国加州圣何塞</li>
+<li><strong>母公司/股东背景</strong>：2002 年被 eBay 以约 15 亿美元收购，2015 年从 eBay 独立分拆后成为独立上市公司</li>
+<li><strong>是否上市</strong>：是（NASDAQ: PYPL）</li>
+<li><strong>最新市值</strong>：约 700 亿美元（2024 年区间，较 2021 年峰值约 3500 亿大幅回落）</li>
+<li><strong>最新员工规模</strong>：约 24,000 人（2024 年，较 2022 年高峰约 30,000 缩减）</li>
+</ul>
+<h2 id="_3">业务版图</h2>
+<ul>
+<li><strong>PayPal 主品牌钱包</strong>：全球最大的消费者数字钱包之一，活跃账户约 4.3 亿（2024 年），支持 200 多个市场、25 种以上货币的 P2P 与 C2B 收付款。</li>
+<li><strong>Braintree</strong>：2013 年以约 8 亿美元收购，定位企业级支付处理（PSP），承接 Uber、Airbnb、TikTok 等大型平台流量，是 PayPal 内部 TPV 增长的主引擎，但 <a href="/concepts/Take Rate.html">Take Rate</a> 显著低于品牌钱包。</li>
+<li><strong>Venmo</strong>：2013 年随 Braintree 一并收入囊中，是美国最具社交属性的 P2P 支付应用，活跃用户约 6,000 万；近年通过 Venmo Debit Card、Venmo for Business、加密交易等业务推进商业化。</li>
+<li><strong>Xoom</strong>：跨境汇款产品，对标 <a href="/companies-global/Wise.html">Wise</a>、Western Union，覆盖约 160 个国家。</li>
+<li><strong>Honey</strong>：2020 年以约 40 亿美元收购的购物优惠/比价插件，用以反哺钱包前端流量，2024 年因 YouTuber MrBeast 揭露其"截胡联盟营销分成"事件陷入舆论危机。</li>
+<li><strong>Hyperwallet / iZettle</strong>：分别面向 Marketplace 平台批量出款与欧洲线下小微商户的 POS 与收单业务，iZettle 2018 年以 22 亿美元收购。</li>
+<li><strong>PYUSD 稳定币</strong>：2023 年与 Paxos 合作发行的美元 <a href="/concepts/Stablecoin.html">Stablecoin</a>，是首家受美国持牌信托机构监管发行的大型科技公司稳定币，规模约 5 亿~10 亿美元体量（2024 年区间）。</li>
+<li><strong>新支付产品 Fastlane</strong>：2024 年由新任 CEO 主推的"一键结账"产品，瞄准 Apple Pay、Shop Pay 的结账漏斗争夺战。</li>
+</ul>
+<h2 id="_4">关键时间线</h2>
+<ul>
+<li><strong>2024-09</strong>：推出 PayPal Everywhere 借记卡返现激励、加大广告业务"PayPal Ads"投入。</li>
+<li><strong>2024-08</strong>：Honey 项目陷入"劫持联盟营销 cookie"舆论争议。</li>
+<li><strong>2023-09</strong>：Alex Chriss 接任 CEO，宣布大规模成本与组织改革。</li>
+<li><strong>2023-08</strong>：发行 PYUSD 稳定币，成为首批拥有合规稳定币产品的美股大型支付公司。</li>
+<li><strong>2022-09</strong>：股价较 2021 年峰值跌去 80%，启动多轮裁员。</li>
+<li><strong>2021-07</strong>：市值一度逼近 3500 亿美元，是当时全球最大金融科技公司。</li>
+<li><strong>2020-11</strong>：上线加密买卖功能，进军 CeFi 钱包市场。</li>
+<li><strong>2020-01</strong>：以约 40 亿美元收购 Honey。</li>
+<li><strong>2018-05</strong>：以 22 亿美元收购欧洲 POS 公司 iZettle。</li>
+<li><strong>2015-07</strong>：从 eBay 独立分拆，单独在 NASDAQ 上市。</li>
+<li><strong>2013-09</strong>：以约 8 亿美元收购 Braintree（含 Venmo）。</li>
+<li><strong>2008-11</strong>：收购 Bill Me Later（后改名 PayPal Credit），切入消费信贷。</li>
+<li><strong>2002-10</strong>：被 eBay 以 15 亿美元收购。</li>
+<li><strong>2002-02</strong>：在 NASDAQ 完成首次 IPO。</li>
+<li><strong>2000-03</strong>：Confinity 与 Elon Musk 的 X.com 合并，统一以 PayPal 品牌运营。</li>
+<li><strong>1998-12</strong>：Peter Thiel、Max Levchin 等创立 Confinity，最早做掌上电脑加密支付。</li>
+</ul>
+<h2 id="_5">商业模式与盈利结构</h2>
+<ul>
+<li><strong>主要收入构成</strong>（2023 年报，约 298 亿美元）：交易类收入约占 91%，其他价值增值服务（信贷利息、跨境汇款手续费、订阅、广告等）约占 9%。Branded Checkout（自有钱包）贡献近 30%~35% 的 TPV，但因费率高于 Braintree，对毛利贡献占比远高于 TPV 占比。</li>
+<li><strong>Take Rate</strong>：整体净收入 Take Rate 长期在 1.8%~2.0%，近年因 Braintree 等低费率渠道占比上升而持续下行。</li>
+<li><strong>关键财务指标</strong>：2023 年 TPV 约 1.53 万亿美元，营收约 298 亿美元，GAAP 净利润约 41 亿美元；2024 年公司将股票回购作为提振股价的重要手段，全年回购规模约 60 亿美元。</li>
+</ul>
+<h2 id="_6">监管处境</h2>
+<ul>
+<li><strong>主要监管者</strong>：美国 CFPB、SEC、FinCEN、纽约金融服务局（NYDFS）；欧洲卢森堡 CSSF（PayPal Europe 持牌主体）；英国 FCA。</li>
+<li><strong>持牌情况</strong>：在美国大部分州持有 Money Transmitter 牌照，在卢森堡持有 EMI/银行牌照覆盖欧盟，在英国持有电子货币机构牌照。</li>
+<li><strong>关键监管事件</strong>：</li>
+<li>2023 年 11 月，CFPB 启动针对 PayPal、Apple Pay、Google Pay 等大型钱包的"非银行大型支付平台监督"程序。</li>
+<li>2022 年因冻结部分用户账户而引发舆论与监管关注。</li>
+<li>2015 年因消费贷自动开户问题被 CFPB 处以 2,500 万美元罚款。</li>
+</ul>
+<h2 id="_7">核心数据</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>时间</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TPV</td>
+<td>约 1.53 万亿美元</td>
+<td>2023</td>
+<td>10-K</td>
+</tr>
+<tr>
+<td>Active Accounts</td>
+<td>约 4.26 亿</td>
+<td>2024 Q2</td>
+<td>季报</td>
+</tr>
+<tr>
+<td>Revenue</td>
+<td>约 298 亿美元</td>
+<td>2023</td>
+<td>10-K</td>
+</tr>
+<tr>
+<td>Net Income (GAAP)</td>
+<td>约 41 亿美元</td>
+<td>2023</td>
+<td>10-K</td>
+</tr>
+<tr>
+<td>Venmo TPV</td>
+<td>约 2,700 亿美元</td>
+<td>2023</td>
+<td>季报披露</td>
+</tr>
+<tr>
+<td>员工</td>
+<td>约 24,000</td>
+<td>2024</td>
+<td>10-K</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_8">关键人物</h2>
+<ul>
+<li>Peter Thiel——联合创始人，PayPal Mafia 核心，后创立 Founders Fund、Palantir。</li>
+<li>Max Levchin——联合创始人 / CTO，后创办 Affirm。</li>
+<li>Elon Musk——X.com 创始人，合并后短暂任 CEO。</li>
+<li>Dan Schulman——2014–2023 年 CEO，主导独立分拆与 Venmo 商业化。</li>
+<li>Alex Chriss——2023 年起任 CEO，前 Intuit QuickBooks 总经理，主导面向中小企业的产品改革。</li>
+</ul>
+<h2 id="_9">相关概念</h2>
+<ul>
+<li>Wallet <a href="/concepts/Take Rate.html">Take Rate</a> <a href="/concepts/Interchange.html">Interchange</a> <a href="/concepts/Stablecoin.html">Stablecoin</a> <a href="/concepts/BNPL.html">BNPL</a> <a href="/concepts/嵌入式金融.html">Embedded Finance</a> Money Transmitter CFPB PayPal Mafia</li>
+</ul>
+<h2 id="_10">关键事件</h2>
+<ul>
+<li>PayPal 从 eBay 分拆</li>
+<li>PYUSD 稳定币发行</li>
+<li>Honey 联盟营销争议</li>
+</ul>
+<h2 id="_11">客观评估</h2>
+<p>PayPal 是互联网原住民支付时代的代表，凭借 eBay 的早期生态优势、双边账户网络和合规牌照壁垒，建立了别人难以复制的全球钱包基础设施。但在 Apple Pay、Shop Pay、Stripe Link 等"嵌入式结账"方案的夹击下，其品牌钱包的结账渗透率正被侵蚀；Braintree 虽支撑 TPV 增长却拉低 Take Rate；Venmo 商业化进展不及预期；估值从 3500 亿跌至 700 亿区间，是过去十年大型金融科技公司估值回归最具代表性的案例。新任 CEO Alex Chriss 主导的"少而精"战略能否在 Fastlane、广告、稳定币三个新方向重新打开增长空间，将决定公司中期命运。</p>
+<h2 id="_12">与中国对标</h2>
+<ul>
+<li>在中国对标支付宝（C2C+C2B 钱包）+ 财付通的合体，但缺乏中国玩家背后的电商/社交超级 App 流量场景，因此商业化路径必须依赖第三方商户。</li>
+<li>Braintree 类似支付宝的 Acquiring 网关业务；Venmo 类似微信红包/AA 收款的社交支付，但变现进度远逊于微信支付；PYUSD 是中国玩家因人民币管制无法切入的赛道，PayPal 在合规稳定币上抢得先机。</li>
+</ul></div><aside class="backlinks-panel">
+  <div class="bl-panel-header">
+    <h3 class="bl-panel-title">链接到本页 <span class="bl-count">1</span></h3>
+    <div class="bl-panel-actions">
+      <button class="bl-action bl-expand-all">展开</button>
+      <button class="bl-action bl-collapse-all">折叠</button>
+    </div>
+  </div>
+  <div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">海外公司索引</span>
+    <span class="bl-mention-cat">索引</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…### 综合支付与商家服务 - Stripe——全球开发者最爱的支付 API，估值 650 亿美元，未上市 - PayPal——全球老牌支付平台，含 Venmo、Honey、PYUSD 稳定币 - Block——原 Square，含 C…</div>
+    <a href="/index-pages/海外公司索引.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+
+</aside>
+
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle sidebar nav groups
+  document.querySelectorAll('.nav-group-title').forEach(function(el) {
+    el.addEventListener('click', function() {
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // Backlinks: toggle individual groups
+  document.querySelectorAll('.bl-group-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      this.closest('.bl-group').classList.toggle('open');
+    });
+  });
+
+  // Favorite / bookmark popup
+  var favBtn = document.getElementById('fav-btn');
+  var favPop = document.getElementById('fav-pop');
+  if (favBtn && favPop) {
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+    var key = isMac ? '⌘ + D' : 'Ctrl + D';
+    favPop.innerHTML =
+      '按 <kbd>' + key + '</kbd> 收藏本页到浏览器书签' +
+      '<button class="fav-pop-copy" id="fav-pop-copy">复制本页链接</button>';
+
+    favBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      favPop.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+      if (!favPop.contains(e.target) && e.target !== favBtn) {
+        favPop.classList.remove('show');
+      }
+    });
+
+    var copyBtn = document.getElementById('fav-pop-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          copyBtn.textContent = '✓ 已复制';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = '复制本页链接';
+            copyBtn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+  }
+
+  // Backlinks: expand/collapse all
+  document.querySelectorAll('.bl-expand-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.add('open');
+      });
+    });
+  });
+  document.querySelectorAll('.bl-collapse-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.remove('open');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>

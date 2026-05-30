@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>蚂蚁集团（Ant Group） - 金融科技知识图谱</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon-180.png">
+<link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#FAF7F2;
+  --bg2:#F3EDE4;
+  --text:#1B1B18;
+  --text2:#6B6560;
+  --gold:#B8860B;
+  --gold-light:#D4A843;
+  --gold-glow:rgba(184,134,11,.12);
+  --navy:#1A2332;
+  --navy-light:#2C3E50;
+  --cream:#FFF8EE;
+  --border:#E0D6C8;
+  --card:#FFFFFF;
+  --link:#8B5E0B;
+  --serif:'Noto Serif SC','Crimson Pro',Georgia,'Times New Roman',serif;
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --sidebar-w:260px;
+}
+
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--navy);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:.5px;
+  font-family:var(--serif);
+  display:block;
+}
+.logo:hover{color:var(--gold-light)}
+
+.sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+
+.nav-link{
+  display:block;
+  padding:6px 16px;
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-left:3px solid transparent;
+  transition:all .15s;
+}
+.nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-link.active{
+  color:#fff;
+  background:rgba(184,134,11,.15);
+  border-left-color:var(--gold);
+  font-weight:600;
+}
+.nav-home{font-size:14px;padding:10px 16px;font-weight:500;margin-bottom:4px}
+.nav-changelog{
+  margin-top:auto;
+  padding:14px 16px;
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.nav-changelog:hover{color:rgba(255,255,255,.7)}
+.nav-changelog.active{color:var(--gold-light)}
+.sidebar-nav{display:flex;flex-direction:column;height:100%}
+
+.nav-group{margin-bottom:2px}
+.nav-group-title{
+  padding:8px 16px;
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  user-select:none;
+  transition:color .15s;
+}
+.nav-group-title:hover{color:#fff}
+.caret{
+  display:inline-block;
+  width:0;height:0;
+  border-left:5px solid #cbd5e1;
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  transition:transform .2s;
+}
+.nav-group.open .nav-group-title .caret{transform:rotate(90deg);border-left-color:#fff}
+.nav-group-title .badge{
+  margin-left:auto;
+  background:rgba(255,255,255,.1);
+  color:#cbd5e1;
+  font-size:11px;
+  padding:1px 6px;
+  border-radius:8px;
+  font-weight:400;
+}
+.nav-group-items{display:none;padding-left:8px}
+.nav-group.open .nav-group-items{display:block}
+
+.hamburger{
+  display:none;
+  position:fixed;
+  top:12px;left:12px;
+  z-index:200;
+  background:var(--navy);
+  color:#fff;
+  border:none;
+  font-size:20px;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:max(var(--sidebar-w), calc((100vw - 1160px) / 2));
+  flex:1;
+  position:relative;
+  max-width:1160px;
+  padding:0;
+}
+
+/* grain overlay */
+.main::after{
+  content:'';
+  position:fixed;
+  top:0;left:var(--sidebar-w);right:0;bottom:0;
+  pointer-events:none;
+  opacity:.03;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== FAV / BOOKMARK BUTTON ===== */
+.fav-wrap{
+  position:absolute;
+  top:24px;right:48px;
+  z-index:50;
+}
+.fav-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  color:var(--gold);
+  font-size:16px;
+  cursor:pointer;
+  transition:all .25s;
+  font-family:var(--sans);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.fav-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-1px);
+}
+.fav-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+}
+.fav-btn:hover .fav-label{color:var(--gold)}
+.fav-pop{
+  display:none;
+  position:absolute;
+  right:0;top:48px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  font-size:13px;
+  min-width:240px;
+  z-index:51;
+  color:var(--text);
+  line-height:1.6;
+}
+.fav-pop.show{display:block}
+.fav-pop kbd{
+  background:var(--bg2);
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:12px;
+  border:1px solid var(--border);
+  font-family:var(--sans);
+  color:var(--navy);
+  font-weight:600;
+}
+.fav-pop-copy{
+  display:block;
+  width:100%;
+  margin-top:10px;
+  padding:8px 0;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:12px;
+  cursor:pointer;
+  text-align:center;
+  transition:all .15s;
+  font-family:var(--sans);
+}
+.fav-pop-copy:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.fav-pop-copy.copied{
+  background:#ecfdf5;
+  border-color:#6ee7b7;
+  color:#059669;
+}
+
+@media(max-width:768px){
+  .fav-wrap{right:16px;top:12px}
+  .fav-btn{padding:6px 14px}
+  .fav-label{font-size:12px}
+}
+
+/* ===== CHANGELOG ===== */
+.article.changelog h2{
+  border-bottom-color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.version{
+  display:inline-flex;
+  align-items:center;
+  background:var(--gold);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:3px 11px;
+  border-radius:6px;
+  font-family:var(--sans);
+  letter-spacing:.3px;
+}
+.changelog-date{
+  font-size:14px;
+  color:var(--text2);
+  font-weight:500;
+  font-family:var(--sans);
+}
+.change-list{list-style:none;padding:0;margin:16px 0}
+.change-list li{
+  padding:10px 0 10px 18px;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  line-height:1.75;
+}
+.change-list li:last-child{border-bottom:none}
+.change-list li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:20px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--gold);
+}
+.change-type{
+  display:inline-block;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+  margin-right:8px;
+  font-family:var(--sans);
+  vertical-align:1px;
+  letter-spacing:.2px;
+}
+.change-type.feat{background:#059669}
+.change-type.fix{background:#dc2626}
+.change-type.plan{background:#3b82f6}
+.change-list li strong{color:var(--navy);font-weight:700}
+
+/* ===== ARTICLE (content pages) ===== */
+.article{max-width:820px;padding:48px 48px 80px}
+.meta{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.type-badge{
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:600;
+}
+.type-概念{background:#7C5E2A}
+.type-方法{background:#5E4A8B}
+.type-产品{background:#1A6B7C}
+.type-人物{background:#8B2F2F}
+.type-总体规划{background:#2A6B4F}
+.type-访谈{background:#3A5E8B}
+.type-财报会议{background:#4A6E2A}
+.type-索引{background:#6B6560}
+
+.article h1{
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:1.3;
+  margin-bottom:24px;
+  font-weight:900;
+  color:var(--navy);
+  letter-spacing:-.5px;
+}
+.article h2{
+  font-family:var(--serif);
+  font-size:21px;
+  margin:36px 0 14px;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--border);
+  font-weight:700;
+  color:var(--navy);
+}
+.article h3{
+  font-family:var(--serif);
+  font-size:17px;
+  margin:24px 0 10px;
+  font-weight:600;
+  color:var(--navy-light);
+}
+.article p{margin:10px 0}
+.article ul,.article ol{padding-left:24px;margin:10px 0}
+.article li{margin:4px 0}
+
+.article a{
+  color:var(--link);
+  text-decoration:none;
+  background:linear-gradient(to bottom,transparent 60%,var(--gold-glow) 60%);
+  transition:background .2s;
+}
+.article a:hover{background:linear-gradient(to bottom,transparent 40%,rgba(184,134,11,.2) 40%)}
+
+.article blockquote{
+  background:var(--cream);
+  border-left:4px solid var(--gold);
+  padding:14px 20px;
+  margin:16px 0;
+  border-radius:0 8px 8px 0;
+  font-style:italic;
+  color:#5C4813;
+  font-family:var(--serif);
+}
+.article blockquote p{margin:0}
+.article blockquote a{background:none;color:var(--gold)}
+.article blockquote a:hover{text-decoration:underline}
+
+.article table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.article th,.article td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+.article th{background:var(--bg2);font-weight:600;color:var(--navy)}
+.article strong{font-weight:700}
+.article hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.article code{
+  background:var(--bg2);
+  padding:2px 6px;
+  border-radius:3px;
+  font-size:13px;
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+  color:#5C4813;
+}
+
+/* ===== BACKLINKS PANEL (right sidebar) ===== */
+.main.has-backlinks{
+  display:grid;
+  grid-template-columns:minmax(0,820px) 280px;
+  gap:0 24px;
+  max-width:1160px;
+}
+.main-content{min-width:0}
+
+.backlinks-panel{
+  grid-column:2;
+  grid-row:1/-1;
+  position:sticky;
+  top:24px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  padding:24px 0 24px 20px;
+  border-left:1px solid var(--border);
+  font-size:13px;
+  align-self:start;
+}
+.backlinks-panel::-webkit-scrollbar{width:3px}
+.backlinks-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.bl-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.bl-panel-title{
+  font-family:var(--serif);
+  font-size:14px;
+  font-weight:700;
+  color:var(--navy);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.bl-count{
+  font-size:11px;
+  background:var(--bg2);
+  padding:1px 7px;
+  border-radius:10px;
+  color:var(--text2);
+  font-weight:600;
+}
+.bl-panel-actions{display:flex;gap:4px}
+.bl-action{
+  background:none;
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:2px 8px;
+  font-size:11px;
+  color:var(--text2);
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:all .15s;
+}
+.bl-action:hover{border-color:var(--gold);color:var(--gold)}
+
+.bl-group{margin-bottom:4px}
+.bl-group-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:5px 0;
+  width:100%;
+  text-align:left;
+  font-size:13px;
+  font-family:var(--sans);
+}
+.bl-group-header:hover{background:rgba(0,0,0,.02);border-radius:4px}
+
+.bl-caret{
+  display:inline-block;
+  width:0;height:0;
+  border:4px solid transparent;
+  border-left:5px solid var(--text2);
+  transition:transform .15s;
+  flex-shrink:0;
+}
+.bl-group.open .bl-caret{transform:rotate(90deg)}
+
+.bl-source-name{
+  color:var(--navy);
+  font-weight:600;
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bl-mention-cat{
+  font-size:10px;
+  color:var(--text2);
+  background:var(--bg2);
+  padding:0 5px;
+  border-radius:8px;
+  flex-shrink:0;
+  margin-left:4px;
+}
+
+.bl-snippets{display:none;padding:4px 0 4px 14px}
+.bl-group.open .bl-snippets{display:block}
+
+.bl-snippet{
+  padding:6px 0;
+  border-bottom:1px solid var(--border);
+  line-height:1.6;
+  color:var(--text2);
+  font-size:12px;
+}
+.bl-snippet:last-child{border-bottom:none}
+.bl-go-link{
+  display:inline-block;
+  font-size:11px;
+  color:var(--link);
+  text-decoration:none;
+  padding:4px 0 2px;
+  font-weight:600;
+  transition:color .15s;
+}
+.bl-go-link:hover{color:var(--gold);text-decoration:underline}
+
+/* ===== HOMEPAGE ===== */
+.hero-section{
+  position:relative;
+  padding:72px 48px 56px;
+  max-width:900px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp .6s ease forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-1px;
+  color:var(--navy);
+  margin-bottom:6px;
+  opacity:0;
+  animation:fadeUp .6s ease .1s forwards;
+}
+.hero-title .gold{color:var(--gold)}
+.hero-sub{
+  font-size:17px;
+  color:var(--text2);
+  line-height:1.8;
+  margin-top:16px;
+  max-width:640px;
+  font-family:var(--serif);
+  font-weight:400;
+  opacity:0;
+  animation:fadeUp .6s ease .2s forwards;
+}
+.hero-sub b{color:var(--navy);font-weight:700}
+
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  max-width:900px;
+  margin:0 auto 48px;
+  padding:0 48px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  opacity:0;
+  animation:fadeUp .6s ease .3s forwards;
+}
+.stat-item{
+  text-align:center;
+  padding:28px 12px;
+  position:relative;
+  transition:background .3s;
+  text-decoration:none;
+  color:inherit;
+}
+.stat-item:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  right:0;top:20%;
+  height:60%;
+  width:1px;
+  background:var(--border);
+}
+.stat-item:hover{background:var(--gold-glow)}
+.stat-num{
+  font-family:var(--serif);
+  font-size:42px;
+  font-weight:900;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-2px;
+}
+.stat-label{
+  font-size:13px;
+  color:var(--text2);
+  font-weight:500;
+  letter-spacing:.5px;
+}
+
+.main-inner{max-width:900px;padding:0 48px 80px;margin:0 auto}
+
+.nav-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:56px;
+  opacity:0;
+  animation:fadeUp .6s ease .4s forwards;
+}
+.nav-card{
+  position:relative;
+  padding:28px 20px 24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  display:block;
+  color:inherit;
+}
+.nav-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  opacity:0;
+  transition:opacity .3s;
+}
+.nav-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+  border-color:var(--gold-light);
+}
+.nav-card:hover::before{opacity:1}
+.nav-card-icon{font-size:32px;margin-bottom:14px;display:block;line-height:1}
+.nav-card-title{
+  font-family:var(--serif);
+  font-size:16px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.nav-card-sub{font-size:13px;color:var(--text2)}
+.nav-card-arrow{
+  position:absolute;
+  bottom:20px;right:20px;
+  font-size:18px;
+  color:var(--border);
+  transition:all .3s;
+}
+.nav-card:hover .nav-card-arrow{color:var(--gold);transform:translateX(4px)}
+
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-line{flex:1;height:1px;background:var(--border)}
+.section-title{
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:700;
+  color:var(--navy);
+  white-space:nowrap;
+}
+.section-count{
+  font-size:12px;
+  color:var(--gold);
+  font-weight:600;
+  background:var(--gold-glow);
+  padding:3px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:10px}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  font-size:14px;
+  color:var(--text);
+  text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  font-weight:500;
+}
+.tag:hover{
+  border-color:var(--gold);
+  color:var(--navy);
+  box-shadow:0 4px 16px var(--gold-glow);
+  transform:translateY(-2px);
+}
+.tag-n{
+  font-size:11px;
+  font-weight:700;
+  color:#fff;
+  background:var(--gold);
+  padding:2px 8px;
+  border-radius:10px;
+  min-width:20px;
+  text-align:center;
+}
+.tag.tier-1{
+  font-size:16px;
+  padding:10px 22px;
+  font-weight:700;
+  border-color:var(--gold-light);
+  background:linear-gradient(135deg,#FFFDF5,#FFF8E7);
+}
+.tag.tier-1 .tag-n{font-size:12px;padding:3px 10px;background:var(--gold)}
+.tag.tier-2{font-size:15px;padding:9px 20px;font-weight:600}
+
+.people-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+}
+.person-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:24px 16px 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-decoration:none;
+  transition:all .3s;
+  text-align:center;
+  color:inherit;
+}
+.person-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  border-color:var(--gold-light);
+}
+.person-avatar{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+  color:var(--gold-light);
+  font-family:var(--serif);
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(26,35,50,.15);
+}
+.person-name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.person-refs{font-size:12px;color:var(--text2)}
+
+.gold-divider{display:flex;align-items:center;gap:16px;margin:56px 0}
+.gold-divider::before,.gold-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.gold-divider-diamond{
+  width:8px;height:8px;
+  background:var(--gold);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+.footer-promo{
+  position:relative;
+  overflow:hidden;
+  padding:40px;
+  background:var(--navy);
+  border-radius:20px;
+  color:#fff;
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+.footer-promo::before{
+  content:'';
+  position:absolute;
+  top:-50%;right:-20%;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(184,134,11,.15),transparent 70%);
+}
+.promo-story{flex:1;position:relative;z-index:1;min-width:0}
+.promo-story h3{
+  font-family:var(--serif);
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--gold-light);
+}
+.promo-story p{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8;margin:8px 0}
+.promo-credit{
+  margin-top:16px !important;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  font-size:13px !important;
+}
+.promo-credit strong{color:var(--gold-light);font-weight:700}
+
+.promo-qr{
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  text-align:center;
+}
+.qr-img{
+  display:block;
+  width:140px;
+  height:140px;
+  border-radius:12px;
+  border:3px solid rgba(255,255,255,.15);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  background:#fff;
+  padding:6px;
+}
+.qr-text{
+  font-size:12px;
+  color:rgba(255,255,255,.6);
+  margin-top:10px;
+  letter-spacing:.5px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.section{opacity:0;animation:fadeUp .5s ease forwards}
+.section:nth-child(1){animation-delay:.45s}
+.section:nth-child(2){animation-delay:.55s}
+.section:nth-child(3){animation-delay:.65s}
+.section:nth-child(4){animation-delay:.75s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .main.has-backlinks{display:block}
+  .backlinks-panel{
+    position:static;
+    max-height:none;
+    overflow-y:visible;
+    border-left:none;
+    border-top:1px solid var(--border);
+    padding:24px 16px;
+    margin-top:24px;
+    max-width:820px;
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .main{margin-left:0;max-width:100%}
+  .main::after{left:0}
+  .main.has-backlinks{display:block}
+  .article{padding:48px 16px 60px}
+  .backlinks-panel{padding:16px 12px;margin-top:16px}
+  .hero-section{padding:44px 20px 20px}
+  .hero-eyebrow{font-size:10px;margin-bottom:12px}
+  .hero-title{font-size:26px}
+  .hero-sub{font-size:14px;line-height:1.6;margin-top:10px}
+  .stats-row{padding:0 16px;margin:0 0 20px}
+  .stat-item{padding:16px 4px}
+  .stat-num{font-size:28px;letter-spacing:-1px}
+  .stat-label{font-size:11px}
+  .main-inner{padding:0 20px 60px}
+  .nav-cards{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+  .nav-card{padding:20px 14px 18px}
+  .nav-card-icon{font-size:24px;margin-bottom:8px}
+  .nav-card-title{font-size:14px}
+  .nav-card-sub{font-size:12px}
+  .footer-promo{flex-direction:column;text-align:center;padding:28px 20px;gap:24px}
+  .people-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="菜单" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<aside class="sidebar">
+  <div class="sidebar-header"><a href="/index.html" class="logo">金融科技知识图谱</a></div>
+  <div class="sidebar-nav">
+    <a href="/index.html" class="nav-link nav-home">🏛 首页</a>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>索引<span class="badge">8</span></div>
+  <div class="nav-group-items">
+    <a href="/index-pages/业务模式索引.html" class="nav-link" title="业务模式索引">业务模式索引</a>
+    <a href="/index-pages/中国公司索引.html" class="nav-link" title="中国公司索引">中国公司索引</a>
+    <a href="/index-pages/关键事件索引.html" class="nav-link" title="关键事件索引">关键事件索引</a>
+    <a href="/index-pages/关键人物索引.html" class="nav-link" title="关键人物索引">关键人物索引</a>
+    <a href="/index-pages/技术栈索引.html" class="nav-link" title="技术栈索引">技术栈索引</a>
+    <a href="/index-pages/核心概念索引.html" class="nav-link" title="核心概念索引">核心概念索引</a>
+    <a href="/index-pages/海外公司索引.html" class="nav-link" title="海外公司索引">海外公司索引</a>
+    <a href="/index-pages/监管政策索引.html" class="nav-link" title="监管政策索引">监管政策索引</a>
+  </div>
+</div>
+<div class="nav-group open">
+  <div class="nav-group-title"><span class="caret"></span>中国公司<span class="badge">11</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-cn/京东科技.html" class="nav-link" title="京东科技">京东科技</a>
+    <a href="/companies-cn/字节跳动金融.html" class="nav-link" title="字节跳动金融">字节跳动金融</a>
+    <a href="/companies-cn/小米金融.html" class="nav-link" title="小米金融">小米金融</a>
+    <a href="/companies-cn/平安壹钱包.html" class="nav-link" title="平安壹钱包">平安壹钱包</a>
+    <a href="/companies-cn/度小满.html" class="nav-link" title="度小满">度小满</a>
+    <a href="/companies-cn/微众银行.html" class="nav-link" title="微众银行">微众银行</a>
+    <a href="/companies-cn/网商银行.html" class="nav-link" title="网商银行">网商银行</a>
+    <a href="/companies-cn/腾讯金融科技.html" class="nav-link" title="腾讯金融科技">腾讯金融科技</a>
+    <a href="/companies-cn/苏宁金融.html" class="nav-link" title="苏宁金融">苏宁金融</a>
+    <a href="/companies-cn/蚂蚁集团.html" class="nav-link active" title="蚂蚁集团">蚂蚁集团</a>
+    <a href="/companies-cn/陆金所.html" class="nav-link" title="陆金所">陆金所</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>海外公司<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/companies-global/Adyen.html" class="nav-link" title="Adyen">Adyen</a>
+    <a href="/companies-global/Block.html" class="nav-link" title="Block">Block</a>
+    <a href="/companies-global/Chime.html" class="nav-link" title="Chime">Chime</a>
+    <a href="/companies-global/Coinbase.html" class="nav-link" title="Coinbase">Coinbase</a>
+    <a href="/companies-global/Klarna.html" class="nav-link" title="Klarna">Klarna</a>
+    <a href="/companies-global/PayPal.html" class="nav-link" title="PayPal">PayPal</a>
+    <a href="/companies-global/Plaid.html" class="nav-link" title="Plaid">Plaid</a>
+    <a href="/companies-global/Revolut.html" class="nav-link" title="Revolut">Revolut</a>
+    <a href="/companies-global/Robinhood.html" class="nav-link" title="Robinhood">Robinhood</a>
+    <a href="/companies-global/SoFi.html" class="nav-link" title="SoFi">SoFi</a>
+    <a href="/companies-global/Stripe.html" class="nav-link" title="Stripe">Stripe</a>
+    <a href="/companies-global/Wise.html" class="nav-link" title="Wise">Wise</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>业务模式<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>核心概念<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/concepts/BNPL.html" class="nav-link" title="BNPL">BNPL</a>
+    <a href="/concepts/CBDC.html" class="nav-link" title="CBDC">CBDC</a>
+    <a href="/concepts/DeFi.html" class="nav-link" title="DeFi">DeFi</a>
+    <a href="/concepts/Interchange.html" class="nav-link" title="Interchange">Interchange</a>
+    <a href="/concepts/KYC AML.html" class="nav-link" title="KYC AML">KYC AML</a>
+    <a href="/concepts/Open Banking.html" class="nav-link" title="Open Banking">Open Banking</a>
+    <a href="/concepts/Stablecoin.html" class="nav-link" title="Stablecoin">Stablecoin</a>
+    <a href="/concepts/TPV GPV.html" class="nav-link" title="TPV GPV">TPV GPV</a>
+    <a href="/concepts/Take Rate.html" class="nav-link" title="Take Rate">Take Rate</a>
+    <a href="/concepts/嵌入式金融.html" class="nav-link" title="嵌入式金融">嵌入式金融</a>
+    <a href="/concepts/联合贷款.html" class="nav-link" title="联合贷款">联合贷款</a>
+    <a href="/concepts/超级App.html" class="nav-link" title="超级App">超级App</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>监管政策<span class="badge">6</span></div>
+  <div class="nav-group-items">
+    <a href="/regulations/个人征信新规.html" class="nav-link" title="个人征信新规">个人征信新规</a>
+    <a href="/regulations/互金整治.html" class="nav-link" title="互金整治">互金整治</a>
+    <a href="/regulations/数据出境监管.html" class="nav-link" title="数据出境监管">数据出境监管</a>
+    <a href="/regulations/网络小贷新规.html" class="nav-link" title="网络小贷新规">网络小贷新规</a>
+    <a href="/regulations/蚂蚁集团重组.html" class="nav-link" title="蚂蚁集团重组">蚂蚁集团重组</a>
+    <a href="/regulations/金融控股公司管理办法.html" class="nav-link" title="金融控股公司管理办法">金融控股公司管理办法</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键事件<span class="badge">5</span></div>
+  <div class="nav-group-items">
+    <a href="/events/P2P 全部清退.html" class="nav-link" title="P2P 全部清退">P2P 全部清退</a>
+    <a href="/events/京东金融重组.html" class="nav-link" title="京东金融重组">京东金融重组</a>
+    <a href="/events/平安科技板块独立.html" class="nav-link" title="平安科技板块独立">平安科技板块独立</a>
+    <a href="/events/滴滴金融崩盘.html" class="nav-link" title="滴滴金融崩盘">滴滴金融崩盘</a>
+    <a href="/events/蚂蚁 IPO 暂停.html" class="nav-link" title="蚂蚁 IPO 暂停">蚂蚁 IPO 暂停</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>关键人物<span class="badge">12</span></div>
+  <div class="nav-group-items">
+    <a href="/people/Brian Armstrong.html" class="nav-link" title="Brian Armstrong">Brian Armstrong</a>
+    <a href="/people/David Vélez.html" class="nav-link" title="David Vélez">David Vélez</a>
+    <a href="/people/Jack Dorsey.html" class="nav-link" title="Jack Dorsey">Jack Dorsey</a>
+    <a href="/people/John Collison.html" class="nav-link" title="John Collison">John Collison</a>
+    <a href="/people/Patrick Collison.html" class="nav-link" title="Patrick Collison">Patrick Collison</a>
+    <a href="/people/Sebastian Siemiatkowski.html" class="nav-link" title="Sebastian Siemiatkowski">Sebastian Siemiatkowski</a>
+    <a href="/people/Vlad Tenev.html" class="nav-link" title="Vlad Tenev">Vlad Tenev</a>
+    <a href="/people/井贤栋.html" class="nav-link" title="井贤栋">井贤栋</a>
+    <a href="/people/彭蕾.html" class="nav-link" title="彭蕾">彭蕾</a>
+    <a href="/people/陈生强.html" class="nav-link" title="陈生强">陈生强</a>
+    <a href="/people/顾国栋.html" class="nav-link" title="顾国栋">顾国栋</a>
+    <a href="/people/马化腾.html" class="nav-link" title="马化腾">马化腾</a>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title"><span class="caret"></span>技术栈<span class="badge">0</span></div>
+  <div class="nav-group-items">
+  </div>
+</div>
+
+  </div>
+</aside>
+<main class="main has-backlinks">
+<div class="main-content article"><div class="meta"><span class="type-badge type-中国公司">中国公司</span></div>
+<h1 id="ant-group">蚂蚁集团（Ant Group）</h1>
+<h2 id="_1">一句话定位</h2>
+<p>中国最大的支付与消费金融科技集团，源自阿里巴巴电商生态，旗下支付宝是全球最大移动支付平台之一，同时是 <a href="/regulations/互金整治.html">互金整治</a> 后金融监管转向的标志性公司。</p>
+<h2 id="_2">基本信息</h2>
+<ul>
+<li><strong>全称</strong>：蚂蚁科技集团股份有限公司（Ant Group Co., Ltd.）</li>
+<li><strong>创立时间</strong>：2004 年支付宝从阿里巴巴体系内孵化；2014 年小微金融服务集团成立；2020 年改名"蚂蚁科技集团"</li>
+<li><strong>总部</strong>：浙江杭州（西溪园区 Z 空间）</li>
+<li><strong>母公司/股东背景</strong>：杭州君瀚、杭州君澳两个有限合伙企业为大股东，马云 为最终控制人；阿里巴巴持有 33% 股权（关联但非母公司，蚂蚁不并表）</li>
+<li><strong>是否上市</strong>：2020 年 11 月 <a href="/events/蚂蚁 IPO 暂停.html">蚂蚁 IPO 暂停</a>（A+H 股双重上市，原拟募资约 2,300 亿元）；目前未上市，整改后是否重启 IPO 尚不明朗</li>
+<li><strong>最新估值或市值</strong>：暂停 IPO 时估值约 3,130 亿美元；据《福布斯》《华尔街日报》等报道，2023 年阿里巴巴回购员工持股的估值已降至约 7,800 亿元人民币（约 1,000 亿美元）</li>
+<li><strong>最新员工规模</strong>：约 25,000 人（2023 年公开口径，整改后有所收缩）</li>
+</ul>
+<h2 id="_3">业务版图</h2>
+<ul>
+<li><strong>第三方支付</strong>：支付宝 是核心，国内 TPV 据央行口径长期占移动支付市场 50% 以上，与 微信支付 形成双寡头格局；月活用户超 7 亿（2020 年招股书）；亦是中国跨境支付重要主体（Alipay+ 海外钱包互联）。</li>
+<li><strong>消费信贷</strong>：花呗（类信用卡分期）、借呗（小额现金贷）整改后并入消金公司"蚂蚁消费金融"持牌经营；与上百家银行通过 <a href="/concepts/联合贷款.html">联合贷款</a>、助贷模式合作。</li>
+<li><strong>小微/普惠信贷</strong>：通过 <a href="/companies-cn/网商银行.html">网商银行</a>（蚂蚁参股 30%）的 310 模式 服务小微商家；蚂蚁小贷（重庆两家网络小贷）已逐步退出。</li>
+<li><strong>财富管理</strong>：余额宝（与天弘基金合作的货币基金）+ 蚂蚁财富平台代销基金、银行理财、保险；累计 AUM 据 2020 年招股书超 4 万亿元，是中国最大的开放式理财代销渠道之一。</li>
+<li><strong>保险科技</strong>：蚂蚁保（保险代理平台）、相互宝（已于 2022 年 1 月停运的相互保险计划）；持有保险代理、网络互助、相互保险等多张牌照。</li>
+<li><strong>数字银行</strong>：参股 <a href="/companies-cn/网商银行.html">网商银行</a>、天弘基金；境外参股菲律宾 GCash、印度 Paytm（已减持）、印尼 DANA、马来西亚 Touch'n Go 电子钱包等。</li>
+<li><strong>B 端开放平台/技术输出</strong>：蚂蚁链（区块链）、AI 风控、SOFA 中间件、OceanBase 数据库（已分拆独立公司）；面向银行的"蚂蚁数科"输出科技能力。</li>
+<li><strong>跨境/海外业务</strong>：Alipay+ 连接全球 25+ 钱包与近 9,000 万商户；以战投方式入股全球多家电子钱包；2024 年推出"海外资金扫码"覆盖入境游客。</li>
+</ul>
+<h2 id="_4">关键时间线</h2>
+<ul>
+<li><strong>2024-04</strong>：蚂蚁集团完成董事会与高管层调整，<a href="/people/井贤栋.html">井贤栋</a> 仍任董事长；启动新一轮组织升级，分拆出"蚂蚁数科""OceanBase""蚂蚁国际""蚂蚁财富科技"等子集团</li>
+<li><strong>2023-07</strong>：央行、国家金融监管总局对蚂蚁集团及旗下机构开出 71.23 亿元罚单，标志监管整改进入收尾阶段</li>
+<li><strong>2023-01</strong>：马云 表决权从 53.46% 降至 6.208%，蚂蚁集团明确"无实际控制人"，被视为整改关键里程碑</li>
+<li><strong>2022-06</strong>：蚂蚁消费金融完成 105 亿元增资，承接花呗、借呗（"信用购"与"信用贷"品牌切换）</li>
+<li><strong>2021-04</strong>：央行等四部门第二次约谈，要求设立金融控股公司、整体申设、纠正不正当竞争</li>
+<li><strong>2021-01</strong>：央行公布 <a href="/regulations/个人征信新规.html">个人征信新规</a>（征求意见稿），蚂蚁筹建 钱塘征信（持股 35%）</li>
+<li><strong>2020-11-03</strong>：<a href="/events/蚂蚁 IPO 暂停.html">蚂蚁 IPO 暂停</a>——上交所及港交所相继暂缓上市，距挂牌仅差两天</li>
+<li><strong>2020-11-02</strong>：央行等四部门首次约谈 马云、<a href="/people/井贤栋.html">井贤栋</a>、胡晓明</li>
+<li><strong>2020-10</strong>：马云在外滩金融峰会演讲，被认为引发监管反应</li>
+<li><strong>2020-08</strong>：递交科创板及港交所招股书，被称为"史上最大 IPO"</li>
+<li><strong>2018</strong>：完成 C 轮融资约 140 亿美元，估值 1,500 亿美元</li>
+<li><strong>2014-10</strong>：浙江蚂蚁小微金融服务集团有限公司成立</li>
+<li><strong>2013-06</strong>：余额宝上线，成为中国互联网理财元年</li>
+<li><strong>2011-05</strong>：央行发放首批支付牌照，支付宝获牌</li>
+<li><strong>2004-12</strong>：支付宝在阿里巴巴体系内推出担保交易功能</li>
+</ul>
+<h2 id="_5">商业模式与盈利结构</h2>
+<ul>
+<li><strong>主要收入构成</strong>（2020 年招股书口径）：数字金融科技平台 63.4%（其中微贷科技 39.4%、理财科技 15.6%、保险科技 8.4%）、数字支付与商家服务 35.9%、创新业务及其他 0.8%</li>
+<li><strong>核心盈利来源</strong>：消费信贷的 <a href="/concepts/联合贷款.html">联合贷款</a> 与助贷分润、技术服务费 / <a href="/concepts/Take Rate.html">Take Rate</a>、支付通道费、理财保险代销佣金</li>
+<li><strong>典型 Take Rate / 利率水平</strong>：花呗借呗对终端借款人年化利率约 14%–24%（2020 年招股书披露 7.5%–18% 居多，整改后利率上限趋严）；助贷分润占合作贷款利息 30%–50%</li>
+<li><strong>整改后变化</strong>：监管要求出资比例不低于 30%，蚂蚁消金资本金压力骤增；表内贷款 + 持牌消金成为主要承载主体，自有资金占用与杠杆受限。</li>
+</ul>
+<h2 id="_6">监管处境</h2>
+<ul>
+<li><strong>关键监管事件</strong>：<a href="/events/蚂蚁 IPO 暂停.html">蚂蚁 IPO 暂停</a>、<a href="/regulations/互金整治.html">互金整治</a>、<a href="/regulations/网络小贷新规.html">网络小贷新规</a> (2020-11)、设立金融控股公司"蚂蚁集团"（2021）、蚂蚁重组 与花呗借呗品牌隔离（2021–2022）、71.23 亿罚单（2023-07）。</li>
+<li><strong>持牌情况</strong>：第三方支付（支付宝）、网络小贷（已收缩）、消费金融（蚂蚁消金，注册资本 230 亿）、<a href="/companies-cn/网商银行.html">网商银行</a>（参股 30%）、保险代理（蚂蚁保）、保险经纪、基金销售（蚂蚁基金销售）、个人征信（钱塘征信，2023 年 1 月获批筹建）、融资担保、私募等。</li>
+<li><strong>数据合规</strong>：2021 年起按 个人金融信息保护 与 <a href="/regulations/数据出境监管.html">数据出境监管</a> 重整数据治理；个人征信业务"断直连"——金融机构不得直接接入大型互联网平台用户画像，必须经持牌征信机构（钱塘征信、朴道征信）。</li>
+</ul>
+<h2 id="_7">核心数据</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>时间</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数字支付 TPV（中国境内）</td>
+<td>118 万亿元（12 个月）</td>
+<td>2020 年 6 月止</td>
+<td>蚂蚁招股书</td>
+</tr>
+<tr>
+<td>年度活跃用户</td>
+<td>超 10 亿</td>
+<td>2020 年 6 月</td>
+<td>招股书</td>
+</tr>
+<tr>
+<td>月活商家</td>
+<td>8,000 万+</td>
+<td>2020 年 6 月</td>
+<td>招股书</td>
+</tr>
+<tr>
+<td>平台促成消费信贷余额</td>
+<td>1.73 万亿元</td>
+<td>2020 年 6 月</td>
+<td>招股书</td>
+</tr>
+<tr>
+<td>平台促成小微贷款余额</td>
+<td>0.42 万亿元</td>
+<td>2020 年 6 月</td>
+<td>招股书</td>
+</tr>
+<tr>
+<td>营业收入</td>
+<td>1,206 亿元</td>
+<td>2020 年（前 9 个月）</td>
+<td>招股书</td>
+</tr>
+<tr>
+<td>净利润</td>
+<td>219.23 亿元</td>
+<td>2020 年（前 9 个月）</td>
+<td>招股书</td>
+</tr>
+<tr>
+<td>营业收入（估算）</td>
+<td>约 1,800 亿元</td>
+<td>2022 年（阿里季报推算）</td>
+<td>阿里巴巴 10-K</td>
+</tr>
+<tr>
+<td>罚单金额</td>
+<td>71.23 亿元</td>
+<td>2023-07</td>
+<td>央行公告</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注：蚂蚁未上市后不再披露完整财报，2021 年后数据多来自阿里巴巴对其权益法投资披露的反推，口径与招股书不完全可比。</p>
+</blockquote>
+<h2 id="_8">关键人物</h2>
+<ul>
+<li><a href="/people/井贤栋.html">井贤栋</a>——董事长兼 CEO，前阿里 CFO，主导蚂蚁整改与组织升级</li>
+<li><a href="/people/彭蕾.html">彭蕾</a>——前蚂蚁金服董事长，支付宝早期掌舵人，2018 年卸任</li>
+<li>胡晓明（孙权）——前蚂蚁集团 CEO（2019–2021），整改启动后离任</li>
+<li>马云——创始人/早期实控人，2023 年放弃表决权后蚂蚁无实控人</li>
+<li>韩歆毅——现任总裁，曾任 CFO，主导财务与战略</li>
+<li>倪行军——支付宝 CEO</li>
+</ul>
+<h2 id="_9">相关概念</h2>
+<ul>
+<li>第三方支付</li>
+<li>消费信贷</li>
+<li><a href="/concepts/联合贷款.html">联合贷款</a></li>
+<li>超级 App</li>
+<li><a href="/concepts/Take Rate.html">Take Rate</a></li>
+<li>TPV</li>
+<li>助贷</li>
+<li>小微信贷</li>
+<li>财富管理</li>
+<li>保险科技</li>
+<li>OceanBase</li>
+<li>蚂蚁链</li>
+<li>Alipay+</li>
+</ul>
+<h2 id="_10">关键事件</h2>
+<ul>
+<li><a href="/events/蚂蚁 IPO 暂停.html">蚂蚁 IPO 暂停</a></li>
+<li><a href="/regulations/互金整治.html">互金整治</a></li>
+<li>蚂蚁重组</li>
+<li><a href="/regulations/网络小贷新规.html">网络小贷新规</a></li>
+<li><a href="/regulations/金融控股公司管理办法.html">金融控股公司管理办法</a></li>
+<li><a href="/regulations/个人征信新规.html">个人征信新规</a></li>
+<li>相互宝停运</li>
+</ul>
+<h2 id="_11">客观评估</h2>
+<p>蚂蚁集团仍是中国金融科技基础设施的核心节点：支付宝在线下扫码、跨境钱包互联、小微商家服务上的渗透是其他玩家难以复制的护城河，余额宝、蚂蚁财富、网商银行也分别在各自细分领域居前列。但其挑战也极其现实：（1）整改后金融业务必须以持牌实体（蚂蚁消金、网商银行、钱塘征信）承载，自有资本约束、利差空间和增长曲线已与 2020 年前完全不同；（2）IPO 路径仍未明朗，员工持股与战投退出预期下移；（3）支付市场进入 低费率竞争，海外业务面临地缘政治与本地合规挑战；（4）作为 <a href="/regulations/金融控股公司管理办法.html">金融控股公司管理办法</a> 的标志性试点，其与监管的边界仍在持续校准。整体看，蚂蚁从"超级金融平台"被重新定位为"持牌金融机构 + 科技服务商"，估值锚也随之从增长股下移到金融股，行业地位仍在但增长想象空间被显著压缩。</p></div><aside class="backlinks-panel">
+  <div class="bl-panel-header">
+    <h3 class="bl-panel-title">链接到本页 <span class="bl-count">23</span></h3>
+    <div class="bl-panel-actions">
+      <button class="bl-action bl-expand-all">展开</button>
+      <button class="bl-action bl-collapse-all">折叠</button>
+    </div>
+  </div>
+  <div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">京东科技（JD Technology，原京东数科 / 京东金融）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…为中国最早的赊购产品，品牌资产稳固。挑战在于：（1）IPO 路径多次受挫，员工股权流动性差；（2）C 端金融业务规模与 蚂蚁集团、腾讯金融科技 不在一个量级，被迫向 B/G 端转型；（3）京东集团整体战略多次调整，京东科技在集团内部资源分配…</div>
+    <a href="/companies-cn/京东科技.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">字节跳动金融（ByteDance Financial Services）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…银行支付机构监督管理条例]]  ## 客观评估  字节金融是中国互联网金融"最年轻、最低调、流量最大"的玩家：起步晚于 蚂蚁集团、腾讯金融科技 6–10 年，但抖音 7 亿日活的流量基础与抖音电商闭环让它的支付与信贷增长曲线极陡。优势在于：…</div>
+    <a href="/companies-cn/字节跳动金融.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">小米金融（天星数科 / Tianxing Digital，含天星银行 Airstar Bank）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…- 是否上市：未单独上市；母公司小米集团已在港股上市 - 最新估值或市值：天星数科未单独披露；体量较 蚂蚁集团、陆金所 小一个量级 - 最新员工规模：天星数科约 1,500 人；天星银行 100+ 人  ## 业务…</div>
+    <a href="/companies-cn/小米金融.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">度小满（Du Xiaoman Financial，原百度金融）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…"在金融垂类大模型中起步早；（3）股东结构相对均衡（百度 + 国资 + 美元 PE），治理稳定。挑战在于：（1）规模较 蚂蚁集团、陆金所、京东科技 仍有显著差距，盈利天花板有限；（2）IPO 路径不明，员工股权流动性差；（3）随着百…</div>
+    <a href="/companies-cn/度小满.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">网商银行（MYbank）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…网商银行（MYbank）  ## 一句话定位  中国第一家以小微企业、个体工商户、农户为核心客群的纯互联网民营银行，由 蚂蚁集团 牵头筹建，以 310 模式 和 卫星遥感风控 把小微金融做成"工业流水线"。  ## 基本信息  -…</div>
+    <a href="/companies-cn/网商银行.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">腾讯金融科技（Tencent Financial Technology / FiT）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…DG/FiT 线），通过 微信支付、QQ 钱包、理财通、微保等产品覆盖支付、财富、保险、信贷场景，是与 蚂蚁集团 双寡头格局中的另一极。  ## 基本信息  - 全称：腾讯金融科技（Tencent Financial Tec…</div>
+    <a href="/companies-cn/腾讯金融科技.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">陆金所（Lufax Holding）</span>
+    <span class="bl-mention-cat">中国公司</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…概股前列；（3）平安以股代息重新并表，意味着平安从"财务投资者"变回"控股母公司"，陆金所独立运营空间收窄；（4）面对 蚂蚁集团、微众银行、网商银行 等对手，陆金所的小微 + 中产无抵押定位夹在中间，规模优势不再；（5）24% 利率…</div>
+    <a href="/companies-cn/陆金所.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">BNPL（Buy Now Pay Later，先买后付）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…Affirm]] 2022 年财报显示 30+ 天逾期率从 1.4% 升至 2.7%。  ## 在中国  - 主要玩家：蚂蚁集团（花呗分期）、京东科技（京东白条）、度小满（有钱花分期）、美团月付 - 典型产品：花呗分期、京东白条、抖…</div>
+    <a href="/concepts/BNPL.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">KYC / AML（客户尽调与反洗钱）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…体上涨 5-10 倍。  ## 在中国  - 主要玩家（合规科技）：天阳科技、慧择科技、同盾科技、百融云创；银行系自建（蚂蚁集团蚁盾、腾讯金融科技灵鲲） - 典型产品：身份证 OCR + 活体检测 + 银联三要素验证 - 监管态度：人行反洗…</div>
+    <a href="/concepts/KYC AML.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">Take Rate（费率/抽成率）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…权；衰退期 Take Rate 难以再提升、只能靠交叉销售（金融、广告）扩大"扩展 Take Rate"。这就是为什么 蚂蚁集团 把"小微贷款促成费"包装成 Take Rate 来讲增长故事。  ## 在中国  - 主要玩家：支付宝（综合…</div>
+    <a href="/concepts/Take Rate.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">嵌入式金融（Embedded Finance）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…"，单位成本 CAC 显著降低，但代价是失去与终端客户的直接关系（"哑管道化"风险）。  ## 在中国  - 主要玩家：蚂蚁集团、腾讯金融科技（微信支付/理财通）、京东科技、字节金融、美团、滴滴金融 - 典型产品：抖音月付、…</div>
+    <a href="/concepts/嵌入式金融.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">联合贷款（Co-lending）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…（合作行峰值时近百家）按 20:80 出资比例共同放款，微众银行提供获客与风控、合作行提供主要资金。这一模式被 蚂蚁集团 借呗/花呗、京东科技 金条、度小满全面复制，2017-2020 年中国互联网联合贷规模从约 1 万亿元…</div>
+    <a href="/concepts/联合贷款.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">超级 App（Super App）</span>
+    <span class="bl-mention-cat">概念</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…流量带来交易数据，数据训练风控模型，模型支撑金融服务（BNPL、保险、理财），金融服务又增强用户粘性反哺流量。蚂蚁集团 全盛期、Grab Financial 当下都是这一飞轮的代表。一旦其中一环被监管（如蚂蚁 IPO 暂停…</div>
+    <a href="/concepts/超级App.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">个人征信新规（China Personal Credit Reporting Regulation）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…年 9 月发布、2022 年 1 月实施)为核心,确立"信贷数据不得直连、必须经持牌征信机构中转"的铁律,直接重塑了 蚂蚁集团、腾讯金融、京东数科 等头部互联网平台的数据资产逻辑,也催生了百行征信、朴道征信、钱塘征信等"持牌征信机…</div>
+    <a href="/regulations/个人征信新规.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">互联网金融风险专项整治（China Internet Finance Rectification）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…速清退。 - 2020-11:银保监会公开宣布,实际运营的 P2P 网贷机构归零。 - 2020-12:蚂蚁集团被央行、银保监会、证监会、外汇局四部门约谈,标志互金整治进入"持牌化阶段"——即针对头部互联网平台金融业务的监管。 -…</div>
+    <a href="/regulations/互金整治.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">数据出境监管（China Cross-Border Data Transfer Regulation）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…个人信息出境标准合同办法》(2023)为操作细则,形成了全球最严格的数据跨境流动监管体系之一,深刻影响了 滴滴、蚂蚁集团 海外业务、字节跳动/TikTok、跨国企业在华运营等多重领域的金融科技合规边界。  ## 背景与起因…</div>
+    <a href="/regulations/数据出境监管.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">网络小额贷款业务管理暂行办法（Online Micro-Lending Regulation）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…所有跨业经营金融业务的非金融主体必须设立金控公司,接受并表监管。  ### 各类玩家的不同处境  - 头部玩家:蚂蚁集团 受影响最深,直接导致 IPO 失败、估值从 IPO 时的约 3000 亿美元下调至 2023 年回购时约 800 亿美…</div>
+    <a href="/regulations/网络小贷新规.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">金融控股公司管理办法（China Financial Holding Company Regulation）</span>
+    <span class="bl-mention-cat">监管</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…法》(2020 年 9 月)双文件构成核心,首次将"非金融企业实际控制两家以上金融机构"的情形纳入金融监管,直接重塑了 蚂蚁集团、腾讯、平安集团、中信集团、光大集团 等大型综合金融集团的资本结构、关联交易与并表监管要…</div>
+    <a href="/regulations/金融控股公司管理办法.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">京东金融重组（JD Finance Restructuring）</span>
+    <span class="bl-mention-cat">事件</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…从供应链金融起步,推出"京保贝"。 - 2014-02：上线"京东白条",成为中国互联网消费金融的标志性产品,比蚂蚁集团的"花呗"早约 18 个月。 - 2017-03-01:京东集团宣布京东金融重组,将京东金融业务…</div>
+    <a href="/events/京东金融重组.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">蚂蚁 IPO 暂停（Ant Group IPO Suspension）</span>
+    <span class="bl-mention-cat">事件</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…形式"的根本转向，也终结了中国大型科技平台公司的资本叙事黄金时代。  ## 时间线  - 2020-07-20：蚂蚁集团正式宣布启动"A+H"两地同步上市计划，发行规模直指 345 亿美元，估值预期 3000 亿美元，将一举超过沙特阿美成为…</div>
+    <a href="/events/蚂蚁 IPO 暂停.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">井贤栋（Eric Jing）</span>
+    <span class="bl-mention-cat">人物</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…CEO → 董事长兼 CEO - 现任职位：蚂蚁集团董事长兼 CEO - 关联公司：阿里巴巴、蚂蚁集团、网商银行  ## 职业生涯  - 1994-2007：先后在可口可乐中国、百事大中华区任 CFO，是典…</div>
+    <a href="/people/井贤栋.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">彭蕾（Lucy Peng）</span>
+    <span class="bl-mention-cat">人物</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet">…azada CEO - 现任职位：已淡出一线管理岗位（2020 年后） - 关联公司：阿里巴巴、蚂蚁集团、Lazada  ## 职业生涯  - 1999：与马云等十八人在杭州湖畔花园创立阿里巴巴，是创始团队中…</div>
+    <a href="/people/彭蕾.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+<div class="bl-group">
+  <button class="bl-group-header">
+    <span class="bl-caret"></span>
+    <span class="bl-source-name">中国公司索引</span>
+    <span class="bl-mention-cat">索引</span>
+  </button>
+  <div class="bl-snippets">
+    <div class="bl-snippet"># 中国公司索引  中国 12 家头部金融科技公司，按生态阵营分类。  ## 阿里系  - 蚂蚁集团——支付宝、花呗、借呗、芝麻信用、网商银行的母公司，中国最大金融科技集团 - 网商银行——首批民营银行之一，主打…</div>
+    <a href="/index-pages/中国公司索引.html" class="bl-go-link">查看原文 →</a>
+  </div>
+</div>
+
+</aside>
+
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle sidebar nav groups
+  document.querySelectorAll('.nav-group-title').forEach(function(el) {
+    el.addEventListener('click', function() {
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // Backlinks: toggle individual groups
+  document.querySelectorAll('.bl-group-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      this.closest('.bl-group').classList.toggle('open');
+    });
+  });
+
+  // Favorite / bookmark popup
+  var favBtn = document.getElementById('fav-btn');
+  var favPop = document.getElementById('fav-pop');
+  if (favBtn && favPop) {
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+    var key = isMac ? '⌘ + D' : 'Ctrl + D';
+    favPop.innerHTML =
+      '按 <kbd>' + key + '</kbd> 收藏本页到浏览器书签' +
+      '<button class="fav-pop-copy" id="fav-pop-copy">复制本页链接</button>';
+
+    favBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      favPop.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+      if (!favPop.contains(e.target) && e.target !== favBtn) {
+        favPop.classList.remove('show');
+      }
+    });
+
+    var copyBtn = document.getElementById('fav-pop-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          copyBtn.textContent = '✓ 已复制';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = '复制本页链接';
+            copyBtn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+  }
+
+  // Backlinks: expand/collapse all
+  document.querySelectorAll('.bl-expand-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.add('open');
+      });
+    });
+  });
+  document.querySelectorAll('.bl-collapse-all').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.closest('.backlinks-panel').querySelectorAll('.bl-group').forEach(function(g) {
+        g.classList.remove('open');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>
